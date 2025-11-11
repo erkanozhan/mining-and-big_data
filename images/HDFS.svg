@@ -1,0 +1,323 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" 
+     font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+    
+    <!-- Tanımlamalar -->
+    <defs>
+        <!-- Gradyanlar -->
+        <linearGradient id="fileGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+        </linearGradient>
+        
+        <linearGradient id="blockGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+        </linearGradient>
+        
+        <linearGradient id="blockGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#34d399;stop-opacity:1" />
+        </linearGradient>
+        
+        <linearGradient id="blockGradient3" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:1" />
+        </linearGradient>
+        
+        <!-- Gölge efekti -->
+        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+            <feOffset dx="0" dy="2" result="offsetblur"/>
+            <feFlood flood-color="#000000" flood-opacity="0.15"/>
+            <feComposite in2="offsetblur" operator="in"/>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+        
+        <!-- Ok işareti -->
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" 
+                markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+        </marker>
+        
+        <!-- Kesikli çizgi stili -->
+        <pattern id="diagonal" patternUnits="userSpaceOnUse" width="4" height="4">
+            <path d="M 0,4 l 4,-4 M -1,1 l 2,-2 M 3,5 l 2,-2" stroke="#e5e7eb" stroke-width="0.5"/>
+        </pattern>
+    </defs>
+    
+    <!-- Arka plan -->
+    <rect width="100%" height="100%" fill="#f9fafb"/>
+    
+    <!-- Ana başlık -->
+    <text x="600" y="40" font-size="28" font-weight="bold" text-anchor="middle" fill="#1f2937">
+        HDFS - Hadoop Distributed File System
+    </text>
+    <text x="600" y="65" font-size="16" text-anchor="middle" fill="#6b7280">
+        Büyük Dosyaların Bloklara Bölünmesi ve Dağıtık Depolanması
+    </text>
+    
+    <!-- BÖLÜM 1: DOSYA BLOKLARA BÖLÜNÜYOR -->
+    <g transform="translate(50, 100)">
+        <!-- Başlık -->
+        <text font-size="18" font-weight="600" fill="#374151">1. Orijinal Dosya (1 GB)</text>
+        
+        <!-- Büyük dosya -->
+        <rect x="0" y="30" width="200" height="80" rx="8" fill="url(#fileGradient)" filter="url(#shadow)"/>
+        <text x="100" y="65" font-size="16" font-weight="600" text-anchor="middle" fill="white">
+            BigData.csv
+        </text>
+        <text x="100" y="85" font-size="14" text-anchor="middle" fill="white">
+            1024 MB
+        </text>
+        
+        <!-- Bölme okları -->
+        <path d="M 220 70 L 250 70" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="235" y="65" font-size="12" text-anchor="middle" fill="#6b7280">Bölme</text>
+        
+        <!-- Bloklar -->
+        <g transform="translate(270, 20)">
+            <text font-size="16" font-weight="600" fill="#374151">128 MB Bloklar</text>
+            
+            <!-- Blok 1 -->
+            <rect x="0" y="25" width="60" height="25" rx="4" fill="url(#blockGradient1)" filter="url(#shadow)"/>
+            <text x="30" y="42" font-size="12" text-anchor="middle" fill="white">Blok 1</text>
+            
+            <!-- Blok 2 -->
+            <rect x="70" y="25" width="60" height="25" rx="4" fill="url(#blockGradient2)" filter="url(#shadow)"/>
+            <text x="100" y="42" font-size="12" text-anchor="middle" fill="white">Blok 2</text>
+            
+            <!-- Blok 3 -->
+            <rect x="140" y="25" width="60" height="25" rx="4" fill="url(#blockGradient3)" filter="url(#shadow)"/>
+            <text x="170" y="42" font-size="12" text-anchor="middle" fill="white">Blok 3</text>
+            
+            <!-- ... -->
+            <text x="210" y="42" font-size="14" fill="#6b7280">...</text>
+            
+            <!-- Blok 8 -->
+            <rect x="230" y="25" width="60" height="25" rx="4" fill="#94a3b8" filter="url(#shadow)"/>
+            <text x="260" y="42" font-size="12" text-anchor="middle" fill="white">Blok 8</text>
+        </g>
+    </g>
+    
+    <!-- BÖLÜM 2: NAME NODE -->
+    <g transform="translate(650, 120)">
+        <rect x="0" y="0" width="180" height="100" rx="8" fill="#ef4444" filter="url(#shadow)"/>
+        <text x="90" y="25" font-size="18" font-weight="600" text-anchor="middle" fill="white">
+            NameNode
+        </text>
+        <text x="90" y="45" font-size="12" text-anchor="middle" fill="#fecaca">
+            (Master - Yönetici)
+        </text>
+        <text x="90" y="65" font-size="11" text-anchor="middle" fill="white">
+            Metadata ve Blok
+        </text>
+        <text x="90" y="80" font-size="11" text-anchor="middle" fill="white">
+            Konumlarını Tutar
+        </text>
+    </g>
+    
+    <!-- BÖLÜM 3: REPLİKASYON ve DAĞITIM -->
+    <g transform="translate(50, 280)">
+        <text font-size="20" font-weight="600" fill="#374151">2. Replikasyon ve Dağıtım (3 Kopya)</text>
+        <text y="25" font-size="14" fill="#6b7280">Her blok varsayılan olarak 3 farklı DataNode'a kopyalanır</text>
+        
+        <!-- DataNode'lar -->
+        <!-- DataNode 1 -->
+        <g transform="translate(0, 60)">
+            <rect x="0" y="0" width="250" height="180" rx="8" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+            <rect x="10" y="10" width="230" height="30" rx="4" fill="#1e40af"/>
+            <text x="125" y="30" font-size="14" font-weight="600" text-anchor="middle" fill="white">
+                DataNode 1 (Sunucu 1)
+            </text>
+            
+            <!-- Bloklar -->
+            <rect x="20" y="55" width="50" height="25" rx="3" fill="url(#blockGradient1)"/>
+            <text x="45" y="72" font-size="11" text-anchor="middle" fill="white">Blok 1</text>
+            
+            <rect x="80" y="55" width="50" height="25" rx="3" fill="url(#blockGradient3)"/>
+            <text x="105" y="72" font-size="11" text-anchor="middle" fill="white">Blok 3</text>
+            
+            <rect x="140" y="55" width="50" height="25" rx="3" fill="#94a3b8"/>
+            <text x="165" y="72" font-size="11" text-anchor="middle" fill="white">Blok 5</text>
+            
+            <!-- Disk kullanımı -->
+            <rect x="20" y="100" width="210" height="20" rx="10" fill="#e5e7eb"/>
+            <rect x="20" y="100" width="126" height="20" rx="10" fill="#10b981"/>
+            <text x="125" y="115" font-size="11" text-anchor="middle" fill="white">%60 Dolu</text>
+            
+            <!-- IP Adresi -->
+            <text x="125" y="150" font-size="12" text-anchor="middle" fill="#6b7280">
+                192.168.1.10
+            </text>
+        </g>
+        
+        <!-- DataNode 2 -->
+        <g transform="translate(280, 60)">
+            <rect x="0" y="0" width="250" height="180" rx="8" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+            <rect x="10" y="10" width="230" height="30" rx="4" fill="#1e40af"/>
+            <text x="125" y="30" font-size="14" font-weight="600" text-anchor="middle" fill="white">
+                DataNode 2 (Sunucu 2)
+            </text>
+            
+            <!-- Bloklar -->
+            <rect x="20" y="55" width="50" height="25" rx="3" fill="url(#blockGradient2)"/>
+            <text x="45" y="72" font-size="11" text-anchor="middle" fill="white">Blok 2</text>
+            
+            <rect x="80" y="55" width="50" height="25" rx="3" fill="url(#blockGradient1)"/>
+            <text x="105" y="72" font-size="11" text-anchor="middle" fill="white">Blok 1</text>
+            
+            <rect x="140" y="55" width="50" height="25" rx="3" fill="#94a3b8"/>
+            <text x="165" y="72" font-size="11" text-anchor="middle" fill="white">Blok 6</text>
+            
+            <!-- Disk kullanımı -->
+            <rect x="20" y="100" width="210" height="20" rx="10" fill="#e5e7eb"/>
+            <rect x="20" y="100" width="147" height="20" rx="10" fill="#f59e0b"/>
+            <text x="125" y="115" font-size="11" text-anchor="middle" fill="white">%70 Dolu</text>
+            
+            <!-- IP Adresi -->
+            <text x="125" y="150" font-size="12" text-anchor="middle" fill="#6b7280">
+                192.168.1.11
+            </text>
+        </g>
+        
+        <!-- DataNode 3 -->
+        <g transform="translate(560, 60)">
+            <rect x="0" y="0" width="250" height="180" rx="8" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+            <rect x="10" y="10" width="230" height="30" rx="4" fill="#1e40af"/>
+            <text x="125" y="30" font-size="14" font-weight="600" text-anchor="middle" fill="white">
+                DataNode 3 (Sunucu 3)
+            </text>
+            
+            <!-- Bloklar -->
+            <rect x="20" y="55" width="50" height="25" rx="3" fill="url(#blockGradient3)"/>
+            <text x="45" y="72" font-size="11" text-anchor="middle" fill="white">Blok 3</text>
+            
+            <rect x="80" y="55" width="50" height="25" rx="3" fill="url(#blockGradient2)"/>
+            <text x="105" y="72" font-size="11" text-anchor="middle" fill="white">Blok 2</text>
+            
+            <rect x="140" y="55" width="50" height="25" rx="3" fill="#94a3b8"/>
+            <text x="165" y="72" font-size="11" text-anchor="middle" fill="white">Blok 7</text>
+            
+            <!-- Disk kullanımı -->
+            <rect x="20" y="100" width="210" height="20" rx="10" fill="#e5e7eb"/>
+            <rect x="20" y="100" width="105" height="20" rx="10" fill="#3b82f6"/>
+            <text x="125" y="115" font-size="11" text-anchor="middle" fill="white">%50 Dolu</text>
+            
+            <!-- IP Adresi -->
+            <text x="125" y="150" font-size="12" text-anchor="middle" fill="#6b7280">
+                192.168.1.12
+            </text>
+        </g>
+        
+        <!-- DataNode 4 (Yedek) -->
+        <g transform="translate(840, 60)">
+            <rect x="0" y="0" width="250" height="180" rx="8" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+            <rect x="10" y="10" width="230" height="30" rx="4" fill="#1e40af"/>
+            <text x="125" y="30" font-size="14" font-weight="600" text-anchor="middle" fill="white">
+                DataNode 4 (Sunucu 4)
+            </text>
+            
+            <!-- Bloklar -->
+            <rect x="20" y="55" width="50" height="25" rx="3" fill="url(#blockGradient1)"/>
+            <text x="45" y="72" font-size="11" text-anchor="middle" fill="white">Blok 1</text>
+            
+            <rect x="80" y="55" width="50" height="25" rx="3" fill="url(#blockGradient2)"/>
+            <text x="105" y="72" font-size="11" text-anchor="middle" fill="white">Blok 2</text>
+            
+            <rect x="140" y="55" width="50" height="25" rx="3" fill="url(#blockGradient3)"/>
+            <text x="165" y="72" font-size="11" text-anchor="middle" fill="white">Blok 3</text>
+            
+            <!-- Disk kullanımı -->
+            <rect x="20" y="100" width="210" height="20" rx="10" fill="#e5e7eb"/>
+            <rect x="20" y="100" width="84" height="20" rx="10" fill="#8b5cf6"/>
+            <text x="125" y="115" font-size="11" text-anchor="middle" fill="white">%40 Dolu</text>
+            
+            <!-- IP Adresi -->
+            <text x="125" y="150" font-size="12" text-anchor="middle" fill="#6b7280">
+                192.168.1.13
+            </text>
+        </g>
+    </g>
+    
+    <!-- BÖLÜM 4: HATAYA DAYANIKLILIK -->
+    <g transform="translate(50, 550)">
+        <text font-size="20" font-weight="600" fill="#374151">3. Hataya Dayanıklılık</text>
+        
+        <!-- Senaryo -->
+        <g transform="translate(0, 40)">
+            <!-- Arızalı Node -->
+            <g transform="translate(0, 0)">
+                <rect x="0" y="0" width="200" height="120" rx="8" fill="#fee2e2" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,3"/>
+                <text x="100" y="25" font-size="14" font-weight="600" text-anchor="middle" fill="#dc2626">
+                    DataNode 2 ARIZALI!
+                </text>
+                <text x="100" y="50" font-size="20" text-anchor="middle" fill="#dc2626">❌</text>
+                <text x="100" y="80" font-size="12" text-anchor="middle" fill="#7f1d1d">
+                    Blok 1, Blok 2 kaybı riski
+                </text>
+                <text x="100" y="100" font-size="11" text-anchor="middle" fill="#991b1b">
+                    (Ama diğer node'larda var!)
+                </text>
+            </g>
+            
+            <!-- Ok -->
+            <path d="M 220 60 L 260 60" stroke="#10b981" stroke-width="3" marker-end="url(#arrow)"/>
+            <text x="240" y="55" font-size="12" text-anchor="middle" fill="#10b981">Otomatik</text>
+            <text x="240" y="70" font-size="12" text-anchor="middle" fill="#10b981">Kurtarma</text>
+            
+            <!-- Kurtarma -->
+            <g transform="translate(280, 0)">
+                <rect x="0" y="0" width="220" height="120" rx="8" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                <text x="110" y="25" font-size="14" font-weight="600" text-anchor="middle" fill="#15803d">
+                    Replikasyon Devrede
+                </text>
+                <text x="110" y="50" font-size="20" text-anchor="middle" fill="#10b981">✓</text>
+                <text x="110" y="75" font-size="12" text-anchor="middle" fill="#166534">
+                    Blok 1 → Node 1, 4'te var
+                </text>
+                <text x="110" y="95" font-size="12" text-anchor="middle" fill="#166534">
+                    Blok 2 → Node 3, 4'te var
+                </text>
+            </g>
+            
+            <!-- Açıklama -->
+            <g transform="translate(520, 0)">
+                <rect x="0" y="0" width="380" height="120" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1"/>
+                <text x="10" y="25" font-size="14" font-weight="600" fill="#92400e">
+                    📌 Replikasyon Avantajları:
+                </text>
+                <text x="20" y="50" font-size="12" fill="#78350f">
+                    • Bir node arızalansa bile veri kaybolmaz
+                </text>
+                <text x="20" y="70" font-size="12" fill="#78350f">
+                    • HDFS otomatik olarak eksik kopyaları yeniden oluşturur
+                </text>
+                <text x="20" y="90" font-size="12" fill="#78350f">
+                    • Varsayılan 3 kopya, %99.99 veri güvenliği sağlar
+                </text>
+                <text x="20" y="110" font-size="12" fill="#78350f">
+                    • Paralel okuma performansını artırır
+                </text>
+            </g>
+        </g>
+    </g>
+    
+    <!-- NameNode'dan DataNode'lara bağlantılar -->
+    <path d="M 740 220 L 175 340" stroke="#6b7280" stroke-width="1" stroke-dasharray="2,2" opacity="0.5"/>
+    <path d="M 740 220 L 455 340" stroke="#6b7280" stroke-width="1" stroke-dasharray="2,2" opacity="0.5"/>
+    <path d="M 740 220 L 735 340" stroke="#6b7280" stroke-width="1" stroke-dasharray="2,2" opacity="0.5"/>
+    <path d="M 740 220 L 1015 340" stroke="#6b7280" stroke-width="1" stroke-dasharray="2,2" opacity="0.5"/>
+    
+    <!-- Merkezi kontrol etiketi -->
+    <text x="740" y="250" font-size="11" text-anchor="middle" fill="#9ca3af">
+        Merkezi Yönetim
+    </text>
+    
+    <!-- Alt bilgi -->
+    <text x="600" y="780" font-size="12" text-anchor="middle" fill="#9ca3af">
+        HDFS - Hataya Dayanıklı Dağıtık Dosya Sistemi | Varsayılan Blok Boyutu: 128MB | Replikasyon Faktörü: 3
+    </text>
+</svg>

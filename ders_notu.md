@@ -81,6 +81,8 @@ Daha yapısal bir bakışla, Hadoop'u dört ana bileşenden oluşan bir çerçev
 
 
 1.  **HDFS (Hadoop Distributed File System):** Hadoop'un dağıtılmış depolama birimidir. Büyük dosyaları *blok* adı verilen parçalara ayırır ve kümedeki farklı makinelere dağıtır. Veri kaybını önlemek için her bloğun kopyalarını oluşturur ve farklı makinelere yedekler. Bu işleme *replikasyon* denir ve sistemin hataya karşı dayanıklı olmasını sağlar.
+
+[HDFS Mimarisi](images/HDFS.svg)
 2.  **YARN (Yet Another Resource Negotiator):** Kümenin kaynak yöneticisidir. Hangi işin hangi makinede çalışacağını planlar, işlem gücü (CPU) ve bellek (RAM) gibi kaynakları işler arasında adil bir şekilde dağıtır. Kısacası kümenin işletim sistemi gibi davranır.
 3.  **MapReduce:** Büyük veri işleme için kullanılan bir programlama modelidir. Temelde iki adımdan oluşur:
     *   **Map:** Büyük bir görevi alır ve onu kümedeki tüm makinelere dağıtılacak küçük, paralel görevlere böler. (Örneğin, milyonlarca belgedeki kelimeleri sayma görevini, her makinenin kendi üzerindeki birkaç belgeyi sayması şeklinde bölmek).
