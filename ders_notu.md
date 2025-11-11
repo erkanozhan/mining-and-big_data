@@ -75,7 +75,7 @@ Peki, bu devasa ve karmaşık veriyi nerede ve nasıl işleyeceğiz? Tek bir sü
 
 Peki Hadoop tam olarak nedir? Şöyle düşünelim: Çok büyük bir yapbozu tek başınıza tamamlamanız haftalar sürebilir. Ama aynı yapbozu 100 arkadaşınıza dağıtırsanız, her biri kendi küçük parçasını yapar ve sonra bu parçaları birleştirerek yapbozu çok daha hızlı tamamlarsınız. Hadoop, tam olarak bu mantıkla çalışır; devasa bir veri işleme görevini, standart donanımlara sahip yüzlerce, hatta binlerce bilgisayardan oluşan bir kümeye dağıtır ve paralel olarak çözmelerini sağlar.
 
-Daha yapısal bir bakışla, Hadoop'u dört ana bileşenden oluşan bir çerçeve olarak tanımlayabiliriz:
+Daha yapısal bir bakışla, Hadoop'u dört ana bileşenden oluşan bir çerçeve olarak tanımlayabiliriz, bunlar:
 ```mermaid
 graph TD
     subgraph "Hadoop Mimarisi"
