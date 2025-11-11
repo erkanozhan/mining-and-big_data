@@ -96,7 +96,7 @@ graph TD
         Processing -- "Veri okur/yazar" --> HDFS
     end
 
-    Kullanıcı_Uygulamaları(Kullanıcı Uygulamaları) -- "İş gönderir (Submit Job)" --> YARN
+    Kullanıcı_Uygulamaları(Kullanıcı Uygulamaları) -- "İş gönderir (Submit Job)" --> YARN 
 ```
 
 1.  **HDFS (Hadoop Distributed File System):** Hadoop'un dağıtılmış depolama birimidir. Büyük dosyaları *blok* adı verilen parçalara ayırır ve kümedeki farklı makinelere dağıtır. Veri kaybını önlemek için her bloğun kopyalarını oluşturur ve farklı makinelere yedekler. Bu işleme *replikasyon* denir ve sistemin hataya karşı dayanıklı olmasını sağlar.
