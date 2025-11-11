@@ -76,25 +76,27 @@ Peki, bu devasa ve karmaşık veriyi nerede ve nasıl işleyeceğiz? Tek bir sü
 Peki Hadoop tam olarak nedir? Şöyle düşünelim: Çok büyük bir yapbozu tek başınıza tamamlamanız haftalar sürebilir. Ama aynı yapbozu 100 arkadaşınıza dağıtırsanız, her biri kendi küçük parçasını yapar ve sonra bu parçaları birleştirerek yapbozu çok daha hızlı tamamlarsınız. Hadoop, tam olarak bu mantıkla çalışır; devasa bir veri işleme görevini, standart donanımlara sahip yüzlerce, hatta binlerce bilgisayardan oluşan bir kümeye dağıtır ve paralel olarak çözmelerini sağlar.
 
 Daha yapısal bir bakışla, Hadoop'u dört ana bileşenden oluşan bir çerçeve olarak tanımlayabiliriz:
-
 ```mermaid
 graph TD
     subgraph "Hadoop Mimarisi"
-        direction LR
-        subgraph "İşleme Modelleri (Processing Models)"
-            Processing["MapReduce, Spark, Flink"]
+        
+        subgraph "İşleme Katmanı (Processing Layer)"
+            Processing["MapReduce, Spark, Flink, vb."]
         end
+        
         subgraph "Kaynak Yönetimi (Resource Management)"
-            YARN
+            YARN["YARN"]
         end
-        subgraph "Dağıtılmış Depolama (Distributed Storage)"
-            HDFS
+        
+        subgraph "Depolama Katmanı (Storage Layer)"
+            HDFS["HDFS (Hadoop Distributed File System)"]
         end
+
+        YARN -- "Kaynakları yönetir ve görevleri atar" --> Processing
+        Processing -- "Veri okur/yazar" --> HDFS
     end
 
-    Kullanıcı_Uygulamaları(Kullanıcı Uygulamaları) --> YARN
-    YARN -- "Kaynakları yönetir ve görevleri atar" --> Processing
-    Processing -- "Veri okur/yazar" --> HDFS
+    Kullanıcı_Uygulamaları(Kullanıcı Uygulamaları) -- "İş gönderir (Submit Job)" --> YARN
 ```
 
 1.  **HDFS (Hadoop Distributed File System):** Hadoop'un dağıtılmış depolama birimidir. Büyük dosyaları *blok* adı verilen parçalara ayırır ve kümedeki farklı makinelere dağıtır. Veri kaybını önlemek için her bloğun kopyalarını oluşturur ve farklı makinelere yedekler. Bu işleme *replikasyon* denir ve sistemin hataya karşı dayanıklı olmasını sağlar.
