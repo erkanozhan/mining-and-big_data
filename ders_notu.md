@@ -60,13 +60,17 @@ Bir veri setinin "Büyük Veri" olarak adlandırılabilmesi için genellikle "V"
 
 
 
-1.
+1. Volume (Hacim): Veri miktarının çok büyük olmasıdır. Gigabaytlar, terabaytlar, hatta petabaytlar seviyesinde veri söz konusudur. Örneğin, Facebook her gün yüz milyonlarca fotoğraf ve video yükleniyor.
+   
 2.  **Hız (Velocity):** Verinin ne kadar hızlı üretildiğini ve işlenmesi gerektiğini belirtir. Bir yangın musluğundan akan su gibi düşünebilirsiniz. Örneğin, borsadaki anlık işlemler, bir jet motorundan gelen sensör verileri veya saniyede atılan binlerce tweet.
+   
 3.  **Çeşitlilik (Variety):** Verinin farklı türlerde ve formatlarda olmasını ifade eder. Sadece sayılardan oluşan düzenli tablolar (yapılandırılmış veri) değil, aynı zamanda metinler, e-postalar, videolar, ses kayıtları, fotoğraflar (yapılandırılmamış veri) ve XML/JSON dosyaları (yarı yapılandırılmış veri) gibi çok çeşitli formatları içerir.
+   
 4.  **Doğruluk (Veracity):** Verinin kalitesini ve güvenilirliğini temsil eder. İnternetteki her bilgi doğru değildir, değil mi? Veri setleri de "gürültü" içerebilir; yani eksik, hatalı veya tutarsız bilgiler barındırabilir. Analizden önce bu veriyi temizlemek ve doğruluğundan emin olmak çok önemlidir.
+   
 5.  **Değer (Value):** En önemli özellik budur. Eğer işlediğimiz veri, bize bir fayda sağlamıyor, bir sorunu çözmüyor veya bir karar almamıza yardımcı olmuyorsa, o veriyi toplamanın ve işlemenin bir anlamı yoktur. Verinin değeri, ne kadar doğru olduğu ve ne kadar hızlı işlenip anlamlı bir sonuca dönüştürüldüğü ile doğrudan ilişkilidir.
 
-### Büyük Veri Depolama ve İşleme: Hadoop'a Giriş
+## Büyük Veri Depolama ve İşleme: Hadoop'a Giriş
 
 Peki, bu devasa ve karmaşık veriyi nerede ve nasıl işleyeceğiz? Tek bir süper bilgisayar bile bu yükün altından kalkamaz. Çözüm, gücü bölmek ve dağıtmaktır. İşte burada **kümeler (clusters)** ve **dağıtılmış sistemler** devreye giriyor.
 
@@ -85,6 +89,53 @@ Daha yapısal bir bakışla, Hadoop'u dört ana bileşenden oluşan bir çerçev
 ![HDFS Mimarisi](images/HDFS.svg)
 
 2.  **YARN (Yet Another Resource Negotiator):** Kümenin kaynak yöneticisidir. Hangi işin hangi makinede çalışacağını planlar, işlem gücü (CPU) ve bellek (RAM) gibi kaynakları işler arasında adil bir şekilde dağıtır. Kısacası kümenin işletim sistemi gibi davranır.
+   Elbette, metni istenen formatta ve üslupta yeniden düzenledim.
+
+### YARN'ı Anlamak: Küme Kaynak Yönetimine Bir Bakış
+
+Gençler, YARN'ı anlamanın en anlaşılır yolu, onu büyük bir veri işleme fabrikasının operasyon müdürü olarak hayal etmektir. Bu fabrikada, işleri yapan işçiler (CPU çekirdekleri) ve bu işler için kullanılan makineler (RAM) bulunur. Müşterilerden, yani biz kullanıcılardan, sürekli olarak çeşitli siparişler (veri işleme görevleri) gelir.
+
+İşte YARN, bu fabrikanın yöneticisi olarak sahneye çıkar. Görevi, gelen her siparişi incelemek, fabrikanın hangi bölümünde ne kadar işçi ve makinenin boş olduğunu bilmek ve bu siparişleri en verimli şekilde uygun işçilere ve makinelere dağıtmaktır.
+
+Bu yönetici, işleri **"Container"** adını verdiğimiz standart çalışma kutularına yerleştirir. Her bir kutunun içinde, işin belirli bir parçasını tamamlamak için gereken miktarda işçi gücü (CPU) ve makine kapasitesi (RAM) bulunur. Bir işin parçası bu kutuda çalışır, görevini tamamladığında kutu boşalır ve derhal yeni bir iş için kullanılabilir hale gelir. Bu sayede fabrika atıl kalmaz ve sürekli üretim halinde olur.
+
+Bu sistemden önce, fabrika sadece tek tip bir sipariş alabiliyordu (örneğin yalnızca MapReduce işleri). YARN sayesinde artık fabrikamız aynı anda hem büyük montaj işleri (MapReduce), hem hızlı prototipleme (Spark) hem de özel üretim (Tez) gibi farklı nitelikteki işleri yürütebiliyor. Bu da kaynakların çok daha esnek ve verimli kullanılmasını sağlıyor.
+
+## Mimarisi ve Çalışma Prensipleri
+
+Şimdi bu yapının teknik bileşenlerine ve işleyişine daha yakından bakalım. YARN, dağıtık bir sistemde kaynakları yönetmek ve işleri planlamak için tasarlanmış bir mimaridir. İki temel bileşenden oluşur:
+
+### Ana Bileşenler
+
+*   **ResourceManager (RM):** Tüm kümenin (fabrikanın) genel müdürüdür. Kümedeki tüm kaynakların (işçiler ve makineler) envanterini tutar ve hangi uygulamanın ne kadar kaynak alacağına nihai olarak karar verir. Tek ve merkezi bir otoritedir. Kendi içinde iki önemli servisi barındırır:
+    *   **Scheduler:** Hangi işin ne zaman ve hangi kaynaklarla çalışacağını belirleyen planlama algoritmasını çalıştırır. Gelen kaynak taleplerini mevcut politikalara göre (FIFO, Capacity, Fair) değerlendirir ve onaylar.
+    *   **ApplicationManager:** Kullanıcı tarafından gönderilen işleri kabul eder ve her iş için özel bir yönetici olan `ApplicationMaster`'ı başlatmak üzere ilk Container'ı ayarlar.
+
+*   **NodeManager (NM):** Kümedeki her bir sunucuda (düğümde) çalışan yerel bir ustabaşıdır. Sorumlulukları şunlardır:
+    *   Kendi sunucusundaki kaynakların (CPU, RAM) durumunu sürekli olarak ResourceManager'a raporlar.
+    *   ResourceManager'dan gelen komutlarla Container'ları başlatır, denetler ve sonlandırır.
+    *   Container'ların kaynak kullanımını izler ve kuralların dışına çıkmalarını engeller.
+
+![YARN Mimarisi](images/YARN.svg)
+
+### İş Akışı Örneği
+
+100 GB'lık bir log dosyasını analiz etmek istediğimizi varsayalım. İşlem adımları şöyle gelişir:
+
+1.  **İş Gönderimi:** Kullanıcı, işini Hadoop kümesine gönderir. Bu istek ilk olarak **ResourceManager (RM)** tarafından karşılanır.
+2.  **ApplicationMaster'ın Başlatılması:** RM, bu işe özel bir yönetici olan **ApplicationMaster (AM)**'ı çalıştırmak için bir **NodeManager**'a talimat gönderir ve ilk Container bu AM için oluşturulur. Artık işin tüm koordinasyonu bu AM'nin sorumluluğundadır.
+3.  **Kaynak Talebi:** Başlayan ApplicationMaster, işin gereksinimlerini (örneğin 10 CPU çekirdeği ve 20 GB RAM) hesaplar ve bu kaynakları RM'nin **Scheduler**'ından talep eder.
+4.  **Kaynak Tahsisi:** Scheduler, kümenin mevcut durumuna bakarak uygun düğümlerde gerekli sayıda Container'ı (örneğin her biri 2 CPU ve 4 GB RAM'e sahip 5 adet Container) AM'ye tahsis eder.
+5.  **Görevin Yürütülmesi:** AM, RM'den aldığı bu Container "biletlerini" kullanarak ilgili **NodeManager**'larla doğrudan iletişime geçer ve görevin parçalarını bu Container'lar içinde paralel olarak başlatır.
+6.  **İzleme ve Hata Toleransı:** AM, tüm Container'ların durumunu izler. Eğer bir Container'daki görev başarısız olursa, AM bunu tespit eder, RM'den yeni bir Container talep eder ve görevi başka bir düğümde yeniden başlatır. Bu, sisteme hata toleransı kazandırır.
+
+### Scheduler Tipleri ve Kullanım Senaryoları
+
+YARN, kaynak planlaması için farklı stratejiler sunar. En yaygın olanları şunlardır:
+
+*   **FIFO Scheduler:** "İlk Giren İlk Çıkar" mantığıyla çalışır. Basitliği nedeniyle test ortamları için kullanışlıdır, ancak üretim ortamlarında verimsizdir. Çünkü uzun süren büyük bir iş, arkasındaki acil ve küçük işlerin beklemesine neden olur (head-of-line blocking).
+*   **Capacity Scheduler:** Küme kaynaklarını, departmanlar veya takımlar için önceden tanımlanmış kuyruklara böler. Her kuyruğun garantili bir minimum kaynak kotası vardır. Bu sayede farklı ekiplerin birbirlerinin kaynaklarını tüketerek işlerini engellemesi önlenir. Çok kullanıcılı kurumsal ortamlar için idealdir.
+*   **Fair Scheduler:** Aktif olan tüm işler arasında kaynakları adil bir şekilde paylaştırmayı hedefler. Eğer kümede tek bir iş çalışıyorsa, tüm kaynakları kullanabilir. Yeni bir iş geldiğinde, Scheduler kaynakları dinamik olarak dengeleyerek her işin adil bir pay almasını sağlar. Bu, özellikle anlık ve farklı boyutlardaki işlerin olduğu ortamlar için çok uygundur.
    
 3.  **MapReduce:** Büyük veri işleme için kullanılan bir programlama modelidir. Temelde iki adımdan oluşur:
     *   **Map:** Büyük bir görevi alır ve onu kümedeki tüm makinelere dağıtılacak küçük, paralel görevlere böler. (Örneğin, milyonlarca belgedeki kelimeleri sayma görevini, her makinenin kendi üzerindeki birkaç belgeyi sayması şeklinde bölmek).
