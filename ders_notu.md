@@ -89,7 +89,6 @@ Daha yapısal bir bakışla, Hadoop'u dört ana bileşenden oluşan bir çerçev
 ![HDFS Mimarisi](images/HDFS.svg)
 
 2.  **YARN (Yet Another Resource Negotiator):** Kümenin kaynak yöneticisidir. Hangi işin hangi makinede çalışacağını planlar, işlem gücü (CPU) ve bellek (RAM) gibi kaynakları işler arasında adil bir şekilde dağıtır. Kısacası kümenin işletim sistemi gibi davranır.
-   Elbette, metni istenen formatta ve üslupta yeniden düzenledim.
 
 ### YARN'ı Anlamak: Küme Kaynak Yönetimine Bir Bakış
 
