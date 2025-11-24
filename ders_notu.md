@@ -62,7 +62,7 @@ Bir veri setinin "Büyük Veri" olarak adlandırılabilmesi için genellikle "V"
 
 2.  **Hız (Velocity):** Verinin ne kadar hızlı üretildiğini ve işlenmesi gerektiğini belirtir. Bir yangın musluğundan akan su gibi düşünebilirsiniz. Örneğin, borsadaki anlık işlemler, bir jet motorundan gelen sensör verileri veya saniyede atılan binlerce tweet.
 
-3.  **Çeşitlilik (Variety)::** Verinin farklı türlerde ve formatlarda olmasını ifade eder. Sadece sayılardan oluşan düzenli tablolar (yapılandırılmış veri) değil, aynı zamanda metinler, e-postalar, videolar, ses kayıtları, fotoğraflar (yapılandırılmamış veri) ve XML/JSON dosyaları (yarı yapılandırılmış veri) gibi çok çeşitli formatları içerir.
+3.  **Çeşitlilik (Variety):** Verinin farklı türlerde ve formatlarda olmasını ifade eder. Sadece sayılardan oluşan düzenli tablolar (yapılandırılmış veri) değil, aynı zamanda metinler, e-postalar, videolar, ses kayıtları, fotoğraflar (yapılandırılmamış veri) ve XML/JSON dosyaları (yarı yapılandırılmış veri) gibi çok çeşitli formatları içerir.
 
 4.  **Doğruluk (Veracity):** Verinin kalitesini ve güvenilirliğini temsil eder. İnternetteki her bilgi doğru değildir, değil mi? Veri setleri de "gürültü" içerebilir; yani eksik, hatalı veya tutarsız bilgiler barındırabilir. Analizden önce bu veriyi temizlemek ve doğruluğundan emin olmak çok önemlidir.
 
@@ -85,53 +85,7 @@ Daha yapısal bir bakışla, Hadoop'u dört ana bileşenden oluşan bir çerçev
 
     ![HDFS Mimarisi](images/HDFS.svg)
 
-2.  **YARN (Yet Another Resource Negotiator):** Kümenin kaynak yöneticisidir. Hangi işin hangi makinede çalışacağını planlar, işlem gücü (CPU) ve bellek (RAM) gibi kaynakları işler arasında adil bir şekilde dağıtır. Kısacası kümenin işletim sistemi gibi davranır.
-
-    ### YARN'ı Anlamak: Küme Kaynak Yönetimine Bir Bakış
-
-    Gençler, YARN'ı anlamanın en anlaşılır yolu, onu büyük bir veri işleme fabrikasının operasyon müdürü olarak hayal etmektir. Bu fabrikada, işleri yapan işçiler (CPU çekirdekleri) ve bu işler için kullanılan makineler (RAM) bulunur. Müşterilerden, yani biz kullanıcılardan, sürekli olarak çeşitli siparişler (veri işleme görevleri) gelir.
-
-    İşte YARN, bu fabrikanın yöneticisi olarak sahneye çıkar. Görevi, gelen her siparişi incelemek, fabrikanın hangi bölümünde ne kadar işçi ve makinenin boş olduğunu bilmek ve bu siparişleri en verimli şekilde uygun işçilere ve makinelere dağıtmaktır.
-
-    Bu yönetici, işleri **"Container"** adını verdiğimiz standart çalışma kutularına yerleştirir. Her bir kutunun içinde, işin belirli bir parçasını tamamlamak için gereken miktarda işçi gücü (CPU) ve makine kapasitesi (RAM) bulunur. Bir işin parçası bu kutuda çalışır, görevini tamamladığında kutu boşalır ve derhal yeni bir iş için kullanılabilir hale gelir. Bu sayede fabrika atıl kalmaz ve sürekli üretim halinde olur.
-
-    Bu sistemden önce, fabrika sadece tek tip bir sipariş alabiliyordu (örneğin yalnızca MapReduce işleri). YARN sayesinde artık fabrikamız aynı anda hem büyük montaj işleri (MapReduce), hem hızlı prototipleme (Spark) hem de özel üretim (Tez) gibi farklı nitelikteki işleri yürütebiliyor. Bu da kaynakların çok daha esnek ve verimli kullanılmasını sağlıyor.
-
-    ## Mimarisi ve Çalışma Prensipleri
-
-    Şimdi bu yapının teknik bileşenlerine ve işleyişine daha yakından bakalım. YARN, dağıtık bir sistemde kaynakları yönetmek ve işleri planlamak için tasarlanmış bir mimaridir. İki temel bileşenden oluşur:
-
-    ### Ana Bileşenler
-
-    *   **ResourceManager (RM):** Tüm kümenin (fabrikanın) genel müdürüdür. Kümedeki tüm kaynakların (işçiler ve makineler) envanterini tutar ve hangi uygulamanın ne kadar kaynak alacağına nihai olarak karar verir. Tek ve merkezi bir otoritedir. Kendi içinde iki önemli servisi barındırır:
-        *   **Scheduler:** Hangi işin ne zaman ve hangi kaynaklarla çalışacağını belirleyen planlama algoritmasını çalıştırır. Gelen kaynak taleplerini mevcut politikalara göre (FIFO, Capacity, Fair) değerlendirir ve onaylar.
-        *   **ApplicationManager:** Kullanıcı tarafından gönderilen işleri kabul eder ve her iş için özel bir yönetici olan `ApplicationMaster`'ı başlatmak üzere ilk Container'ı ayarlar.
-
-    *   **NodeManager (NM):** Kümedeki her bir sunucuda (düğümde) çalışan yerel bir ustabaşıdır. Sorumlulukları şunlardır:
-        *   Kendi sunucusundaki kaynakların (CPU, RAM) durumunu sürekli olarak ResourceManager'a raporlar.
-        *   ResourceManager'dan gelen komutlarla Container'ları başlatır, denetler ve sonlandırır.
-        *   Container'ların kaynak kullanımını izler ve kuralların dışına çıkmalarını engeller.
-
-    ![YARN Mimarisi](images/YARN.svg)
-
-    ### İş Akışı Örneği
-
-    100 GB'lık bir log dosyasını analiz etmek istediğimizi varsayalım. İşlem adımları şöyle gelişir:
-
-    1.  **İş Gönderimi:** Kullanıcı, işini Hadoop kümesine gönderir. Bu istek ilk olarak **ResourceManager (RM)** tarafından karşılanır.
-    2.  **ApplicationMaster'ın Başlatılması:** RM, bu işe özel bir yönetici olan **ApplicationMaster (AM)**'ı çalıştırmak için bir **NodeManager**'a talimat gönderir ve ilk Container bu AM için oluşturulur. Artık işin tüm koordinasyonu bu AM'nin sorumluluğundadır.
-    3.  **Kaynak Talebi:** Başlayan ApplicationMaster, işin gereksinimlerini (örneğin 10 CPU çekirdeği ve 20 GB RAM) hesaplar ve bu kaynakları RM'nin **Scheduler**'ından talep eder.
-    4.  **Kaynak Tahsisi:** Scheduler, kümenin mevcut durumuna bakarak uygun düğümlerde gerekli sayıda Container'ı (örneğin her biri 2 CPU ve 4 GB RAM'e sahip 5 adet Container) AM'ye tahsis eder.
-    5.  **Görevin Yürütülmesi:** AM, RM'den aldığı bu Container "biletlerini" kullanarak ilgili **NodeManager**'larla doğrudan iletişime geçer ve görevin parçalarını bu Container'lar içinde paralel olarak başlatır.
-    6.  **İzleme ve Hata Toleransı:** AM, tüm Container'ların durumunu izler. Eğer bir Container'daki görev başarısız olursa, AM bunu tespit eder, RM'den yeni bir Container talep eder ve görevi başka bir düğümde yeniden başlatır. Bu, sisteme hata toleransı kazandırır.
-
-    ### Scheduler Tipleri ve Kullanım Senaryoları
-
-    YARN, kaynak planlaması için farklı stratejiler sunar. En yaygın olanları şunlardır:
-
-    *   **FIFO Scheduler:** "İlk Giren İlk Çıkar" mantığıyla çalışır. Basitliği nedeniyle test ortamları için kullanışlıdır, ancak üretim ortamlarında verimsizdir. Çünkü uzun süren büyük bir iş, arkasındaki acil ve küçük işlerin beklemesine neden olur (head-of-line blocking).
-    *   **Capacity Scheduler:** Küme kaynaklarını, departmanlar veya takımlar için önceden tanımlanmış kuyruklara böler. Her kuyruğun garantili bir minimum kaynak kotası vardır. Bu sayede farklı ekiplerin birbirlerinin kaynaklarını tüketerek işlerini engellemesi önlenir. Çok kullanıcılı kurumsal ortamlar için idealdir.
-    *   **Fair Scheduler:** Aktif olan tüm işler arasında kaynakları adil bir şekilde paylaştırmayı hedefler. Eğer kümede tek bir iş çalışıyorsa, tüm kaynakları kullanabilir. Yeni bir iş geldiğinde, Scheduler kaynakları dinamik olarak dengeleyerek her işin adil bir pay almasını sağlar. Bu, özellikle anlık ve farklı boyutlardaki işlerin olduğu ortamlar için çok uygundur.
+2.  **YARN (Yet Another Resource Negotiator):** Kümenin kaynak yöneticisidir. Hangi işin hangi makinede çalışacağını planlar, işlem gücü (CPU) ve bellek (RAM) gibi kaynakları işler arasında adil bir şekilde dağıtır. Kısacası kümenin işletim sistemi gibi davranır. Detaylarına birazdan değineceğiz.
 
 3.  **MapReduce:** Büyük veri işleme için kullanılan bir programlama modelidir. Temelde iki adımdan oluşur:
     *   **Map:** Büyük bir görevi alır ve onu kümedeki tüm makinelere dağıtılacak küçük, paralel görevlere böler. (Örneğin, milyonlarca belgedeki kelimeleri sayma görevini, her makinenin kendi üzerindeki birkaç belgeyi sayması şeklinde bölmek).
@@ -139,47 +93,149 @@ Daha yapısal bir bakışla, Hadoop'u dört ana bileşenden oluşan bir çerçev
 
 4.  **Hadoop Common:** Diğer Hadoop modüllerinin çalışması için gerekli olan ortak kütüphaneleri ve yardımcı programları içerir.
 
-Bu yapı sayesinde Hadoop, hem çok büyük verileri uygun maliyetli bir şekilde depolayabilir hem de bu veriyi paralel olarak çok hızlı bir şekilde işleyebilir. Unutmayın ki gençler, Hadoop ve benzeri teknolojiler, Büyük Veri'nin potansiyelini gerçeğe dönüştüren temel araçlardır.
+Bu yapı sayesinde Hadoop, hem çok büyük verileri uygun maliyetli bir şekilde depolayabilir hem de bu veriyi paralel olarak çok hızlı bir şekilde işleyebilir. Önce tek bir makine üzerinde Hadoop'u nasıl çalıştıracağımızı, ardından da bunu küçük bir kümeye nasıl dönüştüreceğimizi göreceğiz.
 
-## Hadoop Kurulumu ve Yapılandırması (Pseudo-Distributed veya Minimal Cluster)
+# Hadoop: Dağıtık Sistemlere Giriş
 
-Bu bölümde, küçük bir Hadoop kümesi (bir Master ve bir Worker düğümü ile) nasıl kurulur ve yapılandırılır bunu öğreneceğiz.
+## Büyük Veri Nedir ve Neden Dağıtık Sistemlere İhtiyaç Duyarız?
 
-### Ön Hazırlıklar
+Gençler tekrar hatırlayalım, düşünün ki elinizde 1 TB boyutunda bir metin dosyası var ve bu dosyadaki her kelimenin kaç kez geçtiğini saymak istiyorsunuz. Normal bir bilgisayarda bu işlem saatler, belki de günler sürebilir. Peki ya 100 bilgisayar aynı anda bu dosyanın farklı parçaları üzerinde çalışsa? İşte dağıtık sistemlerin temel mantığı budur: büyük bir problemi küçük parçalara böl, her parçayı farklı bir makinede işle, sonuçları birleştir.
 
-Bu rehber, Master ve Worker düğümleriniz arasında `hduser` kullanıcısı için parola gerektirmeyen SSH bağlantısının yapılandırıldığını varsaymaktadır. (Örn: `ssh-keygen`, `ssh-copy-id`).
+Hadoop, bu fikri gerçeğe dönüştüren bir yazılım çerçevesidir. İki temel bileşenden oluşur:
 
-### Yapılandırma Dosyaları
+1. **HDFS (Hadoop Distributed File System):** Verileri birden fazla makineye dağıtarak saklar
+2. **YARN (Yet Another Resource Negotiator):** İşlem kaynaklarını yönetir ve görevleri dağıtır
 
-Hadoop, `HADOOP_HOME/etc/hadoop` dizini altındaki XML dosyalarıyla yapılandırılır. Bu dosyaları düzenleyerek kümenizin davranışını özelleştireceğiz.
+## Hadoop Mimarisi: Kim Ne Yapar?
 
-#### 1. `core-site.xml`
+Bir Hadoop kümesi, tıpkı bir şirketteki organizasyon yapısı gibi çalışır. Bir yönetici (Master) ve birden fazla çalışan (Worker) vardır.
 
-Bu dosya, Hadoop'un temel ayarlarını ve HDFS NameNode'un URI'sini tanımlar.
+### Master Düğümde Çalışan Servisler
+
+**NameNode:** HDFS'in beynidir. Hangi dosyanın hangi parçalarının (blok) nerede saklandığını bilir. Dosya sistemi ağacını, blok konumlarını ve metadata bilgilerini tutar. Ancak verilerin kendisini saklamaz; sadece "haritayı" tutar.
+
+**ResourceManager:** YARN'ın merkezidir. Kümedeki tüm hesaplama kaynaklarını (CPU, bellek) yönetir. Bir iş geldiğinde, bu işi hangi makinelerde çalıştıracağına karar verir ve kaynakları tahsis eder.
+
+**SecondaryNameNode:** Adına aldanmayın, bu bir yedek NameNode değildir. NameNode'un edit log dosyalarını periyodik olarak birleştirerek checkpoint oluşturur. Bu sayede NameNode'un başlangıç süresi kısalır ve kurtarma işlemleri kolaylaşır.
+
+### Worker Düğümlerde Çalışan Servisler
+
+**DataNode:** Gerçek verileri saklayan servisdir. Büyük dosyalar 128 MB'lık bloklara bölünür ve bu bloklar farklı DataNode'lara dağıtılır. Her DataNode, sakladığı blokların listesini periyodik olarak NameNode'a bildirir (heartbeat).
+
+**NodeManager:** Her worker makinedeki kaynak yöneticisidir. ResourceManager'dan gelen taleplere göre container'lar oluşturur ve bu container'larda Map veya Reduce görevlerini çalıştırır.
+
+## Pseudo-Distributed Mod: Tek Makinede Tam Deneyim
+
+Gerçek bir küme kurmadan önce, tüm bu servisleri tek bir makine üzerinde çalıştırarak sistemi öğrenebiliriz. Bu moda "Pseudo-Distributed" (sözde-dağıtık) denir. Tüm servisler aynı makinede çalışır, ancak gerçek bir küme gibi davranır.
+
+### Gereksinimler
+
+Hadoop, Java Virtual Machine üzerinde çalışır. Bu nedenle önce Java'yı kurmamız gerekir. Ayrıca Hadoop, düğümler arası iletişim için SSH protokolünü kullanır.
+
+```bash
+# Sistem güncellemesi
+sudo apt update && sudo apt upgrade -y
+
+# Java kurulumu
+sudo apt install openjdk-11-jdk -y
+
+# SSH kurulumu
+sudo apt install ssh openssh-server -y
+```
+
+Java kurulumunu doğrulamak için `java -version` komutunu çalıştırabilirsiniz.
+
+### Hadoop Kullanıcısı Oluşturma
+
+Sistem servislerini ayrı bir kullanıcı altında çalıştırmak, güvenlik ve yönetim açısından iyi bir uygulamadır.
+
+```bash
+# Grup ve kullanıcı oluşturma
+sudo addgroup hadoop
+sudo adduser --ingroup hadoop hduser
+
+# Yeni kullanıcıya geçiş
+su - hduser
+```
+
+### SSH Yapılandırması
+
+Hadoop servisleri başlatıldığında, script'ler SSH üzerinden ilgili düğümlere bağlanır. Tek makinede bile olsak, `hduser` kullanıcısının kendi kendine parola sormadan SSH yapabilmesi gerekir.
+
+```bash
+# Anahtar çifti oluşturma
+ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+
+# Açık anahtarı yetkili anahtarlara ekleme
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+chmod 0600 ~/.ssh/authorized_keys
+```
+
+Test için `ssh localhost` komutunu çalıştırdığınızda parola sorulmamalıdır.
+
+### Hadoop İndirme ve Kurulum
+
+Apache Hadoop'un resmi dağıtımını indirip uygun bir konuma yerleştireceğiz.
+
+```bash
+# İndirme
+wget https://dlcdn.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+
+# Arşivi açma ve taşıma
+tar xzf hadoop-3.3.6.tar.gz
+sudo mv hadoop-3.3.6 /usr/local/hadoop
+
+# Sahiplik ayarı
+sudo chown -R hduser:hadoop /usr/local/hadoop
+```
+
+### Ortam Değişkenleri
+
+Hadoop komutlarının sistemde her yerden çalışabilmesi için PATH değişkenini ve Hadoop'un ihtiyaç duyduğu ortam değişkenlerini tanımlamamız gerekir. `~/.bashrc` dosyasının sonuna şu satırları ekleyin:
+
+```bash
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+export HADOOP_HOME=/usr/local/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+```
+
+Değişiklikleri aktif etmek için `source ~/.bashrc` komutunu çalıştırın.
+
+## Yapılandırma Dosyaları
+
+Hadoop'un davranışını belirleyen yapılandırma dosyaları `$HADOOP_HOME/etc/hadoop` dizinindedir. Her dosya belirli bir bileşeni yapılandırır.
+
+### hadoop-env.sh
+
+Bu dosya, Hadoop'un hangi Java kurulumunu kullanacağını belirtir.
+
+```bash
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+```
+
+### core-site.xml
+
+HDFS için varsayılan dosya sistemini tanımlar. `fs.defaultFS` özelliği, NameNode'un adresini belirtir.
 
 ```xml
 <configuration>
     <property>
         <name>fs.defaultFS</name>
-        <value>hdfs://master-node:9000</value>
+        <value>hdfs://localhost:9000</value>
     </property>
 </configuration>
 ```
 
-*   `fs.defaultFS`: Kümenin NameNode'unun (HDFS yöneticisinin) adresini belirtir. Tüm veri operasyonları bu adrese yönlendirilir.
+### hdfs-site.xml
 
-#### 2. `hdfs-site.xml`
-
-Bu dosya, HDFS'e özel ayarları barındırır: NameNode'un verileri nerede tutacağı, DataNode'ların blokları nereye kaydedeceği ve replikasyon sayısı gibi.
-
-Önce NameNode ve DataNode verilerinin saklanacağı dizinleri oluşturalım (`hduser` ile):
+HDFS'e özgü ayarları içerir. Önce veri dizinlerini oluşturun:
 
 ```bash
 mkdir -p ~/hadoop_data/hdfs/namenode
 mkdir -p ~/hadoop_data/hdfs/datanode
 ```
 
-Şimdi `hdfs-site.xml` dosyasını düzenleyelim:
+Yapılandırma:
 
 ```xml
 <configuration>
@@ -198,18 +254,11 @@ mkdir -p ~/hadoop_data/hdfs/datanode
 </configuration>
 ```
 
-*   `dfs.replication`: HDFS'e yüklenen her veri bloğunun kaç kopyasının oluşturulacağını belirtir. Bizim sadece bir Worker (DataNode) makinemiz olduğu için bu değeri `1` yapıyoruz. Normalde en az 3 olması tavsiye edilir.
-*   `dfs.namenode.name.dir` ve `dfs.datanode.data.dir`: Az önce oluşturduğumuz dizinlerin yollarını belirtiriz.
+`dfs.replication` değeri, her veri bloğunun kaç kopyasının tutulacağını belirtir. Tek makinede olduğumuz için bu değer 1'dir. Gerçek kümelerde genellikle 3 kullanılır.
 
-#### 3. `mapred-site.xml`
+### mapred-site.xml
 
-Bu dosya MapReduce işlemleri için ayarları içerir. Önce şablon dosyayı kopyalayarak oluşturalım:
-
-```bash
-cp mapred-site.xml.template mapred-site.xml
-```
-
-Şimdi `mapred-site.xml` dosyasını düzenleyelim:
+MapReduce işlerinin hangi çerçeve üzerinde çalışacağını belirtir.
 
 ```xml
 <configuration>
@@ -220,11 +269,9 @@ cp mapred-site.xml.template mapred-site.xml
 </configuration>
 ```
 
-*   `mapreduce.framework.name`: MapReduce işlerinin YARN kaynak yöneticisi üzerinde çalışacağını belirtir.
+### yarn-site.xml
 
-#### 4. `yarn-site.xml`
-
-Bu dosya, YARN (kaynak yöneticisi) ayarlarını içerir.
+YARN için temel ayarları içerir.
 
 ```xml
 <configuration>
@@ -232,126 +279,136 @@ Bu dosya, YARN (kaynak yöneticisi) ayarlarını içerir.
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
     </property>
-    <property>
-        <name>yarn.resourcemanager.hostname</name>
-        <value>master-node</value>
-    </property>
 </configuration>
 ```
-*   `yarn.nodemanager.aux-services`: MapReduce işlerinin ara sonuçları (shuffle) yönetebilmesi için gereklidir.
-*   `yarn.resourcemanager.hostname`: Kümenin ResourceManager servisinin hangi makinede çalıştığını belirtir, yani bizim Master düğümümüz.
 
-#### 5. `workers`
+`mapreduce_shuffle` ayarı, Map ve Reduce aşamaları arasındaki veri transferini (shuffle) etkinleştirir.
 
-Bu dosya, hangi makinelerin DataNode ve NodeManager olarak çalışacağını, yani işçi düğümlerini listeler.
+## HDFS Formatlama ve Servisleri Başlatma
 
-`nano workers` veya tercih ettiğiniz bir düzenleyici ile dosyayı açın, içindeki `localhost` girdisini silin ve yerine Worker düğümünüzün ismini yazın:
-
-```
-worker-node
-```
-
-### Yapılandırmayı Worker Düğüme Kopyalama
-
-Master makinede tüm ayarları tamamladık. Şimdi bu ayarları Worker makineye göndermemiz gerekiyor. Master'da `hduser` olarak aşağıdaki komutları çalıştırın:
-
-```bash
-# 1. Worker makinede gerekli dizinleri oluşturun
-ssh hduser@worker-node 'mkdir -p ~/hadoop_data/hdfs/datanode'
-
-# 2. Tüm Hadoop yapılandırma dosyalarını kopyalayın
-scp -r ~/hadoop/etc/hadoop hduser@worker-node:~/hadoop/etc/
-```
-
-*   İlk komut, Worker makinede DataNode'un verilerini saklayacağı dizini oluşturur. Bu adım, `hdfs-site.xml` dosyasında belirtilen yolun Worker düğümde de var olmasını sağlar.
-*   İkinci komut, Master'daki güncel Hadoop yapılandırma dosyalarını (core-site.xml, hdfs-site.xml vb.) Worker düğüme kopyalar.
-
-### Kümenin Başlatılması ve Doğrulanması
-
-Artık her şey hazır. Kümemizi hayata geçirebiliriz. Bu komutlar **SADECE Master** makinede, `hduser` kullanıcısı ile çalıştırılır.
-
-#### 1. HDFS'i Formatlama (SADECE İLK KURULUMDA!)
-
-Bu komut, HDFS dosya sistemini sıfırdan oluşturur. NameNode'da belirttiğimiz metaveri dizinlerini hazırlar.
-
-**UYARI:** Bu komutu çalışan bir kümede asla çalıştırmayın, HDFS'teki tüm verileri siler!
+HDFS'i ilk kez kullanmadan önce formatlanması gerekir. Bu işlem, NameNode için gerekli metadata yapısını oluşturur.
 
 ```bash
 hdfs namenode -format
 ```
-Çıktının sonunda "successfully formatted" ifadesini görmelisiniz.
 
-#### 2. Hadoop Servislerini Başlatma
+Bu komutu yalnızca ilk kurulumda çalıştırın. Çalışan bir kümede bu komutu çalıştırmak tüm verileri siler.
 
-Sırasıyla HDFS ve YARN servislerini başlatalım.
+Servisleri başlatmak için:
 
 ```bash
 start-dfs.sh
 start-yarn.sh
 ```
-Bu komutlar, `workers` dosyasına yazdığınız tüm düğümlere SSH ile bağlanıp ilgili servisleri (DataNode, NodeManager) başlatacaktır.
 
-#### 3. Kümenin Durumunu Kontrol Etme
+Çalışan Java süreçlerini görmek için `jps` komutunu kullanın. Çıktıda şunları görmelisiniz: NameNode, DataNode, SecondaryNameNode, ResourceManager, NodeManager.
 
-Servislerin doğru çalışıp çalışmadığını anlamanın en iyi yolu `jps` (Java Process Status) komutudur.
+### Web Arayüzleri
 
-*   **Master makinede `jps` çıktısı şuna benzer olmalı:**
-    ```
-    ... NameNode
-    ... ResourceManager
-    ... SecondaryNameNode
-    ... Jps
-    ```
-*   **Worker makinede `jps` çıktısı şuna benzer olmalı:**
-    ```
-    ... DataNode
-    ... NodeManager
-    ... Jps
-    ```
-Eğer bu servisleri görüyorsanız, kümeniz başarıyla kurulmuş demektir.
+Hadoop, kümenin durumunu izlemek için web arayüzleri sunar:
 
-Ayrıca web arayüzlerinden de kümenin durumunu kontrol edebilirsiniz:
-*   **HDFS NameNode Arayüzü:** `http://master-node-ip:9870`
-*   **YARN ResourceManager Arayüzü:** `http://master-node-ip:8088`
+- **HDFS NameNode:** http://localhost:9870
+- **YARN ResourceManager:** http://localhost:8088
 
-Bu arayüzlerde "Live Nodes" sayısının 1 olduğunu görmelisiniz.
+Bu arayüzlerde "Live Nodes" sayısının 1 olduğunu görüyorsanız kurulum başarılıdır.
 
-### Test: İlk MapReduce İşini Çalıştırma
+## Çok Düğümlü Kümeye Geçiş
 
-Teoriyi pratiğe dökme zamanı. Hadoop ile gelen örnek bir WordCount (Kelime Sayma) uygulamasını çalıştırarak kümemizi test edelim.
+Tek düğümlü kurulumun mantığını kavradıktan sonra, gerçek dağıtık ortama geçiş yapmak oldukça kolaydır. İki makinelik minimal bir küme için yapılması gereken değişiklikler şunlardır:
+
+### Master-Worker İletişimi
+
+Master ve Worker makineler arasında `hduser` kullanıcısı için parolasız SSH yapılandırması gerekir. Master makineden `ssh worker-node` komutu parola sormadan çalışmalıdır.
+
+### Yapılandırma Değişiklikleri
+
+**core-site.xml:** `localhost` yerine Master düğümün IP adresi veya hostname'i yazılır.
+
+```xml
+<property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://master-node:9000</value>
+</property>
+```
+
+**yarn-site.xml:** ResourceManager'ın adresini ekleyin.
+
+```xml
+<property>
+    <name>yarn.resourcemanager.hostname</name>
+    <value>master-node</value>
+</property>
+```
+
+**workers dosyası:** Worker düğümlerin listesini içerir. `localhost` satırını silip worker hostname'lerini ekleyin.
+
+```
+worker-node
+```
+
+### Yapılandırmayı Dağıtma
+
+Master'daki yapılandırmayı tüm worker'lara kopyalamanız gerekir:
 
 ```bash
-# 1. HDFS üzerinde çalışacağımız dizinleri oluşturalım
+# Worker'da dizin oluşturma
+ssh hduser@worker-node 'mkdir -p ~/hadoop_data/hdfs/datanode'
+
+# Yapılandırma dosyalarını kopyalama
+scp -r $HADOOP_HOME/etc/hadoop hduser@worker-node:$HADOOP_HOME/etc/
+```
+
+Artık `start-dfs.sh` ve `start-yarn.sh` komutları, workers dosyasındaki tüm makinelere SSH ile bağlanarak ilgili servisleri başlatacaktır.
+
+## MapReduce: İlk İş
+
+Kurulumu test etmek için Hadoop ile gelen WordCount örneğini çalıştıralım.
+
+```bash
+# HDFS'te girdi dizini oluşturma
 hdfs dfs -mkdir /input
 
-# 2. Yerel bir test dosyası oluşturalım
+# Test dosyası hazırlama ve yükleme
 echo "merhaba dunya hosgeldin dunya" > test.txt
-
-# 3. Yerel dosyayı HDFS'e yükleyelim
 hdfs dfs -put test.txt /input
 
-# 4. Örnek MapReduce programını çalıştıralım
-hadoop jar ~/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar wordcount /input /output
+# MapReduce işini çalıştırma
+hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar \
+    wordcount /input /output
 
-# 5. Sonucu görelim
+# Sonuçları görüntüleme
 hdfs dfs -cat /output/part-r-00000
 ```
-Çıktı olarak şunu görmelisiniz:
+
+Beklenen çıktı:
 
 ```
-dunya	2
-hosgeldin	1
-merhaba	1
+dunya       2
+hosgeldin   1
+merhaba     1
 ```
-Eğer bu sonucu aldıysanız, tebrikler! İlk dağıtık Hadoop kümenizi kurdunuz ve üzerinde ilk işinizi başarıyla çalıştırdınız.
 
-### Küme'yi Durdurma
+## Kümeyi Durdurma
 
-İşiniz bittiğinde küme'yi güvenli bir şekilde kapatmak için aşağıdaki komutları yine **Master** makineden çalıştırın:
+İşiniz bittiğinde servisleri düzgün bir şekilde kapatın:
 
 ```bash
 stop-yarn.sh
 stop-dfs.sh
 ```
 
-Bu kurulum, size dağıtık sistemlerin çalışma mantığı hakkında temel bir anlayış kazandıracaktır. Unutmayın, karşılaştığınız her hata, öğrenme sürecinin bir parçasıdır. Hata mesajlarını ve log dosyalarını (`~/hadoop/logs` dizininde bulabilirsiniz) okumak, sorun çözme yeteneğinizi geliştirecektir.
+## Sorun Giderme İpuçları
+
+Log dosyaları `$HADOOP_HOME/logs` dizininde bulunur. Bir servis başlamıyorsa, ilgili log dosyasını inceleyerek hatanın kaynağını tespit edebilirsiniz.
+
+Sık karşılaşılan sorunlar:
+
+- **SSH bağlantı hatası:** Parolasız SSH yapılandırmasını kontrol edin
+- **NameNode formatlanamıyor:** Daha önceki veri dizinlerini temizleyin
+- **DataNode bağlanamıyor:** Firewall ayarlarını ve port erişimlerini kontrol edin
+- **Java bulunamıyor:** JAVA_HOME değişkeninin doğru tanımlandığından emin olun
+
+Hata mesajlarını dikkatlice okumak, dağıtık sistemlerde sorun çözme becerinizi geliştirecek en önemli alışkanlıktır.
+
+
+Apache Spark-Hive-Pig-Mahout gibi diğer büyük veri araçlarını da ilerleyen derslerde ele alacağız. 
