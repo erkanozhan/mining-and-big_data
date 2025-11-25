@@ -421,6 +421,20 @@ Sık karşılaşılan sorunlar:
 - **SSH bağlantı hatası:** Parolasız SSH yapılandırmasını kontrol edin
 - **NameNode formatlanamıyor:** Daha önceki veri dizinlerini temizleyin
 - **DataNode bağlanamıyor:** Firewall ayarlarını ve port erişimlerini kontrol edin
+
+**Firewall Ayarları ve Yönetimi
+```bash
+# Firewall'ı açma
+sudo ufw enable
+#Port Açma
+sudo ufw allow 8080
+#Protokol Bazlı Port Açma
+sudo ufw allow 8080/tcp
+sudo ufw allow 8080/udp
+# Firewall'ın Durumunu (Açıkmı-Kapalımı?) Görme
+sudo ufw status
+```
+
 - **Java bulunamıyor:** JAVA_HOME değişkeninin doğru tanımlandığından emin olun
 
 Hata mesajlarını dikkatlice okumak, dağıtık sistemlerde sorun çözme becerinizi geliştirecek en önemli alışkanlıktır.
