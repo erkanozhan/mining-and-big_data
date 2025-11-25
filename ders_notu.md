@@ -141,6 +141,21 @@ sudo apt install openjdk-11-jdk -y
 
 # SSH kurulumu
 sudo apt install ssh openssh-server -y
+
+# Yüklü Linux'ü görme	
+lsb_release -a
+
+# Java Versionu Görme	
+java -version
+
+# Javanın yüklendiği yeri görme
+readlink -f $(which java)
+
+# Hangi javalar yüklü hangisi aktif ve nerede 
+update-java-alternatives -l
+
+#İstenilen Java Sürümünü Aktif Etme	
+sudo update-alternatives --config java
 ```
 
 Java kurulumunu doğrulamak için `java -version` komutunu çalıştırabilirsiniz.
