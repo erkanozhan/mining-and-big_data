@@ -1,9 +1,5 @@
 ***
 
-Merhaba gençler,
-
-Bugün sizlerle son yılların en popüler konularından biri olan **Büyük Veri (Big Data)** üzerine konuşacağız. Bu kavramı muhtemelen duymuşsunuzdur ama tam olarak ne anlama geldiğini, neden bu kadar önemli olduğunu ve arkasındaki teknolojileri adım adım inceleyeceğiz.
-
 ## Büyük Veri Nedir?
 
 En basit haliyle başlayalım. Elinizde tek bir kitaptan oluşan bir bilgi olduğunu düşünün. İçindeki bilgileri bulmak, analiz etmek oldukça kolaydır. Şimdi, o tek kitap yerine dünyanın en büyük kütüphanesindeki tüm kitapların, dergilerin, ses kayıtlarının ve videoların bir anda önünüze yığıldığını hayal edin. Üstelik bu kütüphaneye her saniye binlerce yeni materyal ekleniyor. İşte bu devasa, karmaşık ve sürekli büyüyen bilgi yığınına **Büyük Veri** diyoruz.
