@@ -1,0 +1,212 @@
+<!-- Şekil: Veri ambarı mimarisi ve ETL süreci | Ders notu: Veri Madenciliği ve Büyük Veri -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="gradEdw" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="50%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1e40af"/>
+    </linearGradient>
+    <linearGradient id="gradMart" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="50%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+    <linearGradient id="gradSrc" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4b5563"/>
+      <stop offset="50%" stop-color="#9ca3af"/>
+      <stop offset="100%" stop-color="#4b5563"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.15"/>
+      <feComposite in2="offsetblur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrowMeta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9ca3af"/>
+    </marker>
+    <style>
+      .title { font-size: 24px; font-weight: bold; fill: #111827; }
+      .subtitle { font-size: 14px; fill: #4b5563; }
+      .layer { font-size: 15px; font-weight: bold; fill: #ffffff; text-anchor: middle; }
+      .srcName { font-size: 14px; font-weight: 600; fill: #1f2937; text-anchor: middle; }
+      .srcSub { font-size: 13px; fill: #4b5563; text-anchor: middle; }
+      .stepT { font-size: 15px; font-weight: bold; fill: #92400e; text-anchor: middle; }
+      .stepE { font-size: 13px; fill: #92400e; text-anchor: middle; }
+      .stepD { font-size: 13px; fill: #4b5563; text-anchor: middle; }
+      .flow { stroke: #6b7280; stroke-width: 2.2; fill: none; }
+      .useT { font-size: 15px; font-weight: bold; fill: #1f2937; }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="600" y="44" text-anchor="middle" class="title">Veri Ambarı Mimarisi ve ETL Süreci</text>
+  <text x="600" y="70" text-anchor="middle" class="subtitle">Dağınık işlemsel kaynaklardan analiz ve madenciliğe hazır, bütünleşik veri deposuna</text>
+
+  <!-- Katmanlar -->
+  <rect x="25" y="90" width="190" height="566" rx="16" fill="#f3f4f6" stroke="#6b7280" stroke-opacity="0.35" stroke-width="1.2"/>
+  <rect x="37" y="102" width="166" height="30" rx="15" fill="#6b7280"/>
+  <text x="120.0" y="122" class="layer">Kaynak Katmanı</text>
+  <rect x="235" y="90" width="210" height="566" rx="16" fill="#fffbeb" stroke="#d97706" stroke-opacity="0.35" stroke-width="1.2"/>
+  <rect x="247" y="102" width="186" height="30" rx="15" fill="#d97706"/>
+  <text x="340.0" y="122" class="layer">Hazırlık (Staging)</text>
+  <rect x="465" y="90" width="420" height="566" rx="16" fill="#eff6ff" stroke="#2563eb" stroke-opacity="0.35" stroke-width="1.2"/>
+  <rect x="477" y="102" width="396" height="30" rx="15" fill="#2563eb"/>
+  <text x="675.0" y="122" class="layer">Depolama Katmanı</text>
+  <rect x="905" y="90" width="270" height="566" rx="16" fill="#ecfdf5" stroke="#059669" stroke-opacity="0.35" stroke-width="1.2"/>
+  <rect x="917" y="102" width="246" height="30" rx="15" fill="#059669"/>
+  <text x="1040.0" y="122" class="layer">Sunum Katmanı</text>
+
+  <!-- Kaynaklar -->
+  <g transform="translate(40,160)">
+    <rect width="160" height="100" rx="10" fill="#ffffff" stroke="#d1d5db" filter="url(#shadow)"/>
+    <path d="M 62 18 V 48 A 18 6 0 0 0 98 48 V 18 Z" fill="url(#gradSrc)"/>
+    <path d="M 62 33 A 18 6 0 0 0 98 33" fill="none" stroke="#e5e7eb" stroke-width="1.2"/>
+    <ellipse cx="80" cy="18" rx="18" ry="6" fill="#d1d5db" stroke="#4b5563"/>
+    <text x="80" y="72" class="srcName">İşlemsel Veritabanı</text>
+    <text x="80" y="90" class="srcSub">(OLTP)</text>
+  </g>
+  <line x1="200" y1="210" x2="253" y2="210" class="flow" marker-end="url(#arrow)"/>
+  <g transform="translate(40,285)">
+    <rect width="160" height="100" rx="10" fill="#ffffff" stroke="#d1d5db" filter="url(#shadow)"/>
+    <rect x="58" y="12" width="44" height="40" rx="5" fill="#ffffff" stroke="#4b5563" stroke-width="1.5"/>
+    <rect x="58" y="12" width="44" height="9" rx="3" fill="#4b5563"/>
+    <rect x="63" y="25" width="15" height="10" rx="2" fill="#93c5fd"/>
+    <rect x="82" y="25" width="15" height="10" rx="2" fill="#a7f3d0"/>
+    <rect x="63" y="38" width="15" height="10" rx="2" fill="#fde68a"/>
+    <rect x="82" y="38" width="15" height="10" rx="2" fill="#ddd6fe"/>
+    <text x="80" y="72" class="srcName">CRM / ERP</text>
+    <text x="80" y="90" class="srcSub">sistemleri</text>
+  </g>
+  <line x1="200" y1="335" x2="253" y2="335" class="flow" marker-end="url(#arrow)"/>
+  <g transform="translate(40,410)">
+    <rect width="160" height="100" rx="10" fill="#ffffff" stroke="#d1d5db" filter="url(#shadow)"/>
+    <rect x="56" y="12" width="48" height="40" rx="5" fill="#ffffff" stroke="#4b5563" stroke-width="1.5"/>
+    <line x1="56" y1="21" x2="104" y2="21" stroke="#4b5563" stroke-width="1.2"/>
+    <circle cx="61" cy="16.5" r="1.8" fill="#ef4444"/><circle cx="67" cy="16.5" r="1.8" fill="#f59e0b"/><circle cx="73" cy="16.5" r="1.8" fill="#10b981"/>
+    <line x1="62" y1="28" x2="96" y2="28" stroke="#9ca3af" stroke-width="2"/>
+    <line x1="62" y1="35" x2="88" y2="35" stroke="#9ca3af" stroke-width="2"/>
+    <line x1="62" y1="42" x2="98" y2="42" stroke="#9ca3af" stroke-width="2"/>
+    <text x="80" y="72" class="srcName">Web Logları</text>
+    <text x="80" y="90" class="srcSub">(tıklama akışı)</text>
+  </g>
+  <line x1="200" y1="460" x2="253" y2="460" class="flow" marker-end="url(#arrow)"/>
+  <g transform="translate(40,535)">
+    <rect width="160" height="100" rx="10" fill="#ffffff" stroke="#d1d5db" filter="url(#shadow)"/>
+    <path d="M 64 48 Q 54 48 54 39 Q 54 31 63 31 Q 64 19 77 19 Q 89 19 91 29 Q 104 29 104 39 Q 104 48 94 48 Z" fill="#cffafe" stroke="#0891b2" stroke-width="1.5"/>
+    <text x="79" y="43" text-anchor="middle" font-size="13" font-weight="bold" fill="#0e7490">API</text>
+    <text x="80" y="72" class="srcName">Dış Kaynaklar</text>
+    <text x="80" y="90" class="srcSub">(CSV, API)</text>
+  </g>
+  <line x1="200" y1="585" x2="253" y2="585" class="flow" marker-end="url(#arrow)"/>
+
+  <!-- ETL -->
+  <rect x="255" y="150" width="170" height="490" rx="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.8" filter="url(#shadow)"/>
+  <text x="340" y="178" text-anchor="middle" font-size="20" font-weight="bold" fill="#b45309">ETL</text>
+  <text x="340" y="197" text-anchor="middle" font-size="13" fill="#92400e">Extract · Transform · Load</text>
+  <rect x="268" y="212" width="144" height="110" rx="10" fill="#ffffff" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="340" y="238" class="stepT">1. Çek</text>
+  <text x="340" y="256" class="stepE">(Extract)</text>
+  <line x1="284" y1="268" x2="396" y2="268" stroke="#fde68a"/>
+  <text x="340" y="290" class="stepD">kaynaklardan</text>
+  <text x="340" y="308" class="stepD">veriyi al</text>
+  <rect x="268" y="352" width="144" height="110" rx="10" fill="#ffffff" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="340" y="378" class="stepT">2. Dönüştür</text>
+  <text x="340" y="396" class="stepE">(Transform)</text>
+  <line x1="284" y1="408" x2="396" y2="408" stroke="#fde68a"/>
+  <text x="340" y="430" class="stepD">temizle, birleştir,</text>
+  <text x="340" y="448" class="stepD">biçimlendir</text>
+  <rect x="268" y="492" width="144" height="110" rx="10" fill="#ffffff" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="340" y="518" class="stepT">3. Yükle</text>
+  <text x="340" y="536" class="stepE">(Load)</text>
+  <line x1="284" y1="548" x2="396" y2="548" stroke="#fde68a"/>
+  <text x="340" y="570" class="stepD">ambara yükle</text>
+  <text x="340" y="588" class="stepD">(periyodik)</text>
+  <line x1="340" y1="324" x2="340" y2="350" stroke="#d97706" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <line x1="340" y1="464" x2="340" y2="490" stroke="#d97706" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <path d="M 412 547 H 446 Q 452 547 452 541 V 386 Q 452 380 458 380 H 490" class="flow" marker-end="url(#arrow)"/>
+
+  <!-- Kurumsal veri ambarı -->
+  <g filter="url(#shadow)">
+    <path d="M 492 232 V 432 A 78 20 0 0 0 648 432 V 232 Z" fill="url(#gradEdw)" stroke="#1e3a8a" stroke-width="1.5"/>
+    <path d="M 492 266 A 78 20 0 0 0 648 266" fill="none" stroke="#bfdbfe" stroke-width="1.2" opacity="0.6"/>
+    <path d="M 492 404 A 78 20 0 0 0 648 404" fill="none" stroke="#bfdbfe" stroke-width="1.2" opacity="0.6"/>
+    <ellipse cx="570" cy="232" rx="78" ry="20" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
+  </g>
+  <text x="570" y="330" text-anchor="middle" font-size="18" font-weight="bold" fill="#ffffff">Kurumsal</text>
+  <text x="570" y="353" text-anchor="middle" font-size="18" font-weight="bold" fill="#ffffff">Veri Ambarı</text>
+  <text x="570" y="398" text-anchor="middle" font-size="13" fill="#dbeafe">(Enterprise DW)</text>
+
+  <!-- Meta veri -->
+  <line x1="570" y1="456" x2="570" y2="514" stroke="#9ca3af" stroke-width="1.8" stroke-dasharray="5 4" marker-start="url(#arrowMeta)" marker-end="url(#arrowMeta)"/>
+  <g transform="translate(495,518)" filter="url(#shadow)">
+    <path d="M 0 0 H 134 L 150 16 V 84 H 0 Z" fill="#ffffff" stroke="#6b7280" stroke-width="1.5"/>
+    <path d="M 134 0 V 16 H 150" fill="#e5e7eb" stroke="#6b7280" stroke-width="1.2"/>
+  </g>
+  <text x="570" y="544" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">Meta Veri</text>
+  <text x="570" y="562" text-anchor="middle" font-size="13" fill="#4b5563">(Metadata)</text>
+  <text x="570" y="586" text-anchor="middle" font-size="13" fill="#4b5563">şema · köken · kurallar</text>
+
+  <!-- Veri pazarları -->
+  <text x="785" y="172" text-anchor="middle" font-size="15" font-weight="bold" fill="#5b21b6">Veri Pazarları</text>
+  <text x="785" y="190" text-anchor="middle" font-size="13" fill="#4b5563">(Data Marts)</text>
+  <line x1="652" y1="340" x2="724" y2="268" class="flow" marker-end="url(#arrow)"/>
+  <line x1="652" y1="340" x2="724" y2="398" class="flow" marker-end="url(#arrow)"/>
+  <line x1="652" y1="340" x2="724" y2="528" class="flow" marker-end="url(#arrow)"/>
+  <g transform="translate(785,268)" filter="url(#shadow)">
+    <path d="M -55 -28 V 28 A 55 12 0 0 0 55 28 V -28 Z" fill="url(#gradMart)" stroke="#5b21b6" stroke-width="1.2"/>
+    <ellipse cx="0" cy="-28" rx="55" ry="12" fill="#ddd6fe" stroke="#5b21b6" stroke-width="1.2"/>
+  </g>
+  <text x="785" y="280" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">Satış</text>
+  <g transform="translate(785,398)" filter="url(#shadow)">
+    <path d="M -55 -28 V 28 A 55 12 0 0 0 55 28 V -28 Z" fill="url(#gradMart)" stroke="#5b21b6" stroke-width="1.2"/>
+    <ellipse cx="0" cy="-28" rx="55" ry="12" fill="#ddd6fe" stroke="#5b21b6" stroke-width="1.2"/>
+  </g>
+  <text x="785" y="410" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">Finans</text>
+  <g transform="translate(785,528)" filter="url(#shadow)">
+    <path d="M -55 -28 V 28 A 55 12 0 0 0 55 28 V -28 Z" fill="url(#gradMart)" stroke="#5b21b6" stroke-width="1.2"/>
+    <ellipse cx="0" cy="-28" rx="55" ry="12" fill="#ddd6fe" stroke="#5b21b6" stroke-width="1.2"/>
+  </g>
+  <text x="785" y="540" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">İK</text>
+
+  <!-- Kullanım katmanı -->
+  <line x1="840" y1="268" x2="925" y2="268" class="flow"/>
+  <line x1="840" y1="398" x2="925" y2="398" class="flow"/>
+  <line x1="840" y1="528" x2="925" y2="528" class="flow"/>
+  <line x1="925" y1="268" x2="925" y2="528" class="flow"/>
+  <line x1="925" y1="268" x2="946" y2="268" class="flow" marker-end="url(#arrow)"/>
+  <g transform="translate(948,226)">
+    <rect width="212" height="84" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="1.6" filter="url(#shadow)"/>
+    <path d="M 38 22 L 58 32 L 58 56 L 38 66 L 18 56 L 18 32 Z" fill="#a7f3d0" stroke="#047857" stroke-width="1.4"/>
+    <path d="M 18 32 L 38 42 L 58 32 M 38 42 V 66" fill="none" stroke="#047857" stroke-width="1.4"/>
+    <text x="76" y="48" class="useT">OLAP Analizi</text>
+  </g>
+  <line x1="925" y1="398" x2="946" y2="398" class="flow" marker-end="url(#arrow)"/>
+  <g transform="translate(948,356)">
+    <rect width="212" height="84" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="1.6" filter="url(#shadow)"/>
+    <line x1="16" y1="64" x2="62" y2="64" stroke="#047857" stroke-width="1.6"/>
+    <rect x="20" y="44" width="9" height="20" fill="#34d399"/>
+    <rect x="33" y="30" width="9" height="34" fill="#10b981"/>
+    <rect x="46" y="38" width="9" height="26" fill="#059669"/>
+    <text x="76" y="38" class="useT">Raporlama /</text>
+    <text x="76" y="58" class="useT">Panolar</text>
+  </g>
+  <line x1="925" y1="528" x2="946" y2="528" class="flow" marker-end="url(#arrow)"/>
+  <g transform="translate(948,486)">
+    <rect width="212" height="84" rx="12" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.6" filter="url(#shadow)"/>
+    <circle cx="20" cy="56" r="2.6" fill="#d97706"/><circle cx="28" cy="48" r="2.6" fill="#d97706"/><circle cx="24" cy="38" r="2.6" fill="#d97706"/>
+    <circle cx="36" cy="40" r="11" fill="none" stroke="#b45309" stroke-width="2.5"/>
+    <line x1="44" y1="48" x2="56" y2="62" stroke="#b45309" stroke-width="3.5" stroke-linecap="round"/>
+    <text x="76" y="38" class="useT">Veri</text>
+    <text x="76" y="58" class="useT">Madenciliği</text>
+  </g>
+
+  <!-- Dipnot -->
+  <text x="600" y="690" text-anchor="middle" font-size="14" fill="#4b5563">Veri ambarı (Inmon): <tspan font-weight="bold" fill="#1f2937">konu odaklı, bütünleşik, zaman boyutlu ve kalıcı (non-volatile)</tspan> bir veri deposudur.</text>
+</svg>

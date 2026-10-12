@@ -1,0 +1,148 @@
+<!-- Şekil: "Tenis oynanır mı?" karar ağacı (14 günlük hava verisi) | Ders notu: Veri Madenciliği ve Büyük Veri -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="720" viewBox="0 0 1100 720" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f9fafb"/>
+    </linearGradient>
+    <linearGradient id="innerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="yesGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="noGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.15"/>
+      <feComposite in2="offsetblur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrowHi" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"/>
+    </marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+
+  <!-- Başlık -->
+  <text x="550" y="40" font-size="24" font-weight="bold" text-anchor="middle" fill="#111827">Karar Ağacı: “Tenis oynanır mı?”</text>
+  <text x="550" y="66" font-size="14" text-anchor="middle" fill="#4b5563">Klasik 14 günlük hava durumu verisi · Köşeli parantez: düğüme düşen örneklerin [Evet, Hayır] dağılımı</text>
+
+  <!-- ===== Kenarlar ===== -->
+  <g stroke="#6b7280" stroke-width="2" fill="none">
+    <line x1="550" y1="175" x2="550" y2="272" marker-end="url(#arrow)"/>
+    <line x1="550" y1="175" x2="876" y2="273" marker-end="url(#arrow)"/>
+    <line x1="220" y1="355" x2="323" y2="462" marker-end="url(#arrow)"/>
+    <line x1="880" y1="355" x2="777" y2="462" marker-end="url(#arrow)"/>
+    <line x1="880" y1="355" x2="983" y2="462" marker-end="url(#arrow)"/>
+  </g>
+  <!-- Kuralın izlediği yol (vurgulu) -->
+  <g stroke="#f59e0b" stroke-width="4" fill="none" stroke-linecap="round">
+    <line x1="550" y1="175" x2="224" y2="273" marker-end="url(#arrowHi)"/>
+    <line x1="220" y1="355" x2="117" y2="462" marker-end="url(#arrowHi)"/>
+  </g>
+
+  <!-- Dal etiketleri -->
+  <g font-size="14" font-weight="600" text-anchor="middle">
+    <rect x="343" y="211" width="84" height="26" rx="13" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="385" y="229" fill="#92400e">Güneşli</text>
+    <rect x="508" y="211" width="84" height="26" rx="13" fill="#ffffff" stroke="#9ca3af" stroke-width="1.2"/>
+    <text x="550" y="229" fill="#374151">Bulutlu</text>
+    <rect x="669" y="211" width="92" height="26" rx="13" fill="#ffffff" stroke="#9ca3af" stroke-width="1.2"/>
+    <text x="715" y="229" fill="#374151">Yağmurlu</text>
+
+    <rect x="129" y="397" width="76" height="26" rx="13" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="167" y="415" fill="#92400e">Yüksek</text>
+    <rect x="235" y="397" width="76" height="26" rx="13" fill="#ffffff" stroke="#9ca3af" stroke-width="1.2"/>
+    <text x="273" y="415" fill="#374151">Normal</text>
+
+    <rect x="792" y="397" width="70" height="26" rx="13" fill="#ffffff" stroke="#9ca3af" stroke-width="1.2"/>
+    <text x="827" y="415" fill="#374151">Güçlü</text>
+    <rect x="899" y="397" width="66" height="26" rx="13" fill="#ffffff" stroke="#9ca3af" stroke-width="1.2"/>
+    <text x="932" y="415" fill="#374151">Zayıf</text>
+  </g>
+
+  <!-- ===== Kök düğüm ===== -->
+  <g>
+    <rect x="450" y="95" width="200" height="80" rx="8" fill="url(#innerGrad)" filter="url(#shadow)"/>
+    <text x="550" y="123" font-size="18" font-weight="bold" text-anchor="middle" fill="#ffffff">Hava Durumu</text>
+    <text x="550" y="144" font-size="14" text-anchor="middle" fill="#ffffff">[9 E, 5 H]</text>
+    <rect x="490" y="155" width="120" height="9" rx="2" fill="#ffffff"/>
+    <rect x="491" y="156" width="76.6" height="7" fill="#10b981"/>
+    <rect x="567.6" y="156" width="41.4" height="7" fill="#ef4444"/>
+  </g>
+  <!-- Bilgi kazancı notu -->
+  <line x1="652" y1="135" x2="688" y2="135" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="690" y="110" width="250" height="50" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="815" y="131" font-size="15" font-weight="bold" text-anchor="middle" fill="#92400e">Bilgi Kazancı = 0.247</text>
+  <text x="815" y="150" font-size="13" text-anchor="middle" fill="#92400e">(en yüksek → kök seçildi)</text>
+
+  <!-- ===== 2. seviye ===== -->
+  <!-- Nem -->
+  <rect x="130" y="275" width="180" height="80" rx="8" fill="url(#innerGrad)" filter="url(#shadow)"/>
+  <text x="220" y="303" font-size="18" font-weight="bold" text-anchor="middle" fill="#ffffff">Nem</text>
+  <text x="220" y="324" font-size="14" text-anchor="middle" fill="#ffffff">[2 E, 3 H]</text>
+  <rect x="160" y="335" width="120" height="9" rx="2" fill="#ffffff"/>
+  <rect x="161" y="336" width="47.2" height="7" fill="#10b981"/>
+  <rect x="208.2" y="336" width="70.8" height="7" fill="#ef4444"/>
+
+  <!-- Bulutlu → EVET -->
+  <rect x="475" y="275" width="150" height="80" rx="40" fill="url(#yesGrad)" filter="url(#shadow)"/>
+  <text x="550" y="310" font-size="20" font-weight="bold" text-anchor="middle" fill="#ffffff">EVET</text>
+  <text x="550" y="332" font-size="14" text-anchor="middle" fill="#ffffff">[4 E, 0 H]</text>
+
+  <!-- Rüzgâr -->
+  <rect x="790" y="275" width="180" height="80" rx="8" fill="url(#innerGrad)" filter="url(#shadow)"/>
+  <text x="880" y="303" font-size="18" font-weight="bold" text-anchor="middle" fill="#ffffff">Rüzgâr</text>
+  <text x="880" y="324" font-size="14" text-anchor="middle" fill="#ffffff">[3 E, 2 H]</text>
+  <rect x="820" y="335" width="120" height="9" rx="2" fill="#ffffff"/>
+  <rect x="821" y="336" width="70.8" height="7" fill="#10b981"/>
+  <rect x="891.8" y="336" width="47.2" height="7" fill="#ef4444"/>
+
+  <!-- ===== 3. seviye (yapraklar) ===== -->
+  <rect x="45" y="465" width="140" height="80" rx="40" fill="url(#noGrad)" stroke="#f59e0b" stroke-width="3" filter="url(#shadow)"/>
+  <text x="115" y="500" font-size="20" font-weight="bold" text-anchor="middle" fill="#ffffff">HAYIR</text>
+  <text x="115" y="522" font-size="14" text-anchor="middle" fill="#ffffff">[0 E, 3 H]</text>
+
+  <rect x="255" y="465" width="140" height="80" rx="40" fill="url(#yesGrad)" filter="url(#shadow)"/>
+  <text x="325" y="500" font-size="20" font-weight="bold" text-anchor="middle" fill="#ffffff">EVET</text>
+  <text x="325" y="522" font-size="14" text-anchor="middle" fill="#ffffff">[2 E, 0 H]</text>
+
+  <rect x="705" y="465" width="140" height="80" rx="40" fill="url(#noGrad)" filter="url(#shadow)"/>
+  <text x="775" y="500" font-size="20" font-weight="bold" text-anchor="middle" fill="#ffffff">HAYIR</text>
+  <text x="775" y="522" font-size="14" text-anchor="middle" fill="#ffffff">[0 E, 2 H]</text>
+
+  <rect x="915" y="465" width="140" height="80" rx="40" fill="url(#yesGrad)" filter="url(#shadow)"/>
+  <text x="985" y="500" font-size="20" font-weight="bold" text-anchor="middle" fill="#ffffff">EVET</text>
+  <text x="985" y="522" font-size="14" text-anchor="middle" fill="#ffffff">[3 E, 0 H]</text>
+
+  <!-- ===== Kural kutusu ===== -->
+  <rect x="150" y="582" width="800" height="72" rx="12" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="550" y="608" font-size="14" font-weight="600" text-anchor="middle" fill="#92400e">Kural örneği (vurgulu yol: kökten yaprağa)</text>
+  <text x="550" y="636" font-size="17" text-anchor="middle" fill="#1f2937"><tspan font-weight="bold" fill="#b45309">EĞER</tspan> Hava = Güneşli <tspan font-weight="bold" fill="#b45309">VE</tspan> Nem = Yüksek <tspan font-weight="bold" fill="#b45309">İSE</tspan> Oyna = <tspan font-weight="bold" fill="#dc2626">Hayır</tspan></text>
+
+  <!-- Gösterge -->
+  <g font-size="13" fill="#4b5563">
+    <rect x="215" y="680" width="22" height="16" rx="3" fill="url(#innerGrad)"/>
+    <text x="243" y="693">İç düğüm (test edilen nitelik)</text>
+    <rect x="455" y="680" width="34" height="16" rx="8" fill="url(#yesGrad)"/>
+    <text x="495" y="693">Yaprak: EVET</text>
+    <rect x="610" y="680" width="34" height="16" rx="8" fill="url(#noGrad)"/>
+    <text x="650" y="693">Yaprak: HAYIR</text>
+    <text x="770" y="693">E = Evet, H = Hayır</text>
+  </g>
+</svg>

@@ -1,0 +1,184 @@
+<!-- Şekil: Nitelik (öznitelik) türleri ve ölçek düzeyleri | Ders notu: Veri Madenciliği ve Büyük Veri -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="740" viewBox="0 0 1200 740" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="gradRoot" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="gradCat" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="gradNum" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="gradBand" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#cffafe"/>
+      <stop offset="100%" stop-color="#dbeafe"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.15"/>
+      <feComposite in2="offsetblur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+    </marker>
+    <style>
+      .title { font-size: 24px; font-weight: bold; fill: #111827; }
+      .subtitle { font-size: 14px; fill: #4b5563; }
+      .tree { stroke: #9ca3af; stroke-width: 2; fill: none; }
+      .cardTitle { font-size: 16px; font-weight: bold; fill: #ffffff; text-anchor: middle; }
+      .lbl { font-size: 13px; font-weight: bold; }
+      .ex { font-size: 14px; fill: #1f2937; }
+      .prop { font-size: 13px; font-style: italic; fill: #4b5563; }
+      .op { font-size: 15px; font-weight: bold; text-anchor: middle; }
+      .cap { font-size: 13px; fill: #374151; }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="600" y="44" text-anchor="middle" class="title">Nitelik (Öznitelik) Türleri</text>
+  <text x="600" y="70" text-anchor="middle" class="subtitle">Ölçek düzeyleri ve her düzeyde anlamlı olan işlemler</text>
+
+  <!-- Ağaç bağlantıları -->
+  <path d="M 600 150 V 175 M 360.5 175 H 951.5 M 360.5 175 V 200 M 951.5 175 V 200" class="tree"/>
+  <path d="M 360.5 246 V 272 M 142.5 272 H 578.5 M 142.5 272 V 300 M 360.5 272 V 300 M 578.5 272 V 300" class="tree"/>
+  <path d="M 951.5 246 V 272 M 842.5 272 H 1060.5 M 842.5 272 V 300 M 1060.5 272 V 300" class="tree"/>
+
+  <!-- Kök -->
+  <rect x="430" y="100" width="340" height="50" rx="12" fill="url(#gradRoot)" filter="url(#shadow)"/>
+  <text x="600" y="131" text-anchor="middle" font-size="18" font-weight="bold" fill="#ffffff">Nitelik (Öznitelik) Türleri</text>
+
+  <!-- Kategorik / Sayısal -->
+  <rect x="230.5" y="200" width="260" height="46" rx="12" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2" filter="url(#shadow)"/>
+  <text x="360.5" y="229" text-anchor="middle" font-size="17" font-weight="bold" fill="#5b21b6">Kategorik (Nitel)</text>
+  <rect x="821.5" y="200" width="260" height="46" rx="12" fill="#d1fae5" stroke="#10b981" stroke-width="2" filter="url(#shadow)"/>
+  <text x="951.5" y="229" text-anchor="middle" font-size="17" font-weight="bold" fill="#047857">Sayısal (Nicel)</text>
+
+  <!-- Nitelik türü kartları -->
+  <g transform="translate(40,300)">
+    <rect width="205" height="220" rx="12" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5" filter="url(#shadow)"/>
+    <path d="M 0 44 V 12 Q 0 0 12 0 H 193 Q 205 0 205 12 V 44 Z" fill="url(#gradCat)"/>
+    <text x="102.5" y="28" class="cardTitle">Nominal</text>
+    <text x="12" y="66" class="lbl" fill="#6d28d9">Örnek</text>
+    <text x="12" y="86" class="ex">göz rengi, şehir,</text>
+    <text x="12" y="104" class="ex">posta kodu</text>
+    <text x="12" y="127" class="prop">sıra yok, yalnızca etiket</text>
+    <line x1="12" y1="138" x2="193" y2="138" stroke="#e5e7eb" stroke-width="1"/>
+    <text x="12" y="157" class="lbl" fill="#6d28d9">İşlemler</text>
+    <rect x="12" y="166" width="20" height="24" rx="5" fill="#ede9fe" stroke="#8b5cf6"/>
+    <text x="22" y="183" class="op" fill="#6d28d9">=</text>
+    <rect x="35" y="166" width="20" height="24" rx="5" fill="#ede9fe" stroke="#8b5cf6"/>
+    <text x="45" y="183" class="op" fill="#6d28d9">≠</text>
+    <text x="12" y="208" class="cap">yalnızca eşitlik testi</text>
+  </g>
+  <g transform="translate(258,300)">
+    <rect width="205" height="220" rx="12" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5" filter="url(#shadow)"/>
+    <path d="M 0 44 V 12 Q 0 0 12 0 H 193 Q 205 0 205 12 V 44 Z" fill="url(#gradCat)"/>
+    <text x="102.5" y="28" class="cardTitle">İkili (Binary)</text>
+    <text x="12" y="66" class="lbl" fill="#6d28d9">Örnek</text>
+    <text x="12" y="86" class="ex">sigara içer mi?</text>
+    <text x="12" y="104" class="ex">(Evet / Hayır)</text>
+    <text x="12" y="127" class="prop">simetrik / asimetrik</text>
+    <line x1="12" y1="138" x2="193" y2="138" stroke="#e5e7eb" stroke-width="1"/>
+    <text x="12" y="157" class="lbl" fill="#6d28d9">İşlemler</text>
+    <rect x="12" y="166" width="20" height="24" rx="5" fill="#ede9fe" stroke="#8b5cf6"/>
+    <text x="22" y="183" class="op" fill="#6d28d9">=</text>
+    <rect x="35" y="166" width="20" height="24" rx="5" fill="#ede9fe" stroke="#8b5cf6"/>
+    <text x="45" y="183" class="op" fill="#6d28d9">≠</text>
+    <text x="12" y="208" class="cap">yalnızca eşitlik testi</text>
+  </g>
+  <g transform="translate(476,300)">
+    <rect width="205" height="220" rx="12" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5" filter="url(#shadow)"/>
+    <path d="M 0 44 V 12 Q 0 0 12 0 H 193 Q 205 0 205 12 V 44 Z" fill="url(#gradCat)"/>
+    <text x="102.5" y="28" class="cardTitle">Ordinal (Sıralı)</text>
+    <text x="12" y="66" class="lbl" fill="#6d28d9">Örnek</text>
+    <text x="12" y="86" class="ex">eğitim düzeyi,</text>
+    <text x="12" y="104" class="ex">memnuniyet (1–5)</text>
+    <text x="12" y="127" class="prop">sıralı, aralıklar belirsiz</text>
+    <line x1="12" y1="138" x2="193" y2="138" stroke="#e5e7eb" stroke-width="1"/>
+    <text x="12" y="157" class="lbl" fill="#6d28d9">İşlemler</text>
+    <rect x="12" y="166" width="20" height="24" rx="5" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="22" y="183" class="op" fill="#9ca3af">=</text>
+    <rect x="35" y="166" width="20" height="24" rx="5" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="45" y="183" class="op" fill="#9ca3af">≠</text>
+    <rect x="58" y="166" width="20" height="24" rx="5" fill="#ede9fe" stroke="#8b5cf6"/>
+    <text x="68" y="183" class="op" fill="#6d28d9">&lt;</text>
+    <rect x="81" y="166" width="20" height="24" rx="5" fill="#ede9fe" stroke="#8b5cf6"/>
+    <text x="91" y="183" class="op" fill="#6d28d9">&gt;</text>
+    <text x="12" y="208" class="cap">ek olarak: &lt;, &gt; (sıralama)</text>
+  </g>
+  <g transform="translate(740,300)">
+    <rect width="205" height="220" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)"/>
+    <path d="M 0 44 V 12 Q 0 0 12 0 H 193 Q 205 0 205 12 V 44 Z" fill="url(#gradNum)"/>
+    <text x="102.5" y="28" class="cardTitle">Aralık (Interval)</text>
+    <text x="12" y="66" class="lbl" fill="#047857">Örnek</text>
+    <text x="12" y="86" class="ex">°C sıcaklık,</text>
+    <text x="12" y="104" class="ex">takvim yılı</text>
+    <text x="12" y="127" class="prop">mutlak sıfır yok</text>
+    <line x1="12" y1="138" x2="193" y2="138" stroke="#e5e7eb" stroke-width="1"/>
+    <text x="12" y="157" class="lbl" fill="#047857">İşlemler</text>
+    <rect x="12" y="166" width="20" height="24" rx="5" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="22" y="183" class="op" fill="#9ca3af">=</text>
+    <rect x="35" y="166" width="20" height="24" rx="5" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="45" y="183" class="op" fill="#9ca3af">≠</text>
+    <rect x="58" y="166" width="20" height="24" rx="5" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="68" y="183" class="op" fill="#9ca3af">&lt;</text>
+    <rect x="81" y="166" width="20" height="24" rx="5" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="91" y="183" class="op" fill="#9ca3af">&gt;</text>
+    <rect x="104" y="166" width="20" height="24" rx="5" fill="#d1fae5" stroke="#10b981"/>
+    <text x="114" y="183" class="op" fill="#047857">+</text>
+    <rect x="127" y="166" width="20" height="24" rx="5" fill="#d1fae5" stroke="#10b981"/>
+    <text x="137" y="183" class="op" fill="#047857">−</text>
+    <text x="12" y="208" class="cap">ek olarak: +, − (fark)</text>
+  </g>
+  <g transform="translate(958,300)">
+    <rect width="205" height="220" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)"/>
+    <path d="M 0 44 V 12 Q 0 0 12 0 H 193 Q 205 0 205 12 V 44 Z" fill="url(#gradNum)"/>
+    <text x="102.5" y="28" class="cardTitle">Oran (Ratio)</text>
+    <text x="12" y="66" class="lbl" fill="#047857">Örnek</text>
+    <text x="12" y="86" class="ex">yaş, maaş,</text>
+    <text x="12" y="104" class="ex">Kelvin sıcaklık</text>
+    <text x="12" y="127" class="prop">mutlak sıfır var</text>
+    <line x1="12" y1="138" x2="193" y2="138" stroke="#e5e7eb" stroke-width="1"/>
+    <text x="12" y="157" class="lbl" fill="#047857">İşlemler</text>
+    <rect x="12" y="166" width="20" height="24" rx="5" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="22" y="183" class="op" fill="#9ca3af">=</text>
+    <rect x="35" y="166" width="20" height="24" rx="5" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="45" y="183" class="op" fill="#9ca3af">≠</text>
+    <rect x="58" y="166" width="20" height="24" rx="5" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="68" y="183" class="op" fill="#9ca3af">&lt;</text>
+    <rect x="81" y="166" width="20" height="24" rx="5" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="91" y="183" class="op" fill="#9ca3af">&gt;</text>
+    <rect x="104" y="166" width="20" height="24" rx="5" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="114" y="183" class="op" fill="#9ca3af">+</text>
+    <rect x="127" y="166" width="20" height="24" rx="5" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="137" y="183" class="op" fill="#9ca3af">−</text>
+    <rect x="150" y="166" width="20" height="24" rx="5" fill="#d1fae5" stroke="#10b981"/>
+    <text x="160" y="183" class="op" fill="#047857">×</text>
+    <rect x="173" y="166" width="20" height="24" rx="5" fill="#d1fae5" stroke="#10b981"/>
+    <text x="183" y="183" class="op" fill="#047857">÷</text>
+    <text x="12" y="208" class="cap">ek olarak: ×, ÷ (oran)</text>
+  </g>
+
+  <!-- İşlemlerin kümülatif artışı -->
+  <line x1="40" y1="550" x2="1160" y2="550" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="395" y="538" width="410" height="24" rx="12" fill="#ffffff"/>
+  <text x="600" y="555" text-anchor="middle" font-size="14" font-weight="600" fill="#374151">İzin verilen işlemler artar (gri: önceki düzeyden gelenler)</text>
+
+  <!-- Ayrık / Sürekli -->
+  <rect x="40" y="585" width="1123" height="120" rx="14" fill="url(#gradBand)" stroke="#06b6d4" stroke-width="1.2"/>
+  <text x="601" y="614" text-anchor="middle" font-size="17" font-weight="bold" fill="#0e7490">Ayrık (Discrete)  ↔  Sürekli (Continuous)</text>
+  <text x="601" y="634" text-anchor="middle" font-size="13" fill="#4b5563">Ölçek düzeyinden bağımsız ikinci bir ayrım: değerlerin sayılabilir mi yoksa gerçel sayı mı olduğu</text>
+  <line x1="601" y1="648" x2="601" y2="694" stroke="#a5f3fc" stroke-width="1.5"/>
+  <text x="70" y="666" font-size="14" fill="#1f2937"><tspan font-weight="bold">Ayrık:</tspan> sonlu ya da sayılabilir sonsuz değer kümesi</text>
+  <text x="70" y="686" font-size="14" fill="#4b5563">ör. çocuk sayısı, posta kodu, ikili nitelikler</text>
+  <text x="630" y="666" font-size="14" fill="#1f2937"><tspan font-weight="bold">Sürekli:</tspan> gerçel sayı değerleri (ölçüm hassasiyetiyle sınırlı)</text>
+  <text x="630" y="686" font-size="14" fill="#4b5563">ör. boy, ağırlık, sıcaklık, süre</text>
+</svg>

@@ -1,0 +1,160 @@
+<!-- Şekil: CAP teoremi ve ACID / BASE karşılaştırması | Ders notu: Veri Madenciliği ve Büyük Veri -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="690" viewBox="0 0 1200 690" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f9fafb"/>
+    </linearGradient>
+    <linearGradient id="triGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#eef2ff"/>
+    </linearGradient>
+    <linearGradient id="cGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="aGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="pGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="acidHead" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#60a5fa"/>
+    </linearGradient>
+    <linearGradient id="baseHead" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.15"/>
+      <feComposite in2="offsetblur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+
+  <!-- Başlık -->
+  <text x="600" y="40" font-size="24" font-weight="bold" text-anchor="middle" fill="#111827">CAP Teoremi ve ACID / BASE</text>
+  <text x="600" y="66" font-size="14" text-anchor="middle" fill="#4b5563">Dağıtık bir veri sistemi bu üç özelliğin üçünü birden aynı anda tam olarak sağlayamaz</text>
+
+  <!-- ===================== SOL: CAP ÜÇGENİ ===================== -->
+  <polygon points="360,215 130,560 590,560" fill="url(#triGrad)"/>
+  <!-- Kenarlar -->
+  <line x1="360" y1="215" x2="130" y2="560" stroke="#9ca3af" stroke-width="4" stroke-dasharray="10 7"/>
+  <line x1="360" y1="215" x2="590" y2="560" stroke="#6366f1" stroke-width="4"/>
+  <line x1="130" y1="560" x2="590" y2="560" stroke="#10b981" stroke-width="4"/>
+
+  <!-- Köşe: C -->
+  <circle cx="360" cy="215" r="44" fill="url(#cGrad)" stroke="#ffffff" stroke-width="3" filter="url(#shadow)"/>
+  <text x="360" y="227" font-size="34" font-weight="bold" text-anchor="middle" fill="#ffffff">C</text>
+  <text x="360" y="128" font-size="16" font-weight="bold" text-anchor="middle" fill="#1e40af">C — Tutarlılık (Consistency)</text>
+  <text x="360" y="150" font-size="14" text-anchor="middle" fill="#4b5563">Her okuma en güncel yazmayı görür</text>
+
+  <!-- Köşe: A -->
+  <circle cx="130" cy="560" r="44" fill="url(#aGrad)" stroke="#ffffff" stroke-width="3" filter="url(#shadow)"/>
+  <text x="130" y="572" font-size="34" font-weight="bold" text-anchor="middle" fill="#ffffff">A</text>
+  <text x="30" y="638" font-size="16" font-weight="bold" fill="#047857">A — Erişilebilirlik (Availability)</text>
+  <text x="30" y="660" font-size="14" fill="#4b5563">Her istek yanıt alır</text>
+
+  <!-- Köşe: P -->
+  <circle cx="590" cy="560" r="44" fill="url(#pGrad)" stroke="#ffffff" stroke-width="3" filter="url(#shadow)"/>
+  <text x="590" y="572" font-size="34" font-weight="bold" text-anchor="middle" fill="#ffffff">P</text>
+  <text x="672" y="638" font-size="16" font-weight="bold" text-anchor="end" fill="#6d28d9">P — Bölünme Toleransı (Partition Tolerance)</text>
+  <text x="672" y="660" font-size="14" text-anchor="end" fill="#4b5563">Ağ bölünse de sistem çalışır</text>
+
+  <!-- Kenar etiketleri -->
+  <text x="222" y="342" font-size="16" font-weight="bold" text-anchor="end" fill="#6b7280">CA</text>
+  <text x="222" y="363" font-size="13" text-anchor="end" fill="#4b5563">Tek düğümlü klasik RDBMS</text>
+  <text x="222" y="381" font-size="13" text-anchor="end" fill="#6b7280" font-style="italic">(dağıtık sistemde pratikte yok)</text>
+
+  <text x="500" y="342" font-size="16" font-weight="bold" fill="#4f46e5">CP</text>
+  <text x="500" y="363" font-size="14" fill="#1f2937">HBase, MongoDB,</text>
+  <text x="500" y="381" font-size="14" fill="#1f2937">ZooKeeper</text>
+
+  <text x="360" y="590" font-size="14" text-anchor="middle" fill="#1f2937"><tspan font-size="16" font-weight="bold" fill="#047857">AP:</tspan> Cassandra, CouchDB, DynamoDB</text>
+
+  <!-- Orta not -->
+  <rect x="235" y="430" width="250" height="78" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="360" y="454" font-size="14" font-weight="bold" text-anchor="middle" fill="#92400e">Ağ bölünmesi (P) kaçınılmazdır</text>
+  <text x="360" y="475" font-size="14" text-anchor="middle" fill="#92400e">→ C ile A arasında</text>
+  <text x="360" y="495" font-size="14" text-anchor="middle" fill="#92400e">seçim yapılır.</text>
+
+  <!-- ===================== SAĞ: ACID / BASE ===================== -->
+  <text x="940" y="108" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">ACID ve BASE Karşılaştırması</text>
+
+  <!-- Başlıklar -->
+  <rect x="700" y="124" width="235" height="40" rx="10" fill="url(#acidHead)" filter="url(#shadow)"/>
+  <text x="817.5" y="150" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">ACID (İlişkisel VT)</text>
+  <rect x="945" y="124" width="235" height="40" rx="10" fill="url(#baseHead)" filter="url(#shadow)"/>
+  <text x="1062.5" y="150" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">BASE (NoSQL)</text>
+
+  <!-- ACID satırları -->
+  <g>
+    <rect x="700" y="174" width="235" height="58" rx="8" fill="#eff6ff" stroke="#bfdbfe"/>
+    <circle cx="726" cy="203" r="15" fill="#3b82f6"/>
+    <text x="726" y="209" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">A</text>
+    <text x="752" y="199" font-size="15" font-weight="bold" fill="#1e3a8a">Atomiklik</text>
+    <text x="752" y="218" font-size="13" fill="#4b5563">(Atomicity)</text>
+
+    <rect x="700" y="240" width="235" height="58" rx="8" fill="#eff6ff" stroke="#bfdbfe"/>
+    <circle cx="726" cy="269" r="15" fill="#3b82f6"/>
+    <text x="726" y="275" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">C</text>
+    <text x="752" y="265" font-size="15" font-weight="bold" fill="#1e3a8a">Tutarlılık</text>
+    <text x="752" y="284" font-size="13" fill="#4b5563">(Consistency)</text>
+
+    <rect x="700" y="306" width="235" height="58" rx="8" fill="#eff6ff" stroke="#bfdbfe"/>
+    <circle cx="726" cy="335" r="15" fill="#3b82f6"/>
+    <text x="726" y="341" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">I</text>
+    <text x="752" y="331" font-size="15" font-weight="bold" fill="#1e3a8a">Yalıtım</text>
+    <text x="752" y="350" font-size="13" fill="#4b5563">(Isolation)</text>
+
+    <rect x="700" y="372" width="235" height="58" rx="8" fill="#eff6ff" stroke="#bfdbfe"/>
+    <circle cx="726" cy="401" r="15" fill="#3b82f6"/>
+    <text x="726" y="407" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">D</text>
+    <text x="752" y="397" font-size="15" font-weight="bold" fill="#1e3a8a">Dayanıklılık</text>
+    <text x="752" y="416" font-size="13" fill="#4b5563">(Durability)</text>
+  </g>
+
+  <!-- BASE satırları -->
+  <g>
+    <rect x="945" y="174" width="235" height="80" rx="8" fill="#ecfdf5" stroke="#a7f3d0"/>
+    <circle cx="971" cy="214" r="15" fill="#10b981"/>
+    <text x="971" y="219" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">BA</text>
+    <text x="997" y="209" font-size="15" font-weight="bold" fill="#065f46">Temelde Erişilebilir</text>
+    <text x="997" y="228" font-size="13" fill="#4b5563">(Basically Available)</text>
+
+    <rect x="945" y="262" width="235" height="80" rx="8" fill="#ecfdf5" stroke="#a7f3d0"/>
+    <circle cx="971" cy="302" r="15" fill="#10b981"/>
+    <text x="971" y="308" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">S</text>
+    <text x="997" y="297" font-size="15" font-weight="bold" fill="#065f46">Esnek Durum</text>
+    <text x="997" y="316" font-size="13" fill="#4b5563">(Soft state)</text>
+
+    <rect x="945" y="350" width="235" height="80" rx="8" fill="#ecfdf5" stroke="#a7f3d0"/>
+    <circle cx="971" cy="390" r="15" fill="#10b981"/>
+    <text x="971" y="396" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">E</text>
+    <text x="997" y="385" font-size="15" font-weight="bold" fill="#065f46">Nihai Tutarlılık</text>
+    <text x="997" y="404" font-size="13" fill="#4b5563">(Eventual consistency)</text>
+  </g>
+
+  <!-- Alt etiketler -->
+  <rect x="700" y="444" width="235" height="62" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="817.5" y="470" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e40af">Katı tutarlılık,</text>
+  <text x="817.5" y="491" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e40af">CP eğilimi</text>
+  <rect x="945" y="444" width="235" height="62" rx="10" fill="#d1fae5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="1062.5" y="470" font-size="15" font-weight="bold" text-anchor="middle" fill="#047857">Yüksek erişilebilirlik,</text>
+  <text x="1062.5" y="491" font-size="15" font-weight="bold" text-anchor="middle" fill="#047857">AP eğilimi</text>
+
+  <text x="940" y="540" font-size="13" text-anchor="middle" fill="#4b5563">Nihai tutarlılık: yazma sonrası kopyalar kısa süre farklı</text>
+  <text x="940" y="558" font-size="13" text-anchor="middle" fill="#4b5563">olabilir, ancak zamanla aynı değere yakınsar.</text>
+</svg>

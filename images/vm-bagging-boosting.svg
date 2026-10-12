@@ -1,0 +1,245 @@
+<!-- Şekil: Topluluk öğrenmesi — Bagging ve Boosting karşılaştırması | Ders notu: Veri Madenciliği ve Büyük Veri -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f9fafb"/>
+    </linearGradient>
+    <linearGradient id="dataGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f3f4f6"/>
+      <stop offset="100%" stop-color="#e5e7eb"/>
+    </linearGradient>
+    <linearGradient id="finalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="voteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2.5"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.13"/>
+      <feComposite in2="offsetblur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+    </marker>
+    <!-- Küçük karar ağacı simgesi -->
+    <g id="tree">
+      <line x1="0" y1="0" x2="-9" y2="13" stroke="#047857" stroke-width="1.6"/>
+      <line x1="0" y1="0" x2="9" y2="13" stroke="#047857" stroke-width="1.6"/>
+      <line x1="9" y1="13" x2="3" y2="26" stroke="#047857" stroke-width="1.6"/>
+      <line x1="9" y1="13" x2="16" y2="26" stroke="#047857" stroke-width="1.6"/>
+      <circle cx="0" cy="0" r="4.5" fill="#10b981"/>
+      <circle cx="-9" cy="13" r="4" fill="#34d399"/>
+      <circle cx="9" cy="13" r="4" fill="#10b981"/>
+      <circle cx="3" cy="26" r="4" fill="#34d399"/>
+      <circle cx="16" cy="26" r="4" fill="#34d399"/>
+    </g>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+
+  <!-- Başlık -->
+  <text x="600" y="40" font-size="24" font-weight="bold" text-anchor="middle" fill="#111827">Topluluk Öğrenmesi: Bagging ve Boosting</text>
+  <text x="600" y="66" font-size="14" text-anchor="middle" fill="#4b5563">Birçok zayıf modeli birleştirerek daha güçlü bir tahminci elde etmek (ensemble learning)</text>
+
+  <!-- ===================== BAGGING ===================== -->
+  <rect x="20" y="82" width="1160" height="318" rx="14" fill="#f8fbff" stroke="#bfdbfe" stroke-width="1.5"/>
+  <text x="44" y="114" font-size="18" font-weight="bold" fill="#1e40af">Bagging (Bootstrap Aggregating) — paralel</text>
+  <rect x="860" y="96" width="300" height="28" rx="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="1010" y="115" font-size="14" font-weight="bold" text-anchor="middle" fill="#1e40af">Varyansı azaltır · Ör: Random Forest</text>
+
+  <!-- Oklar -->
+  <g stroke="#6b7280" stroke-width="2" fill="none">
+    <path d="M 194 264 C 230 264, 230 190, 266 190" marker-end="url(#arrow)"/>
+    <line x1="194" y1="264" x2="266" y2="264" marker-end="url(#arrow)"/>
+    <path d="M 194 264 C 230 264, 230 338, 266 338" marker-end="url(#arrow)"/>
+    <line x1="500" y1="190" x2="556" y2="190" marker-end="url(#arrow)"/>
+    <line x1="500" y1="264" x2="556" y2="264" marker-end="url(#arrow)"/>
+    <line x1="500" y1="338" x2="556" y2="338" marker-end="url(#arrow)"/>
+    <path d="M 710 190 C 745 190, 745 250, 776 250" marker-end="url(#arrow)"/>
+    <line x1="710" y1="264" x2="776" y2="264" marker-end="url(#arrow)"/>
+    <path d="M 710 338 C 745 338, 745 278, 776 278" marker-end="url(#arrow)"/>
+    <line x1="940" y1="264" x2="996" y2="264" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- Eğitim verisi -->
+  <rect x="44" y="222" width="150" height="84" rx="10" fill="url(#dataGrad)" stroke="#6b7280" stroke-width="1.2" filter="url(#shadow)"/>
+  <text x="119" y="252" font-size="16" font-weight="bold" text-anchor="middle" fill="#1f2937">Eğitim Verisi</text>
+  <g>
+    <rect x="55" y="266" width="18" height="18" rx="3" fill="#3b82f6"/>
+    <rect x="77" y="266" width="18" height="18" rx="3" fill="#10b981"/>
+    <rect x="99" y="266" width="18" height="18" rx="3" fill="#f59e0b"/>
+    <rect x="121" y="266" width="18" height="18" rx="3" fill="#8b5cf6"/>
+    <rect x="143" y="266" width="18" height="18" rx="3" fill="#ef4444"/>
+    <rect x="165" y="266" width="18" height="18" rx="3" fill="#06b6d4"/>
+  </g>
+
+  <!-- Bootstrap örnekleri -->
+  <text x="385" y="146" font-size="14" font-weight="600" text-anchor="middle" fill="#4b5563">yerine koyarak örnekleme</text>
+  <g font-size="14" font-weight="bold" text-anchor="middle" fill="#1e3a8a">
+    <rect x="270" y="158" width="230" height="64" rx="10" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="385" y="181">Bootstrap Örneği 1</text>
+    <rect x="270" y="232" width="230" height="64" rx="10" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="385" y="255">Bootstrap Örneği 2</text>
+    <rect x="270" y="306" width="230" height="64" rx="10" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="385" y="329">Bootstrap Örneği 3</text>
+  </g>
+  <!-- Örnek kareleri (tekrarlar = yerine koyma) -->
+  <g>
+    <!-- B1: 1 1 3 4 4 6 -->
+    <rect x="321" y="192" width="18" height="18" rx="3" fill="#3b82f6"/>
+    <rect x="343" y="192" width="18" height="18" rx="3" fill="#3b82f6"/>
+    <rect x="365" y="192" width="18" height="18" rx="3" fill="#f59e0b"/>
+    <rect x="387" y="192" width="18" height="18" rx="3" fill="#8b5cf6"/>
+    <rect x="409" y="192" width="18" height="18" rx="3" fill="#8b5cf6"/>
+    <rect x="431" y="192" width="18" height="18" rx="3" fill="#06b6d4"/>
+    <!-- B2: 2 2 3 5 6 6 -->
+    <rect x="321" y="266" width="18" height="18" rx="3" fill="#10b981"/>
+    <rect x="343" y="266" width="18" height="18" rx="3" fill="#10b981"/>
+    <rect x="365" y="266" width="18" height="18" rx="3" fill="#f59e0b"/>
+    <rect x="387" y="266" width="18" height="18" rx="3" fill="#ef4444"/>
+    <rect x="409" y="266" width="18" height="18" rx="3" fill="#06b6d4"/>
+    <rect x="431" y="266" width="18" height="18" rx="3" fill="#06b6d4"/>
+    <!-- B3: 1 2 2 4 5 5 -->
+    <rect x="321" y="340" width="18" height="18" rx="3" fill="#3b82f6"/>
+    <rect x="343" y="340" width="18" height="18" rx="3" fill="#10b981"/>
+    <rect x="365" y="340" width="18" height="18" rx="3" fill="#10b981"/>
+    <rect x="387" y="340" width="18" height="18" rx="3" fill="#8b5cf6"/>
+    <rect x="409" y="340" width="18" height="18" rx="3" fill="#ef4444"/>
+    <rect x="431" y="340" width="18" height="18" rx="3" fill="#ef4444"/>
+  </g>
+
+  <!-- Modeller -->
+  <g font-size="15" font-weight="bold" fill="#1f2937">
+    <rect x="560" y="158" width="150" height="64" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)"/>
+    <use href="#tree" x="590" y="176"/>
+    <text x="625" y="196">Model 1</text>
+    <rect x="560" y="232" width="150" height="64" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)"/>
+    <use href="#tree" x="590" y="250"/>
+    <text x="625" y="270">Model 2</text>
+    <rect x="560" y="306" width="150" height="64" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)"/>
+    <use href="#tree" x="590" y="324"/>
+    <text x="625" y="344">Model 3</text>
+  </g>
+
+  <!-- Oylama -->
+  <rect x="780" y="229" width="160" height="70" rx="10" fill="url(#voteGrad)" filter="url(#shadow)"/>
+  <text x="860" y="259" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">Oylama /</text>
+  <text x="860" y="280" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">Ortalama</text>
+
+  <!-- Nihai tahmin -->
+  <rect x="1000" y="229" width="160" height="70" rx="10" fill="url(#finalGrad)" filter="url(#shadow)"/>
+  <text x="1080" y="270" font-size="17" font-weight="bold" text-anchor="middle" fill="#ffffff">Nihai Tahmin</text>
+
+  <text x="970" y="336" font-size="13" text-anchor="middle" fill="#4b5563">Sınıflandırma: çoğunluk oyu</text>
+  <text x="970" y="355" font-size="13" text-anchor="middle" fill="#4b5563">Regresyon: tahminlerin ortalaması</text>
+  <text x="970" y="380" font-size="13" text-anchor="middle" fill="#1e40af" font-weight="600">Modeller birbirinden bağımsız, aynı anda eğitilir</text>
+
+  <!-- ===================== BOOSTING ===================== -->
+  <rect x="20" y="416" width="1160" height="346" rx="14" fill="#faf8ff" stroke="#ddd6fe" stroke-width="1.5"/>
+  <text x="44" y="448" font-size="18" font-weight="bold" fill="#6d28d9">Boosting — ardışık</text>
+  <rect x="680" y="430" width="480" height="28" rx="14" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2"/>
+  <text x="920" y="449" font-size="14" font-weight="bold" text-anchor="middle" fill="#5b21b6">Yanlılığı (bias) azaltır · Ör: AdaBoost, Gradient Boosting, XGBoost</text>
+
+  <!-- Oklar (ardışık) -->
+  <g stroke="#6b7280" stroke-width="2" fill="none">
+    <line x1="174" y1="520" x2="210" y2="520" marker-end="url(#arrow)"/>
+    <line x1="414" y1="520" x2="450" y2="520" marker-end="url(#arrow)"/>
+    <line x1="584" y1="520" x2="620" y2="520" marker-end="url(#arrow)"/>
+    <line x1="824" y1="520" x2="860" y2="520" marker-end="url(#arrow)"/>
+    <!-- Modellerden ağırlıklı oylamaya -->
+    <line x1="109" y1="560" x2="109" y2="642" marker-end="url(#arrow)"/>
+    <line x1="519" y1="560" x2="519" y2="642" marker-end="url(#arrow)"/>
+    <line x1="929" y1="560" x2="929" y2="642" marker-end="url(#arrow)"/>
+    <line x1="994" y1="667" x2="1026" y2="667" marker-end="url(#arrow)"/>
+  </g>
+  <g font-size="15" font-weight="bold" fill="#6d28d9">
+    <text x="117" y="608">α₁</text>
+    <text x="527" y="608">α₂</text>
+    <text x="937" y="608">α₃</text>
+  </g>
+
+  <!-- Boosting modelleri -->
+  <g font-size="15" font-weight="bold" fill="#1f2937">
+    <rect x="44" y="480" width="130" height="80" rx="10" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5" filter="url(#shadow)"/>
+    <use href="#tree" x="104" y="494"/>
+    <text x="109" y="547" text-anchor="middle">Model 1</text>
+    <rect x="454" y="480" width="130" height="80" rx="10" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5" filter="url(#shadow)"/>
+    <use href="#tree" x="514" y="494"/>
+    <text x="519" y="547" text-anchor="middle">Model 2</text>
+    <rect x="864" y="480" width="130" height="80" rx="10" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5" filter="url(#shadow)"/>
+    <use href="#tree" x="924" y="494"/>
+    <text x="929" y="547" text-anchor="middle">Model 3</text>
+  </g>
+
+  <!-- Nokta paneli 1 -->
+  <g transform="translate(214, 480)">
+    <rect x="0" y="0" width="200" height="80" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.2"/>
+    <line x1="60" y1="78" x2="140" y2="2" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <g fill="#3b82f6">
+      <circle cx="20" cy="20" r="5"/><circle cx="36" cy="44" r="5"/><circle cx="52" cy="22" r="5"/>
+      <circle cx="22" cy="64" r="5"/><circle cx="76" cy="14" r="5"/>
+    </g>
+    <g fill="#10b981">
+      <circle cx="150" cy="58" r="5"/><circle cx="172" cy="30" r="5"/><circle cx="128" cy="70" r="5"/>
+      <circle cx="182" cy="66" r="5"/><circle cx="160" cy="14" r="5"/>
+    </g>
+    <circle cx="122" cy="40" r="10" fill="#ef4444" stroke="#991b1b" stroke-width="1.5"/>
+    <circle cx="56" cy="60" r="10" fill="#ef4444" stroke="#991b1b" stroke-width="1.5"/>
+  </g>
+  <text x="314" y="584" font-size="14" text-anchor="middle" fill="#991b1b" font-weight="600">Hatalı örneklerin</text>
+  <text x="314" y="602" font-size="14" text-anchor="middle" fill="#991b1b" font-weight="600">ağırlığı artırılır</text>
+
+  <!-- Nokta paneli 2 -->
+  <g transform="translate(624, 480)">
+    <rect x="0" y="0" width="200" height="80" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.2"/>
+    <line x1="40" y1="2" x2="160" y2="78" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <g fill="#3b82f6">
+      <circle cx="18" cy="24" r="5"/><circle cx="30" cy="56" r="5"/><circle cx="58" cy="66" r="5"/>
+      <circle cx="20" cy="72" r="5"/><circle cx="90" cy="70" r="5"/>
+    </g>
+    <g fill="#10b981">
+      <circle cx="120" cy="20" r="5"/><circle cx="170" cy="22" r="5"/><circle cx="150" cy="44" r="5"/>
+      <circle cx="182" cy="56" r="5"/><circle cx="90" cy="12" r="5"/>
+    </g>
+    <circle cx="110" cy="56" r="10" fill="#ef4444" stroke="#991b1b" stroke-width="1.5"/>
+    <circle cx="58" cy="30" r="10" fill="#ef4444" stroke="#991b1b" stroke-width="1.5"/>
+  </g>
+  <text x="724" y="584" font-size="14" text-anchor="middle" fill="#991b1b" font-weight="600">Hatalı örneklerin</text>
+  <text x="724" y="602" font-size="14" text-anchor="middle" fill="#991b1b" font-weight="600">ağırlığı artırılır</text>
+
+  <!-- Sağdaki açıklama -->
+  <text x="1080" y="506" font-size="13" text-anchor="middle" fill="#5b21b6" font-weight="600">Her yeni model,</text>
+  <text x="1080" y="524" font-size="13" text-anchor="middle" fill="#5b21b6" font-weight="600">öncekilerin yanlış</text>
+  <text x="1080" y="542" font-size="13" text-anchor="middle" fill="#5b21b6" font-weight="600">sınıfladığı örneklere</text>
+  <text x="1080" y="560" font-size="13" text-anchor="middle" fill="#5b21b6" font-weight="600">odaklanır</text>
+
+  <!-- Ağırlıklı oylama çubuğu -->
+  <rect x="44" y="644" width="950" height="46" rx="10" fill="url(#voteGrad)" filter="url(#shadow)"/>
+  <text x="519" y="673" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">Ağırlıklı Oylama  (başarılı modelin oyu daha ağır: α₁, α₂, α₃)</text>
+
+  <!-- Nihai tahmin -->
+  <rect x="1030" y="637" width="130" height="60" rx="10" fill="url(#finalGrad)" filter="url(#shadow)"/>
+  <text x="1095" y="662" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">Nihai</text>
+  <text x="1095" y="682" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">Tahmin</text>
+
+  <!-- Gösterge -->
+  <g font-size="13" fill="#4b5563">
+    <circle cx="220" cy="730" r="5" fill="#3b82f6"/>
+    <circle cx="234" cy="730" r="5" fill="#10b981"/>
+    <text x="246" y="735">İki sınıfın örnekleri</text>
+    <circle cx="400" cy="730" r="9" fill="#ef4444" stroke="#991b1b" stroke-width="1.5"/>
+    <text x="416" y="735">Yanlış sınıflanan örnek (büyük = ağırlığı artırıldı)</text>
+    <line x1="760" y1="730" x2="800" y2="730" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="808" y="735">Modelin karar sınırı</text>
+  </g>
+</svg>

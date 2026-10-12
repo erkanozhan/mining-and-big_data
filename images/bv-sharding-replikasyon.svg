@@ -1,0 +1,184 @@
+<!-- Şekil: Sharding (yatay bölümleme) ve replikasyon | Ders notu: Veri Madenciliği ve Büyük Veri -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="710" viewBox="0 0 1200 710" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f9fafb"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.13"/>
+      <feComposite in2="offsetblur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3b82f6"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+    </marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6"/>
+    </marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+
+  <!-- Başlık -->
+  <text x="600" y="40" font-size="24" font-weight="bold" text-anchor="middle" fill="#111827">Sharding ve Replikasyon</text>
+  <text x="600" y="66" font-size="14" text-anchor="middle" fill="#4b5563">Veriyi parçalara bölüp düğümlere dağıtmak ve her parçanın kopyasını başka bir düğümde tutmak</text>
+
+  <!-- ===================== ÜST: TABLO → SHARD'LAR ===================== -->
+  <!-- Müşteri tablosu -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="110" width="240" height="178" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="1.2"/>
+    <path d="M 40 118 a 8 8 0 0 1 8 -8 h 224 a 8 8 0 0 1 8 8 v 26 h -240 z" fill="#475569"/>
+  </g>
+  <text x="160" y="133" font-size="15" font-weight="bold" text-anchor="middle" fill="#ffffff">Müşteri Tablosu (A–Z)</text>
+  <g font-size="14" fill="#1f2937">
+    <rect x="41" y="144" width="6" height="24" fill="#3b82f6"/><text x="58" y="161">Ahmet</text><text x="268" y="161" text-anchor="end" fill="#4b5563">Ankara</text>
+    <line x1="41" y1="168" x2="279" y2="168" stroke="#e5e7eb"/>
+    <rect x="41" y="168" width="6" height="24" fill="#3b82f6"/><text x="58" y="185">Elif</text><text x="268" y="185" text-anchor="end" fill="#4b5563">İzmir</text>
+    <line x1="41" y1="192" x2="279" y2="192" stroke="#e5e7eb"/>
+    <rect x="41" y="192" width="6" height="24" fill="#10b981"/><text x="58" y="209">İrem</text><text x="268" y="209" text-anchor="end" fill="#4b5563">Bursa</text>
+    <line x1="41" y1="216" x2="279" y2="216" stroke="#e5e7eb"/>
+    <rect x="41" y="216" width="6" height="24" fill="#10b981"/><text x="58" y="233">Osman</text><text x="268" y="233" text-anchor="end" fill="#4b5563">Konya</text>
+    <line x1="41" y1="240" x2="279" y2="240" stroke="#e5e7eb"/>
+    <rect x="41" y="240" width="6" height="24" fill="#8b5cf6"/><text x="58" y="257">Selin</text><text x="268" y="257" text-anchor="end" fill="#4b5563">Antalya</text>
+    <line x1="41" y1="264" x2="279" y2="264" stroke="#e5e7eb"/>
+    <rect x="41" y="264" width="6" height="23" fill="#8b5cf6"/><text x="58" y="281">Zeynep</text><text x="268" y="281" text-anchor="end" fill="#4b5563">Edirne</text>
+  </g>
+
+  <!-- Sharding oku -->
+  <line x1="296" y1="200" x2="452" y2="200" stroke="#6b7280" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="374" y="182" font-size="15" font-weight="bold" text-anchor="middle" fill="#1f2937">Sharding</text>
+  <text x="374" y="224" font-size="13" text-anchor="middle" fill="#4b5563">(Yatay Bölümleme)</text>
+  <text x="374" y="242" font-size="13" text-anchor="middle" fill="#4b5563">anahtar: adın baş harfi</text>
+
+  <!-- Shard 1 -->
+  <g filter="url(#shadow)">
+    <rect x="470" y="147" width="140" height="106" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+    <path d="M 470 155 a 8 8 0 0 1 8 -8 h 124 a 8 8 0 0 1 8 8 v 26 h -140 z" fill="#3b82f6"/>
+  </g>
+  <text x="540" y="170" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">Shard 1: A–H</text>
+  <g font-size="14" fill="#1f2937">
+    <text x="484" y="199">Ahmet</text>
+    <line x1="471" y1="205" x2="609" y2="205" stroke="#e5e7eb"/>
+    <text x="484" y="223">Elif</text>
+    <line x1="471" y1="229" x2="609" y2="229" stroke="#e5e7eb"/>
+    <text x="484" y="246" fill="#9ca3af">…</text>
+  </g>
+
+  <!-- Shard 2 -->
+  <g filter="url(#shadow)">
+    <rect x="630" y="147" width="140" height="106" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="1.5"/>
+    <path d="M 630 155 a 8 8 0 0 1 8 -8 h 124 a 8 8 0 0 1 8 8 v 26 h -140 z" fill="#10b981"/>
+  </g>
+  <text x="700" y="170" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">Shard 2: I–P</text>
+  <g font-size="14" fill="#1f2937">
+    <text x="644" y="199">İrem</text>
+    <line x1="631" y1="205" x2="769" y2="205" stroke="#e5e7eb"/>
+    <text x="644" y="223">Osman</text>
+    <line x1="631" y1="229" x2="769" y2="229" stroke="#e5e7eb"/>
+    <text x="644" y="246" fill="#9ca3af">…</text>
+  </g>
+
+  <!-- Shard 3 -->
+  <g filter="url(#shadow)">
+    <rect x="790" y="147" width="140" height="106" rx="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
+    <path d="M 790 155 a 8 8 0 0 1 8 -8 h 124 a 8 8 0 0 1 8 8 v 26 h -140 z" fill="#8b5cf6"/>
+  </g>
+  <text x="860" y="170" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">Shard 3: R–Z</text>
+  <g font-size="14" fill="#1f2937">
+    <text x="804" y="199">Selin</text>
+    <line x1="791" y1="205" x2="929" y2="205" stroke="#e5e7eb"/>
+    <text x="804" y="223">Zeynep</text>
+    <line x1="791" y1="229" x2="929" y2="229" stroke="#e5e7eb"/>
+    <text x="804" y="246" fill="#9ca3af">…</text>
+  </g>
+
+  <!-- Shard → birincil düğüm yerleşimi -->
+  <g stroke-width="2" fill="none">
+    <path d="M 540 253 V 300 H 175 V 386" stroke="#3b82f6" marker-end="url(#arrowBlue)"/>
+    <path d="M 700 253 V 322 H 480 V 386" stroke="#10b981" marker-end="url(#arrowGreen)"/>
+    <path d="M 860 253 V 344 H 785 V 386" stroke="#8b5cf6" marker-end="url(#arrowPurple)"/>
+  </g>
+  <text x="300" y="288" font-size="13" font-weight="600" fill="#4b5563">her shard bir düğüme yerleşir</text>
+
+  <!-- ===================== ALT: DÜĞÜMLER ===================== -->
+  <!-- Düğüm 1 -->
+  <rect x="40" y="390" width="270" height="200" rx="12" fill="#f9fafb" stroke="#6b7280" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="175" y="418" font-size="16" font-weight="bold" text-anchor="middle" fill="#1f2937">Düğüm 1</text>
+  <rect x="60" y="440" width="230" height="60" rx="8" fill="#3b82f6"/>
+  <text x="175" y="466" font-size="15" font-weight="bold" text-anchor="middle" fill="#ffffff">Shard 1 (A–H)</text>
+  <text x="175" y="487" font-size="13" text-anchor="middle" fill="#dbeafe">birincil</text>
+  <rect x="60" y="515" width="230" height="60" rx="8" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="175" y="541" font-size="15" font-weight="bold" text-anchor="middle" fill="#5b21b6">Shard 3 (R–Z)</text>
+  <text x="175" y="562" font-size="13" text-anchor="middle" fill="#6d28d9">kopya</text>
+
+  <!-- Düğüm 2 -->
+  <rect x="345" y="390" width="270" height="200" rx="12" fill="#f9fafb" stroke="#6b7280" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="480" y="418" font-size="16" font-weight="bold" text-anchor="middle" fill="#1f2937">Düğüm 2</text>
+  <!-- Uyarı simgesi -->
+  <path d="M 590 400 L 604 424 L 576 424 Z" fill="#ef4444" stroke="#b91c1c" stroke-width="1" stroke-linejoin="round"/>
+  <text x="590" y="421" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">!</text>
+  <rect x="365" y="440" width="230" height="60" rx="8" fill="#10b981"/>
+  <text x="480" y="466" font-size="15" font-weight="bold" text-anchor="middle" fill="#ffffff">Shard 2 (I–P)</text>
+  <text x="480" y="487" font-size="13" text-anchor="middle" fill="#d1fae5">birincil</text>
+  <rect x="365" y="515" width="230" height="60" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="480" y="541" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e40af">Shard 1 (A–H)</text>
+  <text x="480" y="562" font-size="13" text-anchor="middle" fill="#1d4ed8">kopya</text>
+
+  <!-- Düğüm 3 -->
+  <rect x="650" y="390" width="270" height="200" rx="12" fill="#f9fafb" stroke="#6b7280" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="785" y="418" font-size="16" font-weight="bold" text-anchor="middle" fill="#1f2937">Düğüm 3</text>
+  <rect x="670" y="440" width="230" height="60" rx="8" fill="#8b5cf6"/>
+  <text x="785" y="466" font-size="15" font-weight="bold" text-anchor="middle" fill="#ffffff">Shard 3 (R–Z)</text>
+  <text x="785" y="487" font-size="13" text-anchor="middle" fill="#ede9fe">birincil</text>
+  <rect x="670" y="515" width="230" height="60" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="785" y="541" font-size="15" font-weight="bold" text-anchor="middle" fill="#047857">Shard 2 (I–P)</text>
+  <text x="785" y="562" font-size="13" text-anchor="middle" fill="#047857">kopya</text>
+
+  <!-- Kopyalama (replikasyon) okları -->
+  <g stroke-width="2" fill="none" stroke-dasharray="6 4">
+    <path d="M 290 470 H 327 V 545 H 361" stroke="#3b82f6" marker-end="url(#arrowBlue)"/>
+    <path d="M 595 470 H 632 V 545 H 666" stroke="#10b981" marker-end="url(#arrowGreen)"/>
+    <path d="M 900 470 H 937 V 618 H 22 V 545 H 56" stroke="#8b5cf6" marker-end="url(#arrowPurple)"/>
+  </g>
+  <text x="480" y="638" font-size="13" font-weight="600" text-anchor="middle" fill="#4b5563">kesikli oklar: kopyalama (replikasyon) — her shard'ın bir kopyası başka bir düğümde</text>
+
+  <!-- ===================== NOTLAR ===================== -->
+  <rect x="960" y="110" width="215" height="84" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="976" y="136" font-size="15" font-weight="bold" fill="#1e40af">Sharding →</text>
+  <text x="976" y="158" font-size="14" fill="#1e3a8a">ölçeklenebilirlik</text>
+  <text x="976" y="178" font-size="14" fill="#1e3a8a">(yük dağılır)</text>
+
+  <rect x="960" y="208" width="215" height="84" rx="10" fill="#d1fae5" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="976" y="234" font-size="15" font-weight="bold" fill="#047857">Replikasyon →</text>
+  <text x="976" y="256" font-size="14" fill="#065f46">erişilebilirlik ve</text>
+  <text x="976" y="276" font-size="14" fill="#065f46">hata toleransı</text>
+
+  <rect x="960" y="440" width="215" height="110" rx="10" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" filter="url(#shadow)"/>
+  <path d="M 990 452 L 1004 476 L 976 476 Z" fill="#ef4444" stroke="#b91c1c" stroke-width="1" stroke-linejoin="round"/>
+  <text x="990" y="473" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">!</text>
+  <text x="1012" y="472" font-size="15" font-weight="bold" fill="#b91c1c">Düğüm 2 çökerse:</text>
+  <text x="976" y="502" font-size="14" fill="#991b1b">Shard 2'nin kopyası</text>
+  <text x="976" y="524" font-size="14" font-weight="bold" fill="#991b1b">Düğüm 3'te!</text>
+  <text x="976" y="542" font-size="13" fill="#991b1b">Veri kaybolmaz.</text>
+
+  <!-- Gösterge -->
+  <g font-size="13" fill="#4b5563">
+    <rect x="300" y="666" width="30" height="18" rx="4" fill="#475569"/>
+    <text x="338" y="680">Koyu dolgu: birincil shard</text>
+    <rect x="540" y="666" width="30" height="18" rx="4" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="578" y="680">Açık renk, kesikli kenar: kopya (replika)</text>
+  </g>
+</svg>

@@ -1,0 +1,157 @@
+<!-- Şekil: Dikey (scale up) ve yatay (scale out) ölçekleme | Ders notu: Veri Madenciliği ve Büyük Veri -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="660" viewBox="0 0 1200 660" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f9fafb"/>
+    </linearGradient>
+    <linearGradient id="srvGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#64748b"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <linearGradient id="blueHead" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#60a5fa"/>
+    </linearGradient>
+    <linearGradient id="greenHead" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.15"/>
+      <feComposite in2="offsetblur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3b82f6"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+    </marker>
+    <!-- Sunucu kasası (60 x 100) -->
+    <g id="srv">
+      <rect x="0" y="0" width="60" height="100" rx="6" fill="url(#srvGrad)"/>
+      <rect x="8" y="12" width="44" height="8" rx="2" fill="#94a3b8"/>
+      <rect x="8" y="26" width="44" height="8" rx="2" fill="#94a3b8"/>
+      <rect x="8" y="40" width="44" height="8" rx="2" fill="#94a3b8"/>
+      <line x1="10" y1="60" x2="50" y2="60" stroke="#94a3b8" stroke-width="1.2"/>
+      <line x1="10" y1="66" x2="50" y2="66" stroke="#94a3b8" stroke-width="1.2"/>
+      <line x1="10" y1="72" x2="50" y2="72" stroke="#94a3b8" stroke-width="1.2"/>
+      <circle cx="13" cy="88" r="3" fill="#34d399"/>
+      <circle cx="23" cy="88" r="3" fill="#60a5fa"/>
+    </g>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+
+  <!-- Başlık -->
+  <text x="600" y="40" font-size="24" font-weight="bold" text-anchor="middle" fill="#111827">Ölçekleme Yaklaşımları: Dikey ve Yatay</text>
+  <text x="600" y="66" font-size="14" text-anchor="middle" fill="#4b5563">Artan veri hacmi ve yük karşısında sistem kapasitesini büyütmenin iki yolu</text>
+
+  <!-- ===================== SOL PANEL: DİKEY ===================== -->
+  <rect x="20" y="86" width="570" height="554" rx="14" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5" filter="url(#shadow)"/>
+  <path d="M 20 100 a 14 14 0 0 1 14 -14 h 542 a 14 14 0 0 1 14 14 v 36 h -570 z" fill="url(#blueHead)"/>
+  <text x="305" y="118" font-size="19" font-weight="bold" text-anchor="middle" fill="#ffffff">Dikey Ölçekleme (Scale Up)</text>
+  <text x="305" y="164" font-size="14" text-anchor="middle" fill="#4b5563">Tek makineyi daha güçlü bir makineyle değiştirmek</text>
+
+  <!-- Donanım tavanı -->
+  <line x1="40" y1="212" x2="570" y2="212" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="10 6"/>
+  <text x="44" y="204" font-size="15" font-weight="bold" fill="#dc2626">Donanım tavanı</text>
+  <text x="566" y="204" font-size="13" text-anchor="end" fill="#dc2626">bundan büyük makine yok / çok pahalı</text>
+
+  <!-- Taban çizgisi -->
+  <line x1="40" y1="470" x2="570" y2="470" stroke="#d1d5db" stroke-width="2"/>
+
+  <!-- Sunucular: küçük → orta → büyük -->
+  <use href="#srv" transform="translate(60, 370)" filter="url(#shadow)"/>
+  <use href="#srv" transform="translate(200, 310) scale(1.6)" filter="url(#shadow)"/>
+  <use href="#srv" transform="translate(380, 230) scale(2.4)" filter="url(#shadow)"/>
+  <g font-size="14" font-weight="600" text-anchor="middle" fill="#374151">
+    <text x="90" y="492">Küçük</text>
+    <text x="248" y="492">Orta</text>
+    <text x="452" y="492">Büyük</text>
+  </g>
+
+  <!-- Yükseltme okları ve etiketleri -->
+  <g stroke="#3b82f6" stroke-width="2.5" fill="none">
+    <line x1="128" y1="430" x2="190" y2="430" marker-end="url(#arrowBlue)"/>
+    <line x1="304" y1="420" x2="370" y2="420" marker-end="url(#arrowBlue)"/>
+  </g>
+  <g font-size="14" font-weight="bold" text-anchor="middle" fill="#1d4ed8">
+    <text x="160" y="368">CPU ↑</text>
+    <text x="160" y="388">RAM ↑</text>
+    <text x="160" y="408">Disk ↑</text>
+    <text x="338" y="358">CPU ↑</text>
+    <text x="338" y="378">RAM ↑</text>
+    <text x="338" y="398">Disk ↑</text>
+  </g>
+
+  <!-- Artı / eksi -->
+  <rect x="40" y="516" width="530" height="104" rx="10" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="60" y="556" font-size="16" fill="#065f46"><tspan font-weight="bold" fill="#10b981">+</tspan>  Basit, yazılım değişmez</text>
+  <text x="60" y="596" font-size="16" fill="#991b1b"><tspan font-weight="bold" fill="#ef4444">−</tspan>  Pahalı, üst sınır var, tek hata noktası</text>
+
+  <!-- ===================== SAĞ PANEL: YATAY ===================== -->
+  <rect x="610" y="86" width="570" height="554" rx="14" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.5" filter="url(#shadow)"/>
+  <path d="M 610 100 a 14 14 0 0 1 14 -14 h 542 a 14 14 0 0 1 14 14 v 36 h -570 z" fill="url(#greenHead)"/>
+  <text x="895" y="118" font-size="19" font-weight="bold" text-anchor="middle" fill="#ffffff">Yatay Ölçekleme (Scale Out)</text>
+  <text x="895" y="164" font-size="14" text-anchor="middle" fill="#4b5563">Kümeye aynı boyutta yeni makineler eklemek</text>
+
+  <!-- Büyüme oku -->
+  <line x1="646" y1="228" x2="1150" y2="228" stroke="#10b981" stroke-width="2.5" marker-end="url(#arrowGreen)"/>
+  <text x="895" y="218" font-size="14" font-weight="600" text-anchor="middle" fill="#047857">Kapasite ≈ düğüm sayısı × düğüm kapasitesi</text>
+
+  <!-- Ağ bağlantıları -->
+  <g stroke="#6b7280" stroke-width="2" fill="none">
+    <line x1="674" y1="400" x2="674" y2="456"/>
+    <line x1="754" y1="400" x2="754" y2="456"/>
+    <line x1="834" y1="400" x2="834" y2="456"/>
+    <line x1="914" y1="400" x2="914" y2="456"/>
+  </g>
+  <g stroke="#9ca3af" stroke-width="2" stroke-dasharray="5 4" fill="none">
+    <line x1="994" y1="400" x2="994" y2="456"/>
+    <line x1="1074" y1="400" x2="1074" y2="456"/>
+  </g>
+
+  <!-- Standart sunucular -->
+  <use href="#srv" transform="translate(644, 300)" filter="url(#shadow)"/>
+  <use href="#srv" transform="translate(724, 300)" filter="url(#shadow)"/>
+  <use href="#srv" transform="translate(804, 300)" filter="url(#shadow)"/>
+  <use href="#srv" transform="translate(884, 300)" filter="url(#shadow)"/>
+  <!-- Yeni düğümler (kesikli) -->
+  <rect x="964" y="300" width="60" height="100" rx="6" fill="#f0fdf4" stroke="#10b981" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="994" y="360" font-size="30" font-weight="bold" text-anchor="middle" fill="#10b981">+</text>
+  <rect x="1044" y="300" width="60" height="100" rx="6" fill="#f0fdf4" stroke="#10b981" stroke-width="2" stroke-dasharray="6 4" opacity="0.6"/>
+  <text x="1074" y="360" font-size="30" font-weight="bold" text-anchor="middle" fill="#10b981" opacity="0.6">+</text>
+  <text x="1130" y="358" font-size="20" font-weight="bold" text-anchor="middle" fill="#9ca3af">…</text>
+
+  <g font-size="13" font-weight="600" text-anchor="middle" fill="#374151">
+    <text x="674" y="288">Düğüm 1</text>
+    <text x="754" y="288">Düğüm 2</text>
+    <text x="834" y="288">Düğüm 3</text>
+    <text x="914" y="288">Düğüm 4</text>
+  </g>
+  <text x="1034" y="288" font-size="14" font-weight="bold" text-anchor="middle" fill="#047857">+ yeni düğüm</text>
+
+  <!-- Ağ anahtarı -->
+  <rect x="644" y="456" width="460" height="34" rx="8" fill="#cffafe" stroke="#06b6d4" stroke-width="1.5" filter="url(#shadow)"/>
+  <g fill="#0e7490">
+    <circle cx="664" cy="473" r="3"/><circle cx="676" cy="473" r="3"/><circle cx="688" cy="473" r="3"/>
+  </g>
+  <text x="874" y="478" font-size="15" font-weight="bold" text-anchor="middle" fill="#0e7490">Ağ anahtarı (switch)</text>
+
+  <!-- Artı / eksi -->
+  <rect x="630" y="516" width="530" height="104" rx="10" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="650" y="546" font-size="16" fill="#065f46"><tspan font-weight="bold" fill="#10b981">+</tspan>  Ucuz standart donanım, neredeyse sınırsız büyüme,</text>
+  <text x="668" y="568" font-size="16" fill="#065f46">hata toleransı</text>
+  <text x="650" y="602" font-size="16" fill="#991b1b"><tspan font-weight="bold" fill="#ef4444">−</tspan>  Dağıtık yazılım karmaşıklığı (Hadoop, Spark)</text>
+</svg>

@@ -1,0 +1,199 @@
+<!-- Şekil: Yıldız şeması (star schema) | Ders notu: Veri Madenciliği ve Büyük Veri -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="760" viewBox="0 0 1100 760" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="gradFact" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="gradDim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.15"/>
+      <feComposite in2="offsetblur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <style>
+      .title { font-size: 24px; font-weight: bold; fill: #111827; }
+      .subtitle { font-size: 14px; fill: #4b5563; }
+      .tName { font-size: 17px; font-weight: bold; fill: #ffffff; }
+      .tTag { font-size: 13px; fill: #ffffff; text-anchor: end; opacity: 0.9; }
+      .col { font-size: 14px; fill: #1f2937; font-family: Consolas, 'Courier New', monospace; }
+      .colM { font-size: 14px; fill: #047857; font-weight: bold; font-family: Consolas, 'Courier New', monospace; }
+      .type { font-size: 13px; fill: #6b7280; text-anchor: end; }
+      .badge { font-size: 13px; font-weight: bold; text-anchor: middle; }
+      .rel { stroke: #6b7280; stroke-width: 2; fill: none; }
+      .card { fill: #ffffff; stroke-width: 1.5; }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="550" y="44" text-anchor="middle" class="title">Yıldız Şeması (Star Schema)</text>
+  <text x="550" y="70" text-anchor="middle" class="subtitle">Merkezde olgu (fact) tablosu, çevresinde boyut (dimension) tabloları</text>
+
+  <!-- İlişkiler: 1 (boyut) — N (olgu) -->
+  <line x1="310" y1="168.0" x2="420" y2="313.0" class="rel"/>
+  <line x1="311.7" y1="181.8" x2="322.8" y2="173.3" class="rel"/>
+  <line x1="410.3" y1="300.3" x2="426.4" y2="308.2" class="rel"/>
+  <line x1="410.3" y1="300.3" x2="420.0" y2="313.0" class="rel"/>
+  <line x1="410.3" y1="300.3" x2="413.6" y2="317.8" class="rel"/>
+  <line x1="790" y1="168.0" x2="680" y2="341.0" class="rel"/>
+  <line x1="777.7" y1="174.4" x2="789.5" y2="181.9" class="rel"/>
+  <line x1="688.6" y1="327.5" x2="686.8" y2="345.3" class="rel"/>
+  <line x1="688.6" y1="327.5" x2="680.0" y2="341.0" class="rel"/>
+  <line x1="688.6" y1="327.5" x2="673.2" y2="336.7" class="rel"/>
+  <line x1="310" y1="538.0" x2="420" y2="369.0" class="rel"/>
+  <line x1="322.4" y1="531.8" x2="310.7" y2="524.1" class="rel"/>
+  <line x1="411.3" y1="382.4" x2="413.3" y2="364.6" class="rel"/>
+  <line x1="411.3" y1="382.4" x2="420.0" y2="369.0" class="rel"/>
+  <line x1="411.3" y1="382.4" x2="426.7" y2="373.4" class="rel"/>
+  <line x1="790" y1="538.0" x2="680" y2="397.0" class="rel"/>
+  <line x1="788.1" y1="524.2" x2="777.1" y2="532.8" class="rel"/>
+  <line x1="689.8" y1="409.6" x2="673.7" y2="401.9" class="rel"/>
+  <line x1="689.8" y1="409.6" x2="680.0" y2="397.0" class="rel"/>
+  <line x1="689.8" y1="409.6" x2="686.3" y2="392.1" class="rel"/>
+  <text x="332" y="160.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#4b5563">1</text>
+  <text x="394" y="301.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#4b5563">N</text>
+  <text x="768" y="160.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#4b5563">1</text>
+  <text x="706" y="329.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#4b5563">N</text>
+  <text x="332" y="560.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#4b5563">1</text>
+  <text x="394" y="393.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#4b5563">N</text>
+  <text x="768" y="560.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#4b5563">1</text>
+  <text x="706" y="421.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#4b5563">N</text>
+
+  <!-- Boyut tabloları -->
+  <g transform="translate(60,110)">
+    <rect width="250" height="192" rx="12" class="card" stroke="#3b82f6" filter="url(#shadow)"/>
+    <path d="M 0 44 V 12 Q 0 0 12 0 H 238 Q 250 0 250 12 V 44 Z" fill="url(#gradDim)"/>
+    <text x="14" y="28" class="tName">Zaman_Boyut</text>
+    <text x="236" y="28" class="tTag">boyut</text>
+    <rect x="12" y="49" width="38" height="18" rx="9" fill="#fef3c7"/>
+    <text x="31" y="62.5" class="badge" fill="#b45309">PK</text>
+    <text x="60" y="63" class="col">zaman_id</text>
+    <text x="238" y="63" class="type">INT</text>
+    <rect x="1.5" y="72" width="247" height="28" fill="#f9fafb"/>
+    <text x="60" y="91" class="col">gün</text>
+    <text x="238" y="91" class="type">INT</text>
+    <text x="60" y="119" class="col">ay</text>
+    <text x="238" y="119" class="type">INT</text>
+    <rect x="1.5" y="128" width="247" height="28" fill="#f9fafb"/>
+    <text x="60" y="147" class="col">çeyrek</text>
+    <text x="238" y="147" class="type">INT</text>
+    <text x="60" y="175" class="col">yıl</text>
+    <text x="238" y="175" class="type">INT</text>
+  </g>
+  <g transform="translate(790,110)">
+    <rect width="250" height="164" rx="12" class="card" stroke="#3b82f6" filter="url(#shadow)"/>
+    <path d="M 0 44 V 12 Q 0 0 12 0 H 238 Q 250 0 250 12 V 44 Z" fill="url(#gradDim)"/>
+    <text x="14" y="28" class="tName">Ürün_Boyut</text>
+    <text x="236" y="28" class="tTag">boyut</text>
+    <rect x="12" y="49" width="38" height="18" rx="9" fill="#fef3c7"/>
+    <text x="31" y="62.5" class="badge" fill="#b45309">PK</text>
+    <text x="60" y="63" class="col">urun_id</text>
+    <text x="238" y="63" class="type">INT</text>
+    <rect x="1.5" y="72" width="247" height="28" fill="#f9fafb"/>
+    <text x="60" y="91" class="col">ürün_adı</text>
+    <text x="238" y="91" class="type">VARCHAR</text>
+    <text x="60" y="119" class="col">kategori</text>
+    <text x="238" y="119" class="type">VARCHAR</text>
+    <rect x="1.5" y="128" width="247" height="28" fill="#f9fafb"/>
+    <text x="60" y="147" class="col">marka</text>
+    <text x="238" y="147" class="type">VARCHAR</text>
+  </g>
+  <g transform="translate(60,480)">
+    <rect width="250" height="164" rx="12" class="card" stroke="#3b82f6" filter="url(#shadow)"/>
+    <path d="M 0 44 V 12 Q 0 0 12 0 H 238 Q 250 0 250 12 V 44 Z" fill="url(#gradDim)"/>
+    <text x="14" y="28" class="tName">Mağaza_Boyut</text>
+    <text x="236" y="28" class="tTag">boyut</text>
+    <rect x="12" y="49" width="38" height="18" rx="9" fill="#fef3c7"/>
+    <text x="31" y="62.5" class="badge" fill="#b45309">PK</text>
+    <text x="60" y="63" class="col">magaza_id</text>
+    <text x="238" y="63" class="type">INT</text>
+    <rect x="1.5" y="72" width="247" height="28" fill="#f9fafb"/>
+    <text x="60" y="91" class="col">şehir</text>
+    <text x="238" y="91" class="type">VARCHAR</text>
+    <text x="60" y="119" class="col">bölge</text>
+    <text x="238" y="119" class="type">VARCHAR</text>
+    <rect x="1.5" y="128" width="247" height="28" fill="#f9fafb"/>
+    <text x="60" y="147" class="col">ülke</text>
+    <text x="238" y="147" class="type">VARCHAR</text>
+  </g>
+  <g transform="translate(790,480)">
+    <rect width="250" height="164" rx="12" class="card" stroke="#3b82f6" filter="url(#shadow)"/>
+    <path d="M 0 44 V 12 Q 0 0 12 0 H 238 Q 250 0 250 12 V 44 Z" fill="url(#gradDim)"/>
+    <text x="14" y="28" class="tName">Müşteri_Boyut</text>
+    <text x="236" y="28" class="tTag">boyut</text>
+    <rect x="12" y="49" width="38" height="18" rx="9" fill="#fef3c7"/>
+    <text x="31" y="62.5" class="badge" fill="#b45309">PK</text>
+    <text x="60" y="63" class="col">musteri_id</text>
+    <text x="238" y="63" class="type">INT</text>
+    <rect x="1.5" y="72" width="247" height="28" fill="#f9fafb"/>
+    <text x="60" y="91" class="col">ad</text>
+    <text x="238" y="91" class="type">VARCHAR</text>
+    <text x="60" y="119" class="col">yaş_grubu</text>
+    <text x="238" y="119" class="type">VARCHAR</text>
+    <rect x="1.5" y="128" width="247" height="28" fill="#f9fafb"/>
+    <text x="60" y="147" class="col">segment</text>
+    <text x="238" y="147" class="type">VARCHAR</text>
+  </g>
+
+  <!-- Olgu tablosu -->
+  <g transform="translate(420,255)">
+    <rect width="260" height="226" rx="12" class="card" stroke="#f59e0b" filter="url(#shadow)"/>
+    <path d="M 0 44 V 12 Q 0 0 12 0 H 248 Q 260 0 260 12 V 44 Z" fill="url(#gradFact)"/>
+    <text x="14" y="28" class="tName">Satış_Olgu</text>
+    <text x="246" y="28" class="tTag">olgu</text>
+    <rect x="12" y="49" width="38" height="18" rx="9" fill="#dbeafe"/>
+    <text x="31" y="62.5" class="badge" fill="#1d4ed8">FK</text>
+    <text x="60" y="63" class="col">zaman_id</text>
+    <text x="248" y="63" class="type">INT</text>
+    <rect x="1.5" y="72" width="257" height="28" fill="#f9fafb"/>
+    <rect x="12" y="77" width="38" height="18" rx="9" fill="#dbeafe"/>
+    <text x="31" y="90.5" class="badge" fill="#1d4ed8">FK</text>
+    <text x="60" y="91" class="col">urun_id</text>
+    <text x="248" y="91" class="type">INT</text>
+    <rect x="12" y="105" width="38" height="18" rx="9" fill="#dbeafe"/>
+    <text x="31" y="118.5" class="badge" fill="#1d4ed8">FK</text>
+    <text x="60" y="119" class="col">magaza_id</text>
+    <text x="248" y="119" class="type">INT</text>
+    <rect x="1.5" y="128" width="257" height="28" fill="#f9fafb"/>
+    <rect x="12" y="133" width="38" height="18" rx="9" fill="#dbeafe"/>
+    <text x="31" y="146.5" class="badge" fill="#1d4ed8">FK</text>
+    <text x="60" y="147" class="col">musteri_id</text>
+    <text x="248" y="147" class="type">INT</text>
+    <line x1="10" y1="159" x2="250" y2="159" stroke="#fcd34d" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <rect x="12" y="167" width="38" height="18" rx="9" fill="#d1fae5"/>
+    <text x="31" y="180.5" class="badge" fill="#047857">ölçü</text>
+    <text x="60" y="181" class="colM">adet</text>
+    <text x="248" y="181" class="type">INT</text>
+    <rect x="1.5" y="190" width="257" height="28" fill="#f9fafb"/>
+    <rect x="12" y="195" width="38" height="18" rx="9" fill="#d1fae5"/>
+    <text x="31" y="208.5" class="badge" fill="#047857">ölçü</text>
+    <text x="60" y="209" class="colM">tutar</text>
+    <text x="248" y="209" class="type">DECIMAL</text>
+  </g>
+
+  <!-- Lejant -->
+  <rect x="137" y="662" width="38" height="18" rx="9" fill="#fef3c7"/>
+  <text x="156" y="675.5" class="badge" fill="#b45309">PK</text>
+  <text x="183" y="676" font-size="14" fill="#374151">birincil anahtar</text>
+  <rect x="344.6" y="662" width="38" height="18" rx="9" fill="#dbeafe"/>
+  <text x="363.6" y="675.5" class="badge" fill="#1d4ed8">FK</text>
+  <text x="390.6" y="676" font-size="14" fill="#374151">yabancı anahtar</text>
+  <rect x="544.6" y="662" width="38" height="18" rx="9" fill="#d1fae5"/>
+  <text x="563.6" y="675.5" class="badge" fill="#047857">ölçü</text>
+  <text x="590.6" y="676" font-size="14" fill="#374151">sayısal, toplanabilir değer</text>
+  <line x1="835.8" y1="671" x2="865.8" y2="671" class="rel"/>
+  <line x1="840.8" y1="664" x2="840.8" y2="678" class="rel"/>
+  <line x1="851.8" y1="671" x2="865.8" y2="664" class="rel"/>
+  <line x1="851.8" y1="671" x2="865.8" y2="671" class="rel"/>
+  <line x1="851.8" y1="671" x2="865.8" y2="678" class="rel"/>
+  <text x="875.8" y="676" font-size="14" fill="#374151">bire-çok (1–N)</text>
+  <rect x="230" y="700" width="640" height="36" rx="18" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2"/>
+  <text x="550" y="723" text-anchor="middle" font-size="14" fill="#4c1d95"><tspan font-weight="bold">Kar tanesi (snowflake) şemasında</tspan> boyut tabloları da normalize edilir.</text>
+</svg>

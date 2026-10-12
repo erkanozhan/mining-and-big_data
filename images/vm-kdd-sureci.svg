@@ -1,0 +1,150 @@
+<!-- Şekil: Fayyad'ın KDD (Veritabanlarında Bilgi Keşfi) süreci | Ders notu: Veri Madenciliği ve Büyük Veri -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="790" viewBox="0 0 1200 790" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="gradCyl" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="50%" stop-color="#93c5fd"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="gradBulb" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.15"/>
+      <feComposite in2="offsetblur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrowDm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#d97706"/>
+    </marker>
+    <marker id="arrowFb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9ca3af"/>
+    </marker>
+    <style>
+      .title { font-size: 24px; font-weight: bold; fill: #111827; }
+      .subtitle { font-size: 14px; fill: #4b5563; }
+      .objName { font-size: 15px; font-weight: bold; fill: #1f2937; text-anchor: middle; }
+      .objSub { font-size: 13px; fill: #4b5563; text-anchor: middle; }
+      .step { font-size: 15px; font-weight: bold; fill: #374151; text-anchor: middle; }
+      .stepSub { font-size: 13px; fill: #4b5563; text-anchor: middle; }
+      .paper { fill: #ffffff; stroke: #3b82f6; stroke-width: 1.5; }
+      .line { stroke: #93c5fd; stroke-width: 2; stroke-linecap: round; }
+      .fb { stroke: #9ca3af; stroke-width: 1.8; stroke-dasharray: 6 5; fill: none; }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="600" y="44" text-anchor="middle" class="title">KDD Süreci: Veritabanlarında Bilgi Keşfi</text>
+  <text x="600" y="70" text-anchor="middle" class="subtitle">Fayyad, Piatetsky-Shapiro ve Smyth (1996) — veriden bilgiye uzanan yinelemeli adımlar</text>
+
+  <!-- Geri besleme -->
+  <path d="M 1100 250 L 1100 718 Q 1100 728 1090 728 L 110 728 Q 100 728 100 718 L 100 700" class="fb" marker-end="url(#arrowFb)"/>
+  <line x1="300" y1="728" x2="300" y2="610" class="fb" marker-end="url(#arrowFb)"/>
+  <line x1="500" y1="728" x2="500" y2="520" class="fb" marker-end="url(#arrowFb)"/>
+  <line x1="700" y1="728" x2="700" y2="430" class="fb" marker-end="url(#arrowFb)"/>
+  <line x1="900" y1="728" x2="900" y2="340" class="fb" marker-end="url(#arrowFb)"/>
+  <rect x="390" y="740" width="420" height="30" rx="15" fill="#f3f4f6" stroke="#d1d5db"/>
+  <text x="600" y="760" text-anchor="middle" font-size="14" fill="#374151">↺ Geri besleme: gerekirse önceki adımlara dön</text>
+
+  <!-- Veri nesneleri -->
+  <g transform="translate(100,620)" filter="url(#shadow)">
+    <path d="M -40 -22 L -40 26 A 40 11 0 0 0 40 26 L 40 -22 Z" fill="url(#gradCyl)" stroke="#2563eb" stroke-width="1.5"/>
+    <path d="M -40 2 A 40 11 0 0 0 40 2" fill="none" stroke="#2563eb" stroke-width="1.2"/>
+    <ellipse cx="0" cy="-22" rx="40" ry="11" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  </g>
+  <g transform="translate(300,530)">
+    <rect x="-22" y="-40" width="62" height="70" rx="5" class="paper" opacity="0.55"/>
+    <rect x="-28" y="-35" width="62" height="70" rx="5" class="paper" opacity="0.8"/>
+    <rect x="-34" y="-30" width="62" height="70" rx="5" class="paper" filter="url(#shadow)"/>
+    <line x1="-26" y1="-18" x2="14" y2="-18" class="line"/>
+    <line x1="-26" y1="-7" x2="2" y2="-7" class="line"/>
+    <line x1="-26" y1="4" x2="18" y2="4" class="line"/>
+    <line x1="-26" y1="15" x2="-4" y2="15" class="line"/>
+    <line x1="-26" y1="26" x2="10" y2="26" class="line"/>
+  </g>
+  <g transform="translate(500,440)">
+    <rect x="-22" y="-40" width="62" height="70" rx="5" class="paper" opacity="0.55"/>
+    <rect x="-28" y="-35" width="62" height="70" rx="5" class="paper" opacity="0.8"/>
+    <rect x="-34" y="-30" width="62" height="70" rx="5" class="paper" filter="url(#shadow)"/>
+    <line x1="-26" y1="-18" x2="20" y2="-18" class="line" style="stroke:#3b82f6"/>
+    <line x1="-26" y1="-7" x2="20" y2="-7" class="line" style="stroke:#3b82f6"/>
+    <line x1="-26" y1="4" x2="20" y2="4" class="line" style="stroke:#3b82f6"/>
+    <line x1="-26" y1="15" x2="20" y2="15" class="line" style="stroke:#3b82f6"/>
+    <line x1="-26" y1="26" x2="20" y2="26" class="line" style="stroke:#3b82f6"/>
+  </g>
+  <g transform="translate(700,350)" filter="url(#shadow)">
+    <rect x="-42" y="-32" width="84" height="64" rx="5" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+    <path d="M -42 -16 H 42 V -27 Q 42 -32 37 -32 H -37 Q -42 -32 -42 -27 Z" fill="#3b82f6"/>
+    <line x1="-42" y1="0" x2="42" y2="0" stroke="#bfdbfe" stroke-width="1.2"/>
+    <line x1="-42" y1="16" x2="42" y2="16" stroke="#bfdbfe" stroke-width="1.2"/>
+    <line x1="-14" y1="-16" x2="-14" y2="32" stroke="#bfdbfe" stroke-width="1.2"/>
+    <line x1="14" y1="-16" x2="14" y2="32" stroke="#bfdbfe" stroke-width="1.2"/>
+  </g>
+  <g transform="translate(900,260)" filter="url(#shadow)">
+    <rect x="-42" y="-32" width="84" height="64" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5"/>
+    <circle cx="-30" cy="14" r="3" fill="#f59e0b"/>
+    <circle cx="-22" cy="8" r="3" fill="#f59e0b"/>
+    <circle cx="-14" cy="12" r="3" fill="#f59e0b"/>
+    <circle cx="-8" cy="0" r="3" fill="#f59e0b"/>
+    <circle cx="0" cy="-2" r="3" fill="#f59e0b"/>
+    <circle cx="6" cy="-10" r="3" fill="#f59e0b"/>
+    <circle cx="14" cy="-6" r="3" fill="#f59e0b"/>
+    <circle cx="22" cy="-18" r="3" fill="#f59e0b"/>
+    <circle cx="30" cy="-20" r="3" fill="#f59e0b"/>
+    <circle cx="-26" cy="20" r="3" fill="#f59e0b"/>
+    <circle cx="10" cy="4" r="3" fill="#f59e0b"/>
+    <path d="M -34 20 Q 0 6 34 -24" fill="none" stroke="#d97706" stroke-width="2.2"/>
+  </g>
+  <g transform="translate(1100,170)" filter="url(#shadow)">
+    <circle cx="0" cy="-8" r="27" fill="url(#gradBulb)" stroke="#047857" stroke-width="1.5"/>
+    <path d="M -10 4 L -5 -12 L 0 2 L 5 -12 L 10 4" fill="none" stroke="#ecfdf5" stroke-width="2.2" stroke-linejoin="round"/>
+    <rect x="-13" y="20" width="26" height="8" rx="2" fill="#6b7280"/>
+    <rect x="-10" y="29" width="20" height="6" rx="2" fill="#4b5563"/>
+  </g>
+  <text x="100" y="676" class="objName">Veri</text>
+  <text x="100" y="693" class="objSub">(Veritabanları, dosyalar)</text>
+  <text x="300" y="586" class="objName">Hedef Veri</text>
+  <text x="300" y="603" class="objSub">(Target Data)</text>
+  <text x="500" y="496" class="objName">Ön İşlenmiş Veri</text>
+  <text x="500" y="513" class="objSub">(Preprocessed Data)</text>
+  <text x="700" y="406" class="objName">Dönüştürülmüş Veri</text>
+  <text x="700" y="423" class="objSub">(Transformed Data)</text>
+  <text x="900" y="316" class="objName">Örüntüler</text>
+  <text x="900" y="333" class="objSub">(Patterns)</text>
+  <text x="1100" y="226" class="objName">Bilgi</text>
+  <text x="1100" y="243" class="objSub">(Knowledge)</text>
+
+  <!-- Adımlar -->
+  <line x1="154" y1="598" x2="246" y2="534" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="172" y="528" class="step">Seçim</text>
+  <text x="172" y="546" class="stepSub">(Selection)</text>
+  <line x1="354" y1="508" x2="446" y2="444" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="372" y="438" class="step">Ön İşleme</text>
+  <text x="372" y="456" class="stepSub">(Preprocessing)</text>
+  <line x1="554" y1="418" x2="646" y2="354" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="572" y="348" class="step">Dönüştürme</text>
+  <text x="572" y="366" class="stepSub">(Transformation)</text>
+  <rect x="660" y="222" width="156" height="46" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <line x1="754" y1="328" x2="846" y2="264" stroke="#d97706" stroke-width="4" marker-end="url(#arrowDm)"/>
+  <text x="738" y="242" class="step" style="fill:#b45309">Veri Madenciliği</text>
+  <text x="738" y="260" class="stepSub" style="fill:#b45309">(Data Mining)</text>
+  <line x1="954" y1="238" x2="1046" y2="174" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="960" y="130" class="step">Yorumlama /</text>
+  <text x="960" y="148" class="step">Değerlendirme</text>
+  <text x="960" y="166" class="stepSub">(Interpretation /</text>
+  <text x="960" y="182" class="stepSub">Evaluation)</text>
+
+  <!-- Vurgu notu -->
+  <rect x="430" y="138" width="250" height="56" rx="10" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5 3" filter="url(#shadow)"/>
+  <text x="555" y="162" text-anchor="middle" font-size="16" font-weight="bold" fill="#b45309">Sürecin yalnızca bir adımı!</text>
+  <text x="555" y="182" text-anchor="middle" font-size="13" fill="#4b5563">KDD ≠ yalnızca veri madenciliği</text>
+  <path d="M 680 178 Q 702 172 720 218" fill="none" stroke="#d97706" stroke-width="1.5" marker-end="url(#arrowDm)"/>
+</svg>

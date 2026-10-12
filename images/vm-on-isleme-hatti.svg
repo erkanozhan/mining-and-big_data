@@ -1,0 +1,179 @@
+<!-- Şekil: Veri ön işleme boru hattı | Ders notu: Veri Madenciliği ve Büyük Veri -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="gradPipe" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fee2e2"/>
+      <stop offset="50%" stop-color="#f3f4f6"/>
+      <stop offset="100%" stop-color="#d1fae5"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.15"/>
+      <feComposite in2="offsetblur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+    </marker>
+    <style>
+      .title { font-size: 24px; font-weight: bold; fill: #111827; }
+      .subtitle { font-size: 14px; fill: #4b5563; }
+      .cardTitle { font-size: 17px; font-weight: bold; fill: #ffffff; }
+      .num { font-size: 15px; font-weight: bold; text-anchor: middle; }
+      .item { font-size: 14px; fill: #1f2937; }
+      .cell { font-size: 13px; text-anchor: middle; }
+      .iconName { font-size: 15px; font-weight: bold; fill: #1f2937; text-anchor: middle; }
+      .iconSub { font-size: 13px; fill: #4b5563; text-anchor: middle; }
+      .flow { stroke: #6b7280; stroke-width: 2.5; fill: none; }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="600" y="44" text-anchor="middle" class="title">Veri Ön İşleme Boru Hattı</text>
+  <text x="600" y="70" text-anchor="middle" class="subtitle">Ham veriyi madenciliğe hazır hâle getiren dört temel aşama (aşamalar iç içe geçebilir ve yinelenebilir)</text>
+  <rect x="20" y="104" width="1160" height="282" rx="24" fill="url(#gradPipe)" opacity="0.7"/>
+
+  <!-- Ham veri -->
+  <g transform="translate(93,225) rotate(-4)" filter="url(#shadow)">
+    <rect x="-51" y="-56" width="102" height="112" rx="6" fill="#ffffff" stroke="#fca5a5" stroke-width="1.5"/>
+    <path d="M -51 -34 V -50 Q -51 -56 -45 -56 H 45 Q 51 -56 51 -50 V -34 Z" fill="#ef4444"/>
+    <text x="-34" y="-18" class="cell" fill="#374151">23</text>
+    <rect x="-16" y="-33" width="32" height="20" rx="3" fill="#fee2e2"/>
+    <text x="0" y="-18" class="cell" fill="#dc2626" font-weight="bold">?</text>
+    <text x="34" y="-18" class="cell" fill="#374151">İst</text>
+    <line x1="-51" y1="-12" x2="51" y2="-12" stroke="#e5e7eb"/>
+    <rect x="-50" y="-11" width="32" height="20" rx="3" fill="#fee2e2"/>
+    <text x="-34" y="4" class="cell" fill="#dc2626" font-weight="bold">-5</text>
+    <text x="0" y="4" class="cell" fill="#374151">4.1</text>
+    <rect x="18" y="-11" width="32" height="20" rx="3" fill="#fee2e2"/>
+    <text x="34" y="4" class="cell" fill="#dc2626" font-weight="bold">ist.</text>
+    <line x1="-51" y1="10" x2="51" y2="10" stroke="#e5e7eb"/>
+    <rect x="-50" y="11" width="32" height="20" rx="3" fill="#fee2e2"/>
+    <text x="-34" y="26" class="cell" fill="#dc2626" font-weight="bold">?</text>
+    <text x="0" y="26" class="cell" fill="#374151">3.9</text>
+    <text x="34" y="26" class="cell" fill="#374151">Ank</text>
+    <line x1="-51" y1="32" x2="51" y2="32" stroke="#e5e7eb"/>
+    <text x="-34" y="48" class="cell" fill="#374151">41</text>
+    <rect x="-16" y="33" width="32" height="20" rx="3" fill="#fee2e2"/>
+    <text x="0" y="48" class="cell" fill="#dc2626" font-weight="bold">999</text>
+    <rect x="18" y="33" width="32" height="20" rx="3" fill="#fee2e2"/>
+    <text x="34" y="48" class="cell" fill="#dc2626" font-weight="bold">?</text>
+    <line x1="-17" y1="-34" x2="-17" y2="56" stroke="#e5e7eb"/>
+    <line x1="17" y1="-34" x2="17" y2="56" stroke="#e5e7eb"/>
+  </g>
+  <text x="93" y="312" class="iconName">Ham Veri</text>
+  <text x="93" y="331" class="iconSub">eksik, gürültülü,</text>
+  <text x="93" y="348" class="iconSub">tutarsız</text>
+
+  <!-- Madenciliğe hazır veri -->
+  <g transform="translate(1107,225) rotate(0)" filter="url(#shadow)">
+    <rect x="-51" y="-56" width="102" height="112" rx="6" fill="#ffffff" stroke="#6ee7b7" stroke-width="1.5"/>
+    <path d="M -51 -34 V -50 Q -51 -56 -45 -56 H 45 Q 51 -56 51 -50 V -34 Z" fill="#10b981"/>
+    <text x="-34" y="-18" class="cell" fill="#374151">0.21</text>
+    <text x="0" y="-18" class="cell" fill="#374151">0.45</text>
+    <text x="34" y="-18" class="cell" fill="#374151">1</text>
+    <line x1="-51" y1="-12" x2="51" y2="-12" stroke="#e5e7eb"/>
+    <text x="-34" y="4" class="cell" fill="#374151">0.00</text>
+    <text x="0" y="4" class="cell" fill="#374151">0.52</text>
+    <text x="34" y="4" class="cell" fill="#374151">1</text>
+    <line x1="-51" y1="10" x2="51" y2="10" stroke="#e5e7eb"/>
+    <text x="-34" y="26" class="cell" fill="#374151">0.37</text>
+    <text x="0" y="26" class="cell" fill="#374151">0.40</text>
+    <text x="34" y="26" class="cell" fill="#374151">0</text>
+    <line x1="-51" y1="32" x2="51" y2="32" stroke="#e5e7eb"/>
+    <text x="-34" y="48" class="cell" fill="#374151">0.64</text>
+    <text x="0" y="48" class="cell" fill="#374151">0.49</text>
+    <text x="34" y="48" class="cell" fill="#374151">0</text>
+    <line x1="-17" y1="-34" x2="-17" y2="56" stroke="#e5e7eb"/>
+    <line x1="17" y1="-34" x2="17" y2="56" stroke="#e5e7eb"/>
+  </g>
+  <text x="1107" y="312" class="iconName">Madenciliğe</text>
+  <text x="1107" y="331" class="iconName">Hazır Veri</text>
+  <text x="1107" y="350" class="iconSub">temiz, tutarlı</text>
+
+  <!-- Akış okları -->
+  <line x1="150" y1="245" x2="174" y2="245" class="flow" marker-end="url(#arrow)"/>
+  <line x1="368" y1="245" x2="392" y2="245" class="flow" marker-end="url(#arrow)"/>
+  <line x1="586" y1="245" x2="610" y2="245" class="flow" marker-end="url(#arrow)"/>
+  <line x1="804" y1="245" x2="828" y2="245" class="flow" marker-end="url(#arrow)"/>
+  <line x1="1022" y1="245" x2="1048" y2="245" class="flow" marker-end="url(#arrow)"/>
+
+  <!-- Aşama kartları -->
+  <g transform="translate(178,125)">
+    <rect width="190" height="226" rx="12" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5" filter="url(#shadow)"/>
+    <path d="M 0 50 V 12 Q 0 0 12 0 H 178 Q 190 0 190 12 V 50 Z" fill="#d97706"/>
+    <circle cx="26" cy="25" r="14" fill="#ffffff"/>
+    <text x="26" y="30" class="num" fill="#d97706">1</text>
+    <text x="50" y="31" class="cardTitle">Temizleme</text>
+    <rect x="12" y="67" width="5" height="5" rx="1" fill="#f59e0b"/>
+    <text x="25" y="78" class="item">Eksik değerler</text>
+    <rect x="12" y="95" width="5" height="5" rx="1" fill="#f59e0b"/>
+    <text x="25" y="106" class="item">Gürültü</text>
+    <rect x="12" y="123" width="5" height="5" rx="1" fill="#f59e0b"/>
+    <text x="25" y="134" class="item">Aykırı değerler</text>
+    <rect x="12" y="151" width="5" height="5" rx="1" fill="#f59e0b"/>
+    <text x="25" y="162" class="item">Tutarsızlık</text>
+    <line x1="12" y1="188" x2="178" y2="188" stroke="#e5e7eb"/>
+    <text x="12" y="211" font-size="13" fill="#4b5563"><tspan font-weight="bold" fill="#d97706">Amaç:</tspan> hataları gidermek</text>
+  </g>
+  <g transform="translate(396,125)">
+    <rect width="190" height="226" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" filter="url(#shadow)"/>
+    <path d="M 0 50 V 12 Q 0 0 12 0 H 178 Q 190 0 190 12 V 50 Z" fill="#2563eb"/>
+    <circle cx="26" cy="25" r="14" fill="#ffffff"/>
+    <text x="26" y="30" class="num" fill="#2563eb">2</text>
+    <text x="50" y="31" class="cardTitle">Bütünleştirme</text>
+    <rect x="12" y="67" width="5" height="5" rx="1" fill="#3b82f6"/>
+    <text x="25" y="78" class="item">Çoklu kaynakları</text>
+    <text x="25" y="97" class="item">birleştirme</text>
+    <rect x="12" y="114" width="5" height="5" rx="1" fill="#3b82f6"/>
+    <text x="25" y="125" class="item">Varlık eşleme</text>
+    <rect x="12" y="142" width="5" height="5" rx="1" fill="#3b82f6"/>
+    <text x="25" y="153" class="item">Fazlalık / korelasyon</text>
+    <text x="25" y="172" class="item">analizi</text>
+    <line x1="12" y1="188" x2="178" y2="188" stroke="#e5e7eb"/>
+    <text x="12" y="211" font-size="13" fill="#4b5563"><tspan font-weight="bold" fill="#2563eb">Amaç:</tspan> tek, tutarlı görünüm</text>
+  </g>
+  <g transform="translate(614,125)">
+    <rect width="190" height="226" rx="12" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5" filter="url(#shadow)"/>
+    <path d="M 0 50 V 12 Q 0 0 12 0 H 178 Q 190 0 190 12 V 50 Z" fill="#7c3aed"/>
+    <circle cx="26" cy="25" r="14" fill="#ffffff"/>
+    <text x="26" y="30" class="num" fill="#7c3aed">3</text>
+    <text x="50" y="31" class="cardTitle">İndirgeme</text>
+    <rect x="12" y="67" width="5" height="5" rx="1" fill="#8b5cf6"/>
+    <text x="25" y="78" class="item">Boyut: PCA,</text>
+    <text x="25" y="97" class="item">özellik seçimi</text>
+    <rect x="12" y="114" width="5" height="5" rx="1" fill="#8b5cf6"/>
+    <text x="25" y="125" class="item">Sayı: örnekleme,</text>
+    <text x="25" y="144" class="item">kümeleme</text>
+    <rect x="12" y="161" width="5" height="5" rx="1" fill="#8b5cf6"/>
+    <text x="25" y="172" class="item">Sıkıştırma</text>
+    <line x1="12" y1="188" x2="178" y2="188" stroke="#e5e7eb"/>
+    <text x="12" y="211" font-size="13" fill="#4b5563"><tspan font-weight="bold" fill="#7c3aed">Amaç:</tspan> hacmi azaltmak</text>
+  </g>
+  <g transform="translate(832,125)">
+    <rect width="190" height="226" rx="12" fill="#ffffff" stroke="#06b6d4" stroke-width="1.5" filter="url(#shadow)"/>
+    <path d="M 0 50 V 12 Q 0 0 12 0 H 178 Q 190 0 190 12 V 50 Z" fill="#0891b2"/>
+    <circle cx="26" cy="25" r="14" fill="#ffffff"/>
+    <text x="26" y="30" class="num" fill="#0891b2">4</text>
+    <text x="50" y="31" class="cardTitle">Dönüştürme</text>
+    <rect x="12" y="67" width="5" height="5" rx="1" fill="#06b6d4"/>
+    <text x="25" y="78" class="item">Normalizasyon</text>
+    <rect x="12" y="95" width="5" height="5" rx="1" fill="#06b6d4"/>
+    <text x="25" y="106" class="item">Ayrıklaştırma</text>
+    <rect x="12" y="123" width="5" height="5" rx="1" fill="#06b6d4"/>
+    <text x="25" y="134" class="item">Kodlama (one-hot)</text>
+    <rect x="12" y="151" width="5" height="5" rx="1" fill="#06b6d4"/>
+    <text x="25" y="162" class="item">Türetilmiş nitelikler</text>
+    <line x1="12" y1="188" x2="178" y2="188" stroke="#e5e7eb"/>
+    <text x="12" y="211" font-size="13" fill="#4b5563"><tspan font-weight="bold" fill="#0891b2">Amaç:</tspan> uygun biçim ve ölçek</text>
+  </g>
+
+  <!-- GIGO notu -->
+  <rect x="300" y="414" width="600" height="46" rx="23" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5"/>
+  <path d="M 336 448 L 348 426 L 360 448 Z" fill="#ef4444"/>
+  <text x="348" y="445" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">!</text>
+  <text x="620" y="443" text-anchor="middle" font-size="16" fill="#7f1d1d"><tspan font-weight="bold">Çöp girerse çöp çıkar</tspan> (Garbage In, Garbage Out)</text>
+</svg>
