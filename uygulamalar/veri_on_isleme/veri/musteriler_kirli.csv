@@ -1,0 +1,317 @@
+musteri_id,ad_soyad,cinsiyet,yas,sehir,egitim,uyelik_tipi,kayit_tarihi,gelir_aylik,gelir_yillik,memnuniyet,e_posta,ulke,referans_kodu,kampanya_yanit
+1174,Büşra Çetin,K,33,Tekirdag,Lise,Standart,2021-12-26,21500,258000,3,busra.cetin10@ornek.com,Türkiye,,Hayır
+1034,İrem Öztürk,K,28,ISTANBUL,Lisans,Altın,22.04.2021,36500 TL,438000,2,irem.ozturk64@ornek.com,Türkiye,,Hayır
+1166,Ece Koç,K,35,İstanbul,Lisans,Standart,2025-03-08,48500 TL,582000,5,ece.koc2@ornek.com,Türkiye,,EVET
+1079,Merve Arslan,K,47,Ankara,LİSANS,Platin,2024-02-07,36600,439200,3,merve.arslan12@ornek.com,Türkiye,,Evet
+1094,Murat Şimşek,E,58,İstanbul,Lisans,Standart,2021-02-02,,,3,murat.simsek27@ornek.com,Türkiye,,Hayır
+1263,Emre Demir,E,18,Ankara,Lisans,Standart,2023-08-23,43500,522000,3,emre.demir2@ornek.com,Türkiye,,Hayır
+1026,Hatice Çelik,K,54,tekirdağ,lisans,Gold,2018-12-18,34700,416400,4,hatice.celik56@ornek.com,Türkiye,,Hayır
+1010,Mehmet Özkan,E,39,istanbul,Yüksek Lisans,Standart,2024-05-18,49300,591600,4,mehmet.ozkan40@ornek.com,Türkiye,,Hayır
+1064,Cansu Çelik,K,37,bursa,Lise,Standart,2019-11-07,21800,261600,5,cansu.celik94@ornek.com,Türkiye,REF2487,Evet
+1083,Yusuf Polat,e,40,ANKARA,Yüksek Lisans,Standart,2020-12-09,39000 TL,468000,4,yusuf.polat16@ornek.com,Türkiye,,Evet
+1204,İrem Şimşek,K,37,Antalya,Lisans,Gold,03/08/2019,31300,375600,3,irem.simsek40@ornek.com,Türkiye,REF2728,Hayır
+1196,İbrahim Yıldız,E,36,Tekirdağ,Lisans,Platin,07.10.2024,31800,381600,3,ibrahim.yildiz32@ornek.com,Türkiye,,Hayır
+1180,Fatma Özkan,K,29,İstanbul,,Gold,2022-10-19,33800,405600,3,fatma.ozkan16@ornek.com,Türkiye,,Hayır
+1061,İrem Şahin,K,45,İzmir,İlkokul,Standart,2025-03-15,13600,163200,4,irem.sahin91@ornek.com,Türkiye,,H
+1147,Hasan Arslan,Erkek,56,İstanbul,Lisans,Standart,2021-12-07,53200,638400,3,hasan.arslan80@ornek.com,Türkiye,,HAYIR
+1219,Emre Aslan,erkek,36,İstanbul,Lisans,Gold,2023-07-05,35900,430800,4,Emre.Aslan55@Ornek.Com,Türkiye,,Evet
+1164,İbrahim Şimşek,E,26,İstanbul,Lise,Gold,2018-03-16,17900,214800,3,ibrahim.simsek0@ornek.com,Türkiye,REF1700,hayir
+1169,Mustafa Demir,E,20,Tekirdağ,İlkokul,Standart,2018-10-23,14700,176400,4,mustafa.demir5@ornek.com,Türkiye,REF0542,Hayır
+1181,Zeynep Özkan,k,44,BURSA,Lise,Standart,29.04.2020,,,4,zeynep.ozkan17@ornek.com,Türkiye,,Hayır
+1043,Gizem Özkan,KADIN,43,izmir,Yüksek Lisans,Standart,18.03.2019,27500,330000,4,gizem.ozkan73@ornek.com,Türkiye,,Hayır
+1006,Emine Arslan,K,35,İstanbul,Lise,Standart,01/08/2019,-25000,-300000,3,emine.arslan36@ornek.com,Türkiye,,Evet
+1159,İrem Demir,Kadın,60,İzmir,?,Standart,2023-12-27,16100,193200,4,irem.demir92@ornek.com,Türkiye,,Hayır
+1140,İbrahim Özkan,E,24,Ankara ,Lisans,Gold,2025-01-30,32800,393600,4,,Türkiye,,Evet
+1281,Mehmet Kaya,E,49,Izmir,Lisans,Standart,2019-03-01,37700,452400,5,mehmet.kaya20@ornek.com,Türkiye,,Evet
+1297,Gizem Arslan,K,50 yaş,İstanbul,Lisans,Gold,2021-04-06,33800,405600,Bilinmiyor,gizem.arslan36@ornek.com,Türkiye,,Hayır
+1266,Hatice Aslan,Kadin,18,Antalya,LİSE,Standart,01/03/2023,17000,204000,4,hatice.aslan5@ornek.com,Türkiye,,Hayır
+1120,Burak Doğan,E,46,Ankara,Lisans,Standart,2018-03-08,?,,3,burak.dogan53@ornek.com,Türkiye,,Hayır
+1238,Mehmet Şahin,E,35,Antalya,Lisans,Gold,2021-07-03,,,3,mehmet.sahin74@ornek.com,Türkiye,,Hayır
+1077,  SERKAN DOĞAN ,erkek,46,Antalya,Lise,Standart,2018-01-22,15700,188400,3,serkan.dogan10@ornek.com,Türkiye,,Hayır
+1002,İrem Koç,K,N/A,İstanbul,Lise,Gold,2022-10-16,47700 TL,572400,3,Irem.Koc32@Ornek.Com,Türkiye,,Hayır
+1242,Ayşe Aslan,kadın,32,İstanbul,Lisans,Gold,21.12.2023,39400,472800,4,ayse.aslan78@ornek.com,Türkiye,,EVET
+1138,Kerem Yıldırım,E,48,İstanbul,Lise,Standart,2020-12-21,16.600 TL,199200,3,kerem.yildirim71@ornek.com,Türkiye,,Hayır
+1058,Kerem Kılıç,E,31,izmir,Lise,Platin,2020-12-17,25000,300000,,kerem.kilic88@ornek.com,Türkiye,,Evet
+1239,Burak Yılmaz,E,18,İstanbul,Lise,Standart,2018-07-06,Bilinmiyor,,5,burak.yilmaz75@ornek.com,Türkiye,,Hayır
+1282,  ÇAĞLAR ÖZKAN ,ERKEK,29,İzmir,Lisans,Standart,2022-09-03,23700,284400,4,caglar.ozkan21@ornek.com,Türkiye,REF9159,Hayır
+1278,  SELİN ÇETİN ,K,38,Ankara,Yüksek Lisans,Standart,30/08/2022,34900,418800,3,selin.cetin17@ornek.com,Türkiye,,Evet
+1114,Mustafa Koç,ERKEK,38,Tekirdağ,Lisans,Standart,2022-07-18,51200,614400,4,mustafa.koc47@ornek.com,Türkiye,,Hayır
+1004,Kerem Demir,E,52,Bursa,Lise,Standart,2023-11-13,23900,286800,2,kerem.demir34@ornek.com,Türkiye,,Hayır
+1273,Hüseyin Demir,ERKEK,?,Bursa,Doktora,Gold,12.11.2019,74600,895200,Bilinmiyor,huseyin.demir12@ornek.com,Türkiye,,HAYIR
+1112,Hatice Arslan,k,,Antalya,Lise ,Standart,10/07/2020,14200 TL,170400,3,hatice.arslan45@ornek.com,Türkiye,,Hayır
+1222,Mustafa Aslan,e,61,TEKİRDAĞ,Lise,Standart,2023-10-21,16800,201600,2,Bilinmiyor,Türkiye,REF6888,Hayır
+1105,Büşra Demir,K,49,Bursa,,Gold,06.08.2021,41500,498000,3,busra.demir38@ornek.com,Türkiye,REF3167,Evet
+1085,  AYŞE ŞAHİN ,K,45,Bursa,Lise ,Standart,2020-08-31,20700,248400,,ayse.sahin18@ornek.com,Türkiye,REF2305,Hayır
+1078,Serkan Kaya,e,34 yaş,ankara,İLKOKUL,Platin,2023-05-30,9200,110400,,-,Türkiye,,Hayır
+1047,Yusuf Özdemir,E,27,İstanbul,Lise,Standart,31.02.2022,21100,253200,4,yusuf.ozdemir77@ornek.com,Türkiye,REF2359,hayir
+1046,Zeynep Yıldırım,K,54,Tekirdağ,İlkokul,Platin,2020-02-27,18300,219600,4,zeynep.yildirim76@ornek.com,Türkiye,,Hayır
+1018,Serkan Yıldız,E,54,tekirdağ,Lisans,Gold,2024-07-02,53000,636000,4,serkan.yildiz48@ornek.com,Türkiye,,Hayır
+1183,Hüseyin Demir,E,46,Ankara,İlkokul,Standart,2018-02-17,17800,213600,3,huseyin.demir19@ornek.com,Türkiye,,Hayır
+1124,Murat Demir,E,40,İstanbul,Lise ,Altın,03.05.2023,17600,211200,,murat.demir57@ornek.com,Türkiye,,Hayır
+1187,hasan   yılmaz,Bilinmiyor,44,Bursa,Lise,Gold,09.06.2018,,,5,hasan.yilmaz23@ornek.com,Türkiye,,Evet
+1025,Ece Kılıç,K,43,Ankra,Lisans,Standart,2022-07-08,38200,458400,4,ece.kilic55@ornek.com,Türkiye,,Evet
+1074,Hasan Kaya,E,18,TEKİRDAĞ,Doktora,Standart,17.12.2023,50200,602400,3,hasan.kaya7@ornek.com,Türkiye,REF6145,Hayır
+1207,Selin Arslan,KADIN,28,İstanbul,Doktora,Standart,2019-05-28,36.700 TL,440400,4,selin.arslan43@ornek.com,Türkiye,REF9184,Hayır
+1109,Kerem Özdemir,Erkek,32,İstanbul,Bilinmiyor,Standart,14/11/2019,19700,236400,,kerem.ozdemir42@ornek.com,Türkiye,,Hayır
+1091,Serkan Polat,E,30,?,Yüksek lisans,GOLD,31.08.2019,49000,588000,4,serkan.polat24@ornek.com,Türkiye,,Evet
+1117,  YUSUF ARSLAN ,E,29,İstanbul,Lise,Platin,2025-01-02,,,2,yusuf.arslan50@ornek.com,Türkiye,,Hayır
+1036,Oğuz Aslan,E,37,İstanbul,Lise,Standart,2024-07-27,19100,229200,4,oguz.aslan66@ornek.com,Türkiye,REF7060,hayır
+1008,Selin Arslan,K,33,İstanbul,ilkokul,Standart,15.11.2024,17600,211200,2,selin.arslan38@ornek.com,Türkiye,,Hayır
+1138,Kerem Yıldırım,E,48,İstanbul,Lise,Standart,2020-12-21,16.600 TL,199200,3,kerem.yildirim71@ornek.com,Türkiye,,Hayır
+1133,çağlar   şimşek,E,32,İstanbul,Doktora,Gold,2024-02-18,47000,564000,0,caglar.simsek66@ornek.com,Türkiye,,hayir
+1254,Hasan Çelik,E,36,Ankara,İlkokul,Gold,2023-02-21,13200,158400,5,hasan.celik90@ornek.com,Türkiye,,Hayır
+1176,oğuz   polat,E,50,Antalya,Lise,Gold,27.07.2021,12600 TL,151200,5,?,Türkiye,,Evet
+1226,Hüseyin Kaya,e,31,Ankara,Lise,Standart,2024-08-11,27100,325200,3,huseyin.kaya62@ornek.com,Türkiye,,Hayır
+1224,Çağlar Aslan,E,48,İstanbul,Yüksek Lisans,Gold,23/09/2022,57100,685200,9,caglar.aslan60@ornek.com,Türkiye,,Evet
+1209,Hüseyin Öztürk,ERKEK,47, İstanbul  ,Lisans,Standart,07.11.2020,21300,255600,?,huseyin.ozturk45@ornek.com,Türkiye,,Hayır
+1158,Özge Öztürk,K,44,-,Lisans  ,Standart,2023-11-03,25500,306000,4,ozge.ozturk91@ornek.com,Türkiye,,Hayır
+1095,Şule Kaya,K,36,Bilinmiyor,İlkokul,Standart,12.08.2022,24500,294000,5,sule.kaya28@ornek.com,Türkiye,,Evet
+1156,Selin Aydın,Kadın,27,İstanbul,LİSE,Standart,25.12.2021,27600,331200,3,selin.aydin89@ornek.com,Türkiye,,Hayır
+1076,Mehmet Çetin,E,,Tekirdağ,Lisans,Standart,14.03.2025,27000,324000,4,mehmet.cetin9@ornek.com,Türkiye,,Hayır
+1149,Selin Yıldırım,K,45,İstanbul,Lise,Gold,2019-09-04,19000,228000,4,selin.yildirim82@ornek.com,Türkiye,,Evet
+1295,Elif Çetin,K,59,İzmir,?,Standart,21/05/2018,20300,243600,3,elif.cetin34@ornek.com,Türkiye,,Hayır
+1290,Çağlar Yıldız,E,40,İzmir,Lisans,standart,12.02.2023,3500000,42000000,4,caglar.yildiz29@ornek.com,Türkiye,REF1426,Hayır
+1211,Yusuf Yılmaz,E,49, İstanbul  ,Lise,STANDART,17.06.2018,35800,429600,3,yusuf.yilmaz47@ornek.com,Türkiye,,Hayır
+1115,Ayşe Şimşek,Kadın,39,Bursa,Lisans,Standart,2020-03-16,30400,364800,2,ayse.simsek48@ornek.com,Türkiye,,Hayır
+1145,Selin Koç,Kadin,24,İzmir,İLKOKUL,STANDART,14/01/2022,17800,213600,5,selin.koc78@ornek.com,Türkiye,,Hayır
+1214,Çağlar Yıldız,E,37,İstanbul,Lise,Standart,2018-07-22,,,4,caglar.yildiz50@ornek.com,Türkiye,,Hayır
+1235,Murat Özkan,E,21,Ankara,Lise,Gold,2023-04-13,,,1,murat.ozkan71@ornek.com,Türkiye,,Hayır
+1228,Emine Özkan,k,56,Ankara,Lisans,Standart,2022-10-14,42600,511200,5,-,Türkiye,,Hayır
+1060,Şule Yıldız,K,54,İstanbul,Lisans,Gold,2023-11-24,58400,700800,3,Sule.Yildiz90@Ornek.Com,Türkiye,,Evet
+1110,Ayşe Özdemir,Kadin,21,Tekirdağ,Lise,platin,2023-10-10,,,4,ayse.ozdemir43@ornek.com,Türkiye,,Hayır
+1007,Hüseyin Yıldırım,e,28, İstanbul  ,Lisans,Standart,10.12.2020,44200,530400,4,huseyin.yildirim37@ornek.com,Türkiye,,Hayır
+1194,Murat Kurt,E,47,Antalya,Lise,Standart,15/04/2025,19100,229200,3,murat.kurt30@ornek.com,Türkiye,,Hayır
+1031,Burak Çetin,E,31,Ankara,Lisans,Gold,17.10.2018,28100,337200,2,burak.cetin61@ornek.com,Türkiye,,hayir
+1023,Murat Şahin,E,66,İzmir,Yüksek Lisans,Platinum,2022-01-11,230000,2760000,4,Murat.Sahin53@Ornek.Com,Türkiye,REF6405,Hayır
+1269,Özge Aydın,K,39,Ankara,lise,Standart,2018-11-02,19100,229200,5,ozge.aydin8@ornek.com,Türkiye,REF3008,Evet
+1057,Emine Koç,k,46,Ankara,Lisans  ,STANDART,2024-06-05,N/A,,4,emine.koc87@ornek.com,Türkiye,,Hayır
+1251,Oğuz Polat,E,49,İzmir,Yüksek Lisans,Gold,02.03.2023,58000,696000,5,oguz.polat87@ornek.com,Türkiye,,Evet
+1276,Hasan Arslan,E,30,Ankara,Lise ,Standart,2022-02-26,16600,199200,3,hasan.arslan15@ornek.com,Türkiye,,Hayır
+1114,Mustafa Koç,ERKEK,38,Tekirdağ,Lisans,Standart,2022-07-18,51200,614400,4,mustafa.koc47@ornek.com,Türkiye,,Hayır
+1144,Emre Yıldız,E,-,Antalya,İlkokul,Gold,14.08.2023,19800,237600,5,emre.yildiz77@ornek.com,Türkiye,,Hayır
+1256,Burak Kurt,E,50,,Lisans,Standart,2024-06-01,36200,434400,4,burak.kurt92@ornek.com,Türkiye,,Hayır
+1259,Oğuz Aslan,e,36,Ankara,yüksek lisans,Standart,09/08/2024,-,,1,oguz.aslan95@ornek.com,Türkiye,,hayır
+1146,Özge Öztürk,K,57,ankara,Lisans,Gold,2019-12-07,16900,202800,5,ozge.ozturk79@ornek.com,Türkiye,REF8747,Hayır
+1300,Okan Kılıç,E,46,ANTALYA,Lisans  ,STANDART,2019-09-01,35.700 TL,428400,3,okan.kilic39@ornek.com,Türkiye,REF1886,Hayır
+1102,Oğuz Kılıç,e,36,Tekirdağ,Yüksek Lisans,Standart,13.11.2020,?,,3,oguz.kilic35@ornek.com,Türkiye,,Evet
+1210,Hatice Polat,N/A,23,İstanbul,Doktora,Standart,2018-07-15,55000,660000,5,hatice.polat46@ornek.com,Türkiye,,E
+1067,Büşra Arslan,K,37,İstanbul,Lisans,Standart,03.03.2020,40200,482400,3,busra.arslan0@ornek.com,Türkiye,,Hayır
+1127,Çağlar Çetin,Erkek,29,İstanbul,Doktora,STANDART,2022-07-16,50000,600000,4,caglar.cetin60@ornek.com,Türkiye,,Hayır
+1019,Ece Kaya,K,46,bursa,lise,Standart,2022-01-21,30900,370800,4,ece.kaya49@ornek.com,Türkiye,,Hayır
+1182,Çağlar Kılıç,E,24,İstanbul,Lise,STANDART,06.07.2019,,,5,caglar.kilic18@ornek.com,Türkiye,,Hayır
+1060,  ŞULE YILDIZ,K,54,i̇stanbul,Lisans,Gold,2023-11-24,58400,700800,3,Sule.Yildiz90@Ornek.Com,Türkiye,,Evet
+1020,Oğuz Demir,E,39,ISTANBUL,lise,Standart,2020-04-16,13900,166800,3,oguz.demir50@ornek.com,Türkiye,,Hayır
+1299,Okan Kaya,E,28,Tekirdağ,Lise,Standart,2025-06-19,26600,319200,5,okan.kaya38@ornek.com,Türkiye,,Hayır
+1093,Elif Şimşek,K,39,Bursa,Lise,Platin,24.06.2022,26100,313200,3,elif.simsek26@ornek.com,Türkiye,REF3195,Evet
+1080,Zeynep Şimşek,Kadin,22,istanbul,Lise,Standart,17.11.2024,14300,171600,5,zeynep.simsek13@ornek.com,Türkiye,,Evet
+1248,Murat Kaya,ERKEK,46,Tekirdağ,İLKOKUL,Standart,06.11.2019,18300,219600,4,murat.kaya84@ornek.com,Türkiye,,Hayır
+1186,Ali Doğan,erkek,50,Tekirdağ,Lisans,Standart,2024-01-31,30700,368400,1,ali.dogan22@ornek.com,Türkiye,,Hayır
+1073,İbrahim Kılıç,E,23,İzmir,Lisans,Standart,2020-07-11,26.500 TL,318000,4,ibrahim.kilic6@ornek.com,Türkiye,,Hayır
+1097,Ahmet Çetin,E,43,BURSA,İlkokul,STANDART,2018-09-24,,,4,ahmet.cetin30@ornek.com,Türkiye,REF9138,Hayır
+1016,Özge Kılıç,K,otuz beş,İzmir,Lisans  ,Gold,2018-05-19,28600,343200,4,ozge.kilic46@ornek.com,Türkiye,,Evet
+1011,Özge Kurt,K,45,İzmir,Lisans,Platin,2019-11-11,26200,314400,1,Ozge.Kurt41@Ornek.Com,Türkiye,,hayir
+1178,Ahmet Demir,E,21, Bursa,LİSE,Gold,15.05.2021,11700,140400,3,ahmet.demir14@ornek.com,Türkiye,REF3315,Hayır
+1125,  MERVE KOÇ ,K,37,Ankara,Yüksek Lisans,Standart,2020-05-26,33400,400800,3,merve.koc58@ornek.com,Türkiye,,Hayır
+1098,Hatice Doğan,K,44,ankara,Lise,Platin,17.02.2020,23400,280800,5,hatice.dogan31@ornek.com,Türkiye,,Hayır
+1069,Ahmet Şimşek,E,23,İstanbul,Doktora,Standart,2019-11-24,55000,660000,4,ahmet.simsek2@ornek.com,Türkiye,,Hayır
+1249,Selin Kurt,K,39,Ankara,Yüksek Lisans,Standart,2023-12-29,46100 TL,553200,3,selin.kurt85@ornek.com,Türkiye,,Hayır
+1038,Elif Yıldız,Kadın,54,Tekirdağ,Lisans,Standart,2021-12-14,160000,1920000,3,elif.yildiz68@ornek.com,Türkiye,,Hayır
+1017,Şule Çelik,K,,İstanbul,Lisans,Gold,07.06.2024,41400,496800,5,sule.celik47@ornek.com,Türkiye,,H
+1056,Yusuf Arslan,erkek,32,bursa,Lise,Standart,2022-05-14,24900,298800,4,yusuf.arslan86@ornek.com,Türkiye,REF9753,Hayır
+1165,Ahmet Öztürk,E,36,İstanbul,yüksek lisans,Standart,2020-07-20,35800,429600,2,ahmet.ozturk1@ornek.com,Türkiye,,Evet
+1286,Cansu Çetin,KADIN,22,İSTANBUL,Lise,STANDART,2023-03-14,43400 TL,520800,4,cansu.cetin25@ornek.com,Türkiye,,Hayır
+1068,Hasan Özkan,E,18,Bursa,Lisans,Gold,2023-01-30,30900,370800,3,hasan.ozkan1@ornek.com,Türkiye,,Hayır
+1119,Hüseyin Çelik,E,49,izmir,Lise,STANDART,2025-02-07,,,3,huseyin.celik52@ornek.com,Türkiye,,Hayır
+1200,Merve Aydın,K,60,Ankara,İlkokul,Platin,28/06/2020,18500,222000,3,merve.aydin36@ornek.com,Türkiye,,Hayır
+1070,Oğuz Demir,E,57,İzmir,Doktora,Platin,02.12.2021,59100 TL,709200,4,oguz.demir3@ornek.com,Türkiye,,E
+1032,Hasan Yıldırım,E,,İstanbul,Lise,Standart,17.06.2023,17200,206400,5,hasan.yildirim62@ornek.com,Türkiye,REF2301,Hayır
+1195,Zeynep Aydın,kadın,35, Bursa,Yüksek Lisans,Gold,2019-04-10,42000,504000,4,zeynep.aydin31@ornek.com,Türkiye,,Evet
+1168,Murat Özdemir,ERKEK,44,İzmir,Yüksek Lisans,Standart,2023-04-28,N/A,,3,murat.ozdemir4@ornek.com,Türkiye,,EVET
+1250,Okan Kılıç,E,51,İzmir,Lise,STANDART,2024-04-23,19400,232800,4,okan.kilic86@ornek.com,Türkiye,,Evet
+1220,Gizem Polat,kadın,63,Antalya,Lise,Platin,2022-05-08,20100,241200,5,Gizem.Polat56@Ornek.Com,Türkiye,REF1289,Evet
+1126,Hatice Demir,K,32,ANKARA,Lise,Platin,2022-03-23,11400,136800,4,Hatice.Demir59@Ornek.Com,Türkiye,,E
+1232,Emine Çelik,k,30,Tekirdağ,lisans,Platin,2023-05-05,60800,729600,3,emine.celik68@ornek.com,Türkiye,,Hayır
+1087,Mehmet Aydın,E,33,İzmir,Lisans,Standart,2022-12-10,38100,457200,4,Mehmet.Aydin20@Ornek.Com,Türkiye,REF8023,Evet
+1267,Ali Kurt,Erkek,29,Ankara,Lisans,Standart,2022-11-16,33500,402000,3,ali.kurt6@ornek.com,Türkiye,REF1651,Hayır
+1185,Emre Özdemir,E,26,İstanbul,Lise,Standart,10.04.2024,12200,146400,4,selin@ornek,Türkiye,,Hayır
+1268,ali   kurt,E,30,Tekirdağ,Lise,Standart,26.10.2024,25300,303600,4,ali.kurt7@ornek.com,Türkiye,,Hayır
+1230,  KEREM YILMAZ ,erkek,21,IZMIR,Lisans,Standart,30.11.2021,30000,360000,3,kerem.yilmaz66@ornek.com,Türkiye,,H
+1229,Cansu Özkan,K,37,Tekirdağ,LİSANS,Standart,2021-04-19,,,5,Cansu.Ozkan65@Ornek.Com,Türkiye,,hayır
+1141,Ece Kurt,K,40,istanbul,Lisans,Platin,01.07.2024,30500,366000,4,ece.kurt74@ornek.com,Türkiye,,Evet
+1205,hüseyin   çetin,E,38,Ankara,Lisans,Standart,2018-12-31,35400,424800,4,huseyin.cetin41@ornek.com,Türkiye,,Evet
+1148,Yusuf Yıldırım,E,38,İstanbul,Lise,Standart,2024-06-29,,,4,yusuf.yildirim81@ornek.com,Türkiye,,Hayır
+1203,Yusuf Arslan,E,18,İstanbul,Yüksek Lisans,Platin,2020-03-07,37.900 TL,454800,4,yusuf.arslan39@ornek.com,Türkiye,,Hayır
+1130,Şule Aslan,K,?,ISTANBUL,Lise,Standart,01/06/2018,24800,297600,4,sule.aslan63@ornek.com,Türkiye,REF6592,Evet
+1039,Ali Koç,E,29,Tekirdağ,Lise,STANDART,2025-05-18,23300,279600,5,ali.koc69@ornek.com,Türkiye,,Hayır
+1247,Merve Şahin,K,46,istanbul,Lisans,Standart,30.08.2023,56.300 TL,675600,4,merve.sahin83@ornek.com,Türkiye,,Hayır
+1187,  HASAN   YILMAZ,Bilinmiyor,44,bursa,Lise,Gold,09.06.2018,,,,hasan.yilmaz23@ornek.com,Türkiye,,Evet
+1153,Büşra Kaya,K,28,Antalya,Lise,Gold,26.03.2020,14900,178800,4,busra.kaya86@ornek.com,Türkiye,,Evet
+1113,Zeynep Çetin,K,39,ANKARA,Lisans,STANDART,2019-10-07,?,,5,zeynep.cetin46@ornek.com,Türkiye,,Hayır
+1246,Ahmet Yılmaz,E,70,Antalya,Lisans  ,Platin,2019-02-25,41000,492000,4,ahmet.yilmaz82@ornek.com,Türkiye,,Evet
+1118,Mehmet Özdemir,E,49,İzmır,Lise,Standart,20.03.2024,24800,297600,4,mehmet.ozdemir51@ornek.com,Türkiye,,Hayır
+1293,  HATİCE ARSLAN ,K,,İstanbul,Lise,Standart,2023-08-19,13100,157200,5,hatice.arslan32@ornek.com,Türkiye,,Hayır
+1287,Serkan Kaya,E,49,Tekirdağ,LİSE,Gold,2022-08-17,,,2,serkan.kaya26@ornek.com,Türkiye,REF1205,Hayır
+1173,Merve Yılmaz,K,33,Tekirdağ,Lisans,Gold,14/12/2024,23300,279600,5,merve.yilmaz9@ornek.com,Türkiye,,Hayır
+1197,Mehmet Polat,E,57,Ankara,Lisans,Standart,2023-01-30,31200,374400,4,mehmet.polat33@ornek.com,Türkiye,,Hayır
+1155,Murat Doğan,erkek,65,Antalya,Lisans,Standart,07.02.2022,23400,280800,4,murat.dogan88@ornek.com,Türkiye,REF9017,Hayır
+1199,kerem   yıldırım,erkek,18,Ankara,Doktora,Gold,2024-03-10,53400,640800,4,kerem.yildirim35@ornek.com,Türkiye,,Evet
+1003,Ayşe Çetin,K,19,İstanbul,Lisans,Standart,01.04.2021,26800,321600,3,ayse.cetin33@ornek.com,Türkiye,,Evet
+1116,özge   koç,K,43,Ankara ,Lisans  ,standart,2022-12-08,36400,436800,-,mehmet.demir.ornek.com,Türkiye,,E
+1298,Oğuz Kaya,e,27,İzmir,Lisans,STANDART,2018-08-26,30500,366000,5,oguz.kaya37@ornek.com,Türkiye,,Evet
+1198,Hasan Özdemir,E,29,Bilinmiyor,,Gold,2024-11-28,37200,446400,4,hasan.ozdemir34@ornek.com,Türkiye,,Evet
+1121,kerem   demir,E,48,izmir,İlkokul,Standart,2021-05-31,11400,136800,5,kerem.demir54@ornek.com,Türkiye,,Evet
+1234,Zeynep Demir,kadın,N/A,antalya,Lise,GOLD,2021-05-09,18100,217200,3,zeynep.demir70@ornek.com,Türkiye,,Hayır
+1280,Mehmet Kılıç,,,,,gold,,,,,,Türkiye,,Evet
+1128,Derya Kaya,kadın,26,istanbul,Lise,platin,18.09.2021,17000,204000,,derya.kaya61@ornek.com,Türkiye,,Hayır
+1075,Cansu Kılıç,K,34,İzmır,Lise,Platin,2021-05-27,27000,324000,5,kerem koc@ornek.com,Türkiye,,Evet
+1030,burak   öztürk,erkek,Bilinmiyor,İstanbul,Lise,Platin,2025-01-12,21600,259200,3,burak.ozturk60@ornek.com,Türkiye,,Evet
+1084,Hatice Polat,k,50,İstanbul,Lise,Standart,2020-08-21,24.700 TL,296400,4,hatice.polat17@ornek.com,Türkiye,,Hayır
+1262,Ahmet Şimşek,E,52,Antalya,İlkokul,Gold,2020-04-22,,,5,ahmet.simsek1@ornek.com,Türkiye,,Evet
+1108,Emine Doğan,K,0,İstanbul,Lisans,Gold,2020-04-04,18100,217200,4,emine.dogan41@ornek.com,Türkiye,,Evet
+1184,Derya Demir,KADIN,31,Ankara ,Lise,Standart,2024-08-27,22200,266400,4,derya.demir20@ornek.com,Türkiye,,Hayır
+1177,İrem Aydın,KADIN,46,İSTANBUL,LİSE,Gold,2018-12-03,20400,244800,4,irem.aydin13@ornek.com,Türkiye,,Evet
+1134,Emine Koç,K,52,Tekirdağ,YL,Standart,2024-06-25,67600 TL,811200,3,emine.koc67@ornek.com,Türkiye,,Hayır
+1212,Şule Özkan,KADIN,66, İstanbul  ,Lise,Standart,2025-06-02,29000,348000,2,sule.ozkan48@ornek.com,Türkiye,,Hayır
+1240,Ayşe Şimşek,K,50,İstanbul,Lise,Platin,2019-04-10,,,4,ayse.simsek76@ornek.com,Türkiye,REF0569,Hayır
+1292,Kerem Çetin,E,18,İstanbul,Lise,Standart,22/07/2018,N/A,,5,kerem.cetin31@ornek.com,Türkiye,,Hayır
+1066,  BURAK ASLAN ,erkek,19,İzmir,Lisans,Standart,2023-07-09,34100,409200,4,burak.aslan96@ornek.com,Türkiye,,Hayır
+1221,Hasan Yılmaz,E,39,Tekirdağ,Lise ,STANDART,21.08.2018,17300,207600,5,hasan.yilmaz57@ornek.com,Türkiye,,Hayır
+1086,Fatma Kurt,K,49,ankara,Lisans,PLATİN,2022-10-13,44300,531600,3,ayse.kaya@,Türkiye,,Hayır
+1285,İbrahim Kurt,E,26,İstanbul,Lisans,Standart,2020-06-15,N/A,,4,ibrahim.kurt24@ornek.com,Türkiye,,Hayır
+1160,Fatma Çetin,K,26,İstanbul,ilkokul,Standart,2019-11-04,11600,139200,4,fatma.cetin93@ornek.com,Türkiye,,Hayır
+1013,  FATMA KOÇ ,,57,Bursa,Yüksek Lisans,Gold,2018-07-18,64600,775200,4,fatma.koc43@ornek.com,Türkiye,REF1750,Hayır
+1036,Oğuz Aslan,E,37,İstanbul,Lise,Standart,2024-07-27,19100,229200,4,oguz.aslan66@ornek.com,Türkiye,REF7060,hayır
+1029,Emine Arslan,K,41,İzmir,Lisans,Standart,2019-03-12,31900,382800,4,emine.arslan59@ornek.com,Türkiye,,Evet
+1171,Serkan Aslan,E,34,Ankara,LİSANS,Standart,14/10/2020,27700,332400,3,Serkan.Aslan7@Ornek.Com,Türkiye,REF7061,Hayır
+1143,Mustafa Kılıç,E,30,Ankara,Lisans,Standart,2020-09-11,26300,315600,4,mustafa.kilic76@ornek.com,Türkiye,,Hayır
+1255,Ece Yıldız,K,35,İstanbul,Lisans  ,Standart,03/11/2022,35000,420000,5,ece.yildiz91@ornek.com,Türkiye,,HAYIR
+1132,Şule Aydın,K,42,İstanbul,Yüksek Lisans,Gold,2020-08-11,35000,420000,3,sule.aydin65@ornek.com,Türkiye,,evet
+1257,Şule Çelik,K,59,Bursa,İlkokul,Standart,2024-08-09,13.000 TL,156000,1,sule.celik93@ornek.com,Türkiye,,HAYIR
+1052,ahmet   aslan,Erkek,42,Antalya,Lisans,Gold,2021-10-08,32700,392400,4,ahmet.aslan82@ornek.com,Türkiye,,EVET
+1096,Çağlar Yıldız,E,58,tekirdağ,İlkokul,standart,24.07.2024,25000,300000,4,caglar.yildiz29@ornek.com,Türkiye,REF4460,Evet
+1231,Murat Çelik,E,41,Tekirdağ,Lisans,Standart,2025-01-13,30200,362400,3,murat.celik67@ornek.com,Türkiye,,Hayır
+1179,Özge Yıldız,K,47,İstanbul,-,Standart,2018-06-17,18.500 TL,222000,2,ozge.yildiz15@ornek.com,Türkiye,,Hayır
+1245,irem   yılmaz,K,45,Ankara,Yüksek Lisans,Standart,2021-02-28,57900,694800,5,irem.yilmaz81@ornek.com,Türkiye,REF0162,Evet
+1042,Zeynep Şimşek,K,38, Bursa,Lisans,Platin,24.02.2024,45000,540000,4,zeynep.simsek72@ornek.com,Türkiye,,Evet
+1090,emine   koç,K,29,İstanbul,Yüksek Lisans,Gold,2025-05-24,210000,2520000,3,emine.koc23@ornek.com,Türkiye,,Hayır
+1241,  SERKAN YILDIZ ,E,44,Ankara,Lisans,Standart,2021-02-25,49.700 TL,596400,5,serkan.yildiz77@ornek.com,Türkiye,,Evet
+1137,Gizem Çetin,K,33,İstanbul,LİSANS,Gold,21.04.2024,39600,475200,5,gizem.cetin70@ornek.com,Türkiye,,Evet
+1027,Ali Yıldırım,ERKEK,31,İstanbul,Lisans,Standart,30/11/2018,19600,235200,4,ali.yildirim57@ornek.com,Türkiye,,Hayır
+1288,Fatma Şahin,K,37,Bursa,,Platin,2023-01-21,25300,303600,,fatma.sahin27@ornek.com,Türkiye,,Hayır
+1142,Hüseyin Koç,,,,,standart,,,,,,Türkiye,,Evet
+1223,Hatice Demir,K,28,Ankra,Lisans,Standart,2018-04-12,,,4,hatice.demir59@ornek.com,Türkiye,,hayir
+1001,Hasan Kılıç,erkek,47,İst.,Lisans,Standart,2023-11-23,28000,336000,4,hasan.kilic31@ornek.com,Türkiye,REF5822,Evet
+1284,Ahmet Şahin,E,38,İSTANBUL,Doktora,Standart,2019-01-05,40400,484800,N/A,ahmet.sahin23@ornek.com,Türkiye,,Hayır
+1288,Fatma Şahin,K,37,Bursa,,Platin,2023-01-21,25300,303600,,fatma.sahin27@ornek.com,Türkiye,,Hayır
+1101,Ece Arslan,k,30,Tekirdağ,Lisans,Standart,02.07.2022,29500 TL,354000,3,ece.arslan34@ornek.com,Türkiye,,Hayır
+1193,Derya Çetin,K,34,Istanbul,Lisans,Standart,2019-12-22,35100,421200,,derya.cetin29@ornek.com,Türkiye,,H
+1272,İbrahim Çelik,E,29,Ankara,Lisans,Gold,06.04.2022,35.300 TL,423600,-,ibrahim.celik11@ornek.com,Türkiye,,Evet
+1104,Yusuf Şahin,E,22,İstanbul,Lise,Gold,06.05.2025,16700,200400,3,yusuf.sahin37@ornek.com,Türkiye,,Hayır
+1172,Oğuz Polat,E,56,Ankara,lise,Standart,2023-07-30,19200,230400,3,oguz.polat8@ornek.com,Türkiye,,Hayır
+1099,Zeynep Kaya,K,60,ankara,Lisans,Standart,2021-11-14,36800,441600,55,zeynep.kaya32@ornek.com,Türkiye,,Evet
+1037,Ece Çelik,Kadin,64,İstanbul,Lisans,platin,28.05.2019,40900,490800,3,ece.celik67@ornek.com,Türkiye,,Evet
+1062,Cansu Çetin,K,38 yaş,İstanbul,Yüksek Lisans,Standart,04.11.2024,43300,519600,5,cansu.cetin92@ornek.com,Türkiye,,Hayır
+1151,Ece Polat,KADIN,27,Bursa,Yüksek Lisans,Standart,05.07.2023,39.400 TL,472800,3,ece.polat84@ornek.com,Türkiye,,Hayır
+1048,Cansu Arslan,K,41,Ankara ,Doktora,Gold,19/11/2018,51000,612000,3,cansu.arslan78@ornek.com,Türkiye,,Hayır
+1225,Elif Kılıç,kadın,45,Antalya,Yüksek Lisans,Platin,2021-01-25,51400,616800,5,elif.kilic61@ornek.com,Türkiye,,Evet
+1261,Selin Polat,N/A,38,Tekirdağ,Lisans,Standart,2019-07-20,36400 TL,436800,4,selin.polat0@ornek.com,Türkiye,,Hayır
+1012,Özge Özdemir,K,45,IZMIR,LİSE,Standart,11.05.2024,33900,406800,3,ozge.ozdemir42@ornek.com,Türkiye,,Hayır
+1077,    SERKAN DOĞAN ,erkek,46,antalya,Lise,Standart,2018-01-22,15700,188400,,serkan.dogan10@ornek.com,Türkiye,,Hayır
+1201,Mehmet Yılmaz,E,72,ankara,Lise,Gold,15.03.2024,23.100 TL,277200,2,mehmet.yilmaz37@ornek.com,Türkiye,REF8111,Hayır
+1283,Fatma Aydın,K,41,İzmir,Lisans,Standart,2024-12-06,?,,4,fatma.aydin22@ornek.com,Türkiye,,hayir
+1028,Ayşe Öztürk,Kadın,45,Tekirdağ,Lisans,Platin,2023-11-08,32700,392400,4,ayse.ozturk58@ornek.com,Türkiye,,Evet
+1243,Ali Şimşek,E,25,İstanbul,Lise,Gold,09/11/2023,14000,168000,4,ali.simsek79@ornek.com,Türkiye,,Hayır
+1005,Burak Kurt,E,34,İstanbul,Doktora,Standart,2019-03-17,38700,464400,2,burak.kurt35@ornek.com,Türkiye,,Hayır
+1123,Derya Kurt,K,65,Ankara,Lise ,STANDART,2024-11-17,33500,402000,4,derya.kurt56@ornek.com,Türkiye,,Hayır
+1033,Hüseyin Aydın,E,18,İSTANBUL,Doktora,Standart,2025-04-23,185000,2220000,4,huseyin.aydin63@ornek.com,Türkiye,,Hayır
+1227,Cansu Aslan,K,43,İstanbul,Lise,Standart,2020-04-21,22800,273600,5,cansu.aslan63@ornek.com,Türkiye,,Hayır
+1163,Serkan Şimşek,E,21,İzmir,Lisans,Gold,2021-01-20,19000,228000,4,serkan.simsek96@ornek.com,Türkiye,,Evet
+1233,Mustafa Özdemir,Erkek,37,İstanbul,lise,Standart,2021-02-08,18.900 TL,226800,3,mustafa.ozdemir69@ornek.com,Türkiye,,hayir
+1270,Gizem Yılmaz,Kadın,54,İzmir,lisans,Standart,2020-03-18,49900,598800,4,gizem.yilmaz9@ornek.com,Türkiye,,Hayır
+1139,Mehmet Çetin,E,43,ankara,Lisans,Gold,2021-02-13,35700,428400,3,mehmet.cetin72@ornek.com,Türkiye,,Evet
+1063,Ali Yılmaz,erkek,-,İzmir,Bilinmiyor,Standart,25.12.2023,27900,334800,4,ali.yilmaz93@ornek.com,Türkiye,REF7891,
+1216,Mehmet Kurt,,48,ankara,Lise,Gold,29.12.2018,21.400 TL,256800,4,mehmet.kurt52@ornek.com,Türkiye,,Hayır
+1136,Mehmet Aslan,e,39,İstanbul,Lise,GOLD,26.03.2018,21000,252000,4,mehmet.aslan69@ornek.com,Türkiye,,Hayır
+1129,Ayşe Özdemir,K,N/A,İzmır,,STANDART,2021-07-22,21200 TL,254400,3,ayse.ozdemir62@ornek.com,Türkiye,,Hayır
+1130,Şule Aslan,K,?,ISTANBUL,Lise,Standart,01/06/2018,24800,297600,4,sule.aslan63@ornek.com,Türkiye,REF6592,Evet
+1009,Hasan Polat,E,46,İzmir,Lise,Standart,2022-08-09,15500,186000,4,hasan.polat39@ornek.com,Türkiye,,Evet
+1071,Elif Polat,K,52,İzmir,Lisans,Gold,2023-12-21,56400,676800,4,elif.polat4@ornek.com,Türkiye,,Evet
+1279,Kerem Arslan,E,49,İstanbul,Lise,Gold,03.05.2021,,,3,kerem.arslan18@ornek.com,Türkiye,,Hayır
+1065,Mehmet Doğan,e,52,İstanbul,lisans,Standart,2023-10-21,,,3,mehmet.dogan95@ornek.com,Türkiye,,
+1045,Kerem Koç,erkek,37,İstanbul,Lisans,standart,2022-08-27,36900,442800,5,kerem.koc75@ornek.com,Türkiye,REF8978,evet
+1015,Hatice Aslan,K,23,bursa,Lise,Standart,2021-12-02,9900 TL,118800,2,hatice.aslan45@ornek.com,Türkiye,,Hayır
+1157,Mustafa Çetin,E,31,istanbul,Lisans,Platin,2021-01-25,32400,388800,3,mustafa.cetin90@ornek.com,Türkiye,REF2650,Evet
+1041,Okan Aslan,E,36,İstanbul,Lise,Standart,2018-05-07,21600,259200,3,Okan.Aslan71@Ornek.Com,Türkiye,,Hayır
+1296,Derya Kılıç,K,44,Bursa,Lisans,Standart,24/01/2021,39600 TL,475200,4,derya.kilic35@ornek.com,Türkiye,,evet
+1124,Murat Demir,E,40,İstanbul,Lise ,Altın,03.05.2023,17600,211200,,murat.demir57@ornek.com,Türkiye,,Hayır
+1291,Derya Kaya,kadın,55,,Yüksek Lisans,Standart,2022-07-26,43000,516000,5,derya.kaya30@ornek.com,Türkiye,REF0548,Evet
+1217,Kerem Yılmaz,E,20,Ankara,İlkokul,Gold,2021-12-15,11900,142800,4,kerem.yilmaz53@ornek.com,Türkiye,,Hayır
+1154,Ahmet Şimşek,E,50,Antalya,Lise,Platin,2019-08-14,30900,370800,3,ahmet.simsek87@ornek.com,Türkiye,,Hayır
+1024,Cansu Aydın,K,42,Antalya,Doktora,Platin,2023-09-12,58200,698400,4,cansu.aydin54@ornek.com,Türkiye,,Evet
+1275,Ahmet Aslan,E,29,İzmir,Yüksek Lisans,Standart,2020-07-17,N/A,,2,ahmet.aslan14@ornek.com,Türkiye,,Hayır
+1111,Mustafa Aslan,E,31,İstanbul,lisans,Standart,2019-07-22,49000,588000,4,Mustafa.Aslan44@Ornek.Com,Türkiye,,Hayır
+1082,Kerem Demir,E,42,Ankara,Yüksek Lisans,Standart,17/05/2025,56900,682800,4,Bilinmiyor,Türkiye,,Hayır
+1237,Büşra Kurt,K,47,ISTANBUL,Lise,Standart,2019-04-05,15400,184800,4,busra.kurt73@ornek.com,Türkiye,,Hayır
+1208,Hatice Demir,K,48,İzmır,Lisans,Standart,2018-11-25,-,,1,hatice.demir44@ornek.com,Türkiye,,Hayır
+1213,İrem Aslan,K,43,BURSA,lisans,Gold,2018-08-29,37200,446400,5,irem.aslan49@ornek.com,Türkiye,,Evet
+1040,Ece Şimşek,Kadın,45,Tekirdağ ,İlkokul,Standart,2023-08-01,17400,208800,3,Ece.Simsek70@Ornek.Com,Türkiye,,Evet
+1289,İrem Yılmaz,K,29,İstanbul,İlkokul,Gold,2022-03-12,13700,164400,4,irem.yilmaz28@ornek.com,Türkiye,,Hayır
+1252,İbrahim Kurt,erkek,56,ankara,Lisans,Gold,2020-06-22,43600,523200,3,ibrahim.kurt88@ornek.com,Türkiye,,Evet
+1185,Emre Özdemir,E,26,İstanbul,Lise,Standart,10.04.2024,12200,146400,4,selin@ornek,Türkiye,,Hayır
+1202,Özge Yıldırım,Kadın,36,İstanbul,Lise,Platin,08.04.2019,26700,320400,3,ozge.yildirim38@ornek.com,Türkiye,,Hayır
+1162,Emine Doğan,K,63 yaş,İzmir,Yüksek Lisans,platin,2019-09-24,65300,783600,4,emine.dogan95@ornek.com,Türkiye,REF2577,Hayır
+1044,Burak Özdemir,e,,ISTANBUL,Lise,Standart,2023-08-13,13200,158400,N/A,burak.ozdemir74@ornek.com,Türkiye,,Hayır
+1218,Mehmet Demir,E,43,Ankara,Yüksek Lisans,Platin,14/03/2024,43900,526800,4,mehmet.demir54@ornek.com,Türkiye,,Evet
+1191,Cansu Kaya,KADIN,41,İstanbul,İlkokul,Standart,18.12.2018,15700,188400,5,Cansu.Kaya27@Ornek.Com,Türkiye,,Hayır
+1260,İrem Kurt,k,45,Bursa,lisans,Standart,2023-09-25,17300,207600,5,irem.kurt96@ornek.com,Türkiye,,Hayır
+1106,  SELİN DOĞAN ,,35,Bursa,Yüksek Lisans,Standart,15/08/2024,32400,388800,2,,Türkiye,,Hayır
+1054,İbrahim Kurt,ERKEK,40,istanbul,Doktora,Standart,2021-10-14,71500,858000,4,ibrahim.kurt84@ornek.com,Türkiye,,Hayır
+1002,İrem Koç,K,N/A,İstanbul,Lise,Gold,2022-10-16,47700 TL,572400,3,Irem.Koc32@Ornek.Com,Türkiye,,Hayır
+1050,Emine Kurt,k,7,İst.,lise,Altın,15.10.2019,29100,349200,4,emine.kurt80@ornek.com,Türkiye,,Hayır
+1081,Ayşe Çetin,k,37,,Lisans,Standart,2019-03-06,30700,368400,3,ayse.cetin14@ornek.com,Türkiye,,Hayır
+1206,Emre Koç,E,39,Antalya,lise,Standart,2018-09-04,35000,420000,5,emre.koc42@ornek.com,Türkiye,,Hayır
+1035,Büşra Şahin,KADIN,35,Bilinmiyor,lise,Standart,2018-06-05,19500 TL,234000,3,Busra.Sahin65@Ornek.Com,Türkiye,,Hayır
+1264,Emine Koç,K,31,,Lise,Standart,2019-08-16,N/A,,2,emine.koc3@ornek.com,Türkiye,,Hayır
+1092,Emine Koç,,,,,Gold,,,,,,Türkiye,,Hayır
+1053,Hüseyin Çelik,E,48,İzmir,Yüksek Lisans,Platin,2023-01-15,27100,325200,4,huseyin.celik83@ornek.com,Türkiye,,Evet
+1265,Cansu Kurt,K,32,İstanbul,Yüksek Lisans,Gold,2021-05-23,53500,642000,4,cansu.kurt4@ornek.com,Türkiye,REF3367,Evet
+1242,Ayşe Aslan,kadın,32,İstanbul,Lisans,Gold,21.12.2023,39400,472800,4,ayse.aslan78@ornek.com,Türkiye,,EVET
+1014,Zeynep Öztürk,K,37,,Yüksek Lisans,Platin,2019-09-16,47100 TL,565200,4,zeynep.ozturk44@ornek.com,Türkiye,,Evet
+1089,Cansu Aydın,K,61,Antalya,Y. Lisans,Standart,2018-07-14,50200,602400,,,Türkiye,,Hayır
+1274,Ayşe Demir,K,54,Ankara,Doktora,Platin,2020-03-04,75200,902400,3,ayse.demir13@ornek.com,Türkiye,,Evet
+1167,Mustafa Kılıç,E,51,Bursa,Lisans  ,standart,2021-04-26,N/A,,Bilinmiyor,mustafa.kilic3@ornek.com,Türkiye,,Evet
+1115,  AYŞE ŞİMŞEK,Kadın,39,bursa,Lisans,Standart,2020-03-16,30400,364800,,ayse.simsek48@ornek.com,Türkiye,,Hayır
+1135,Merve Çelik,K,,Bursa,Lise ,Gold,2023-08-16,27500,330000,4,merve.celik68@ornek.com,Türkiye,,Hayır
+1128,Derya Kaya,kadın,26,istanbul,Lise,platin,18.09.2021,17000,204000,,derya.kaya61@ornek.com,Türkiye,,Hayır
+1244,Emine Yılmaz,kadın,51,İzmir,-,Standart,2019-12-15,81900,982800,4,emine.yilmaz80@ornek.com,Türkiye,,Evet
+1055,yusuf   doğan,e,39,BURSA,İlkokul,Gold,2021-10-14,23600,283200,3,,Türkiye,,Hayır
+1051,Selin Özdemir,K,58,İstanbul,Lise,Platin,24/04/2020,27800 TL,333600,4,selin.ozdemir81@ornek.com,Türkiye,,Evet
+1175,Özge Kurt,K,47,İstanbul,İlkokul,Standart,2018-10-09,12500,150000,2,ozge.kurt11@ornek.com,Türkiye,,Hayır
+1190,Murat Yılmaz,E,36,Ankara,İlkokul,STANDART,2022-05-03,11800,141600,4,murat.yilmaz26@ornek.com,Türkiye,REF7111,Hayır
+1221,  HASAN YILMAZ,E,39,tekirdağ,Lise ,STANDART,21.08.2018,17300,207600,5,hasan.yilmaz57@ornek.com,Türkiye,,Hayır
+1188,Burak Aslan,ERKEK,34,BURSA,Yüksek Lisans,Standart,2029-04-01,33800,405600,2,burak.aslan24@ornek.com,Türkiye,,Hayır
+1170,Kerem Öztürk,Erkek,47,İstanbul,Lise,Standart,06/10/2022,16500,198000,4,kerem.ozturk6@ornek.com,Türkiye,,Evet
+1059,Fatma Kaya,Kadin,49,İstanbul,Yüksek Lisans,PLATİN,2024-03-27,,,5,fatma.kaya89@ornek.com,Türkiye,,Evet
+1049,Emine Polat,k,-4,Antalya,Lise,Gold,2025-05-24,31400,376800,4,emine.polat79@ornek.com,Türkiye,,Hayır
+1236,Emine Koç,K,22,İzmır,İlkokul,STANDART,2020-08-05,Bilinmiyor,,3,emine.koc72@ornek.com,Türkiye,,Hayır
+1253,Çağlar Polat,E,35,Antalya,İlkokul,Standart,2025-02-21,16500,198000,4,caglar.polat89@ornek.com,Türkiye,,Hayır
+1022,Mehmet Özdemir,Erkek,64,Ankara,Yüksek Lisans,standart,2022-08-21,-18000,-216000,4,mehmet.ozdemir52@ornek.com,Türkiye,,Hayır
+1161,Şule Şahin,Kadın,44,Bursa,LİSE,Standart,2023-12-18,28500,342000,5,sule.sahin94@ornek.com,Türkiye,,EVET
+1277,Kerem Arslan,e,250,Ankara,LİSANS,Platin,18/02/2020,24800,297600,4,kerem.arslan16@ornek.com,Türkiye,,Hayır
+1192,İrem Özdemir,Kadin,44,İst.,İlkokul,Standart,2019-01-21,14700,176400,4,irem.ozdemir28@ornek.com,Türkiye,,Hayır
+1294,Yusuf Polat,E,30, İstanbul  ,Yüksek Lisans,Platin,07.05.2021,,,3,yusuf.polat33@ornek.com,Türkiye,,Evet
+1258,Kerem Kaya,E,35,İstanbul,Lisans,Platin,2018-08-01,,,4,kerem.kaya94@ornek.com,Türkiye,,Evet
+1150,Hüseyin Şahin,E,18,Tekirdag,Lisans,Standart,2023-08-04,40200,482400,4,huseyin.sahin83@ornek.com,Türkiye,,Evet
+1131,Fatma Çetin,K,45,,,GOLD,23/05/2021,19900,238800,3,fatma.cetin64@ornek.com,Türkiye,,Hayır
+1152,Kerem Demir,ERKEK,37,Bursa,Doktora,Gold,2024-08-21,245000,2940000,2,kerem.demir85@ornek.com,Türkiye,REF9644,H
+1100,Hüseyin Kaya,E,37,Tekirdağ,İLKOKUL,Gold,2023-11-27,20100,241200,2,huseyin.kaya33@ornek.com,Türkiye,,H
+1088,Çağlar Doğan,E,52,İstanbul,Lisans,Gold,2021-07-21,30700,368400,?,caglar.dogan21@ornek.com,Türkiye,,Evet
+1215,Ece Koç,K,39,İzmir,Lise ,Standart,2018-03-24,,,5,ece.koc51@ornek.com,Türkiye,,Hayır
+1122,Şule Şimşek,K,45,Antalya,ilkokul,Gold,26.08.2019,20300,243600,4,sule.simsek55@ornek.com,Türkiye,REF6087,Hayır
+1202,  ÖZGE YILDIRIM,Kadın,36,i̇stanbul,Lise,Platin,08.04.2019,26700,320400,3,ozge.yildirim38@ornek.com,Türkiye,,Hayır
+1021,Elif Aydın,K,45,Bursa,yüksek lisans,Standart,28/09/2018,52400,628800,3,elif.aydin51@ornek.com,Türkiye,,Hayır
+1189,Oğuz Arslan,e,58,İstanbul,Yüksek Lisans,Standart,12.04.2025,66800,801600,4,oguz.arslan25@ornek.com,Türkiye,,Hayır
+1072,Okan Kılıç,E,32,ankara,İlkokul,Standart,2019-06-01,12500,150000,5,okan.kilic5@ornek.com,Türkiye,,H
+1107,Merve Yılmaz,K,55,Tekirdağ,Lisans,Standart,2023-11-05,28200,338400,4,merve.yilmaz40@ornek.com,Türkiye,,Hayır
+1271,Yusuf Özdemir,E,38,Tekirdağ,Lisans,Gold,19.05.2025,26000,312000,5,yusuf.ozdemir10@ornek.com,Türkiye,,Evet
+1103,Elif Şahin,K,46,izmir,Lise,standart,2022-07-28,28900,346800,3,elif.sahin36@ornek.com,Türkiye,,Evet

@@ -403,6 +403,14 @@ print(pd.DataFrame(X, columns=on_isleme.get_feature_names_out()).round(2))
 
 `Pipeline` kullanmanın önemli bir faydası vardır: Doldurma ve ölçekleme parametreleri (medyan, ortalama, standart sapma) **yalnızca eğitim verisinden** öğrenilir ve test verisine aynen uygulanır. Böylece test verisinden eğitime bilgi sızması **(data leakage)** önlenir.
 
+### 4.6 Uygulama: Kirli Bir Veri Setini Uçtan Uca Temizlemek
+
+Bu bölümde anlatılan adımların hepsi, bilerek "kirletilmiş" bir müşteri veri seti üzerinde uygulamalı olarak gösterilmiştir. Veri setinde gizli eksik değerler, mükerrer kayıtlar, yazım tutarsızlıkları, imkânsız ve aykırı değerler, karışık tarih biçimleri, farklı para birimleri ve gereksiz sütunlar vardır. Aynı iş hem **Python (pandas)** hem de **R (tidyverse)** ile yapılır ve iki betik aynı temiz tabloyu üretir.
+
+![Veri ön işleme uygulamasının akışı](images/vm-on-isleme-uygulama-akisi.svg)
+
+Kodlar, veri seti, grafikler ve adım adım açıklamalar için: **[uygulamalar/veri_on_isleme](uygulamalar/veri_on_isleme/README.md)**
+
 ***
 
 ## 5. Veri Ambarı ve OLAP
