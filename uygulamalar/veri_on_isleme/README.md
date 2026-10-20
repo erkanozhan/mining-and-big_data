@@ -61,6 +61,8 @@ Rscript r/on_isleme.R
 
 RStudio kullanıyorsanız `r/on_isleme.R` dosyasını açıp **Source** düğmesine basmanız yeterlidir.
 
+**Paketler ne işe yarıyor?** Python tarafında **pandas** tabloları (DataFrame) okuma, süzme ve dönüştürme işlerini yapar; **numpy** vektörel sayısal hesap sağlar (pandas da onun üzerine kuruludur); **matplotlib** grafikleri çizer; **scipy** istatistiksel testleri (burada ki-kare) içerir; **scikit-learn** ise makine öğrenmesi araçlarını (burada k-NN ile doldurma ve PCA) sunar. R tarafında bu işler şöyle paylaşılır: **readr** okuma, **dplyr/tidyr** tablo işlemleri, **stringr/stringi** metin işlemleri, **ggplot2/patchwork/scales** grafikler, **VIM** ise k-NN ile eksik değer doldurma. Her iki dilde de "temel dil + uzman paketler" yaklaşımı vardır: Tekerleği yeniden icat etmek yerine, binlerce kişinin test ettiği hazır fonksiyonları kullanırız.
+
 Her iki betik de konsola adım adım ne yaptığını ve sonucunu yazar; grafikleri `ciktilar/` altına kaydeder. **Önerilen çalışma biçimi:** Betiği bir kez baştan sona çalıştırın, sonra bu belgeyi okurken her adımı konsol çıktısı ve grafikle birlikte inceleyin. Ardından kodu adım adım (Python'da VS Code/Jupyter'de hücre hücre, R'da satır satır `Ctrl+Enter` ile) yeniden çalıştırıp ara sonuçlara kendiniz bakın.
 
 > **Windows notu:** Konsolda Türkçe karakterler bozuk görünürse Python betiği bunu `sys.stdout.reconfigure(encoding="utf-8")` satırıyla zaten düzeltir. Sorun sürerse terminalde önce `chcp 65001` komutunu çalıştırın.
@@ -157,7 +159,14 @@ sum(duplicated(ham))
 sum(duplicated(ham$musteri_id))
 ```
 
-R'da `trim_ws = FALSE` önemlidir: readr varsayılan olarak baştaki ve sondaki boşlukları sessizce siler, biz ise sorunu **görmek** istiyoruz.
+**Kod ne yapıyor?** Dosyayı bilerek **iki kez** okuyoruz ve iki okumanın amacı farklıdır:
+
+* **İlk okuma (`saf`) bir teşhis aracıdır.** `read_csv` her sütunun değerlerine bakıp tipini kendisi tahmin eder (*tip çıkarımı*, type inference). Bir sütundaki tek bir `"?"` ya da `"50 yaş"` bile tahmini bozar ve sütunun tamamı metin (`object`) olur. Bu yüzden `saf.dtypes` çıktısı bize "hangi sütunlarda sayıya benzemeyen bir şey var?" sorusunun cevabını verir. Bu tabloyu temizlik için kullanmayacağız.
+* **İkinci okuma (`ham`) çalışacağımız tablodur.** `dtype=str` her sütunu metin olarak okur, böylece hiçbir değer okuma sırasında kaybolmaz ya da değişmez. `keep_default_na=False` ayarı pandas'ın `"NA"`, `"N/A"`, `"null"` gibi yaklaşık 20 metni **kendiliğinden** eksik saymasını kapatır; `na_values=[""]` ise yalnızca tamamen boş hücreleri eksik sayar. Neden pandas'ın bu yardımını istemiyoruz? Çünkü `"N/A"` sessizce NaN'a dönerse Adım 2.1'de "kaç tane gizli eksik vardı?" sorusunu cevaplayamayız. İlke şudur: **Veriyi değiştiren her karar bizim elimizde ve kayıt altında olmalı.** `df = ham.copy()` ile ham tablonun bir kopyası üzerinde çalışırız; `ham` Adım 8'deki "önce/sonra" raporu için dokunulmadan saklanır.
+
+Son üç satır hızlı bir kalite kontrolüdür. `nunique()` bir sütundaki **farklı değer sayısını** (kardinalite) verir: Altı şehir beklerken 33 farklı değer görmek, yazım tutarsızlığının kesin işaretidir. `duplicated()` her satır için "bu satırın aynısı daha önce geçti mi?" sorusuna `True`/`False` cevap verir; `sum()` ise `True` değerlerini sayar (Python'da `True = 1`, `False = 0`). Tüm satıra göre yapılan kontrol ile yalnızca `musteri_id`'ye göre yapılan kontrol arasındaki fark (10 ↔ 16), "aynı müşteri ama birebir aynı yazılmamış" kayıtların varlığını ortaya koyar.
+
+R'da aynı iş `col_types = cols(.default = col_character())` (her şeyi metin oku) ve `na = ""` (yalnızca boş hücre eksiktir) ile yapılır. `trim_ws = FALSE` da önemlidir: readr varsayılan olarak baştaki ve sondaki boşlukları sessizce siler, biz ise sorunu **görmek** istiyoruz.
 
 **Çıktı**
 
@@ -205,6 +214,17 @@ df <- df |>
   mutate(across(everything(), str_trim)) |>
   mutate(across(everything(), ~ if_else(.x %in% GIZLI_EKSIK, NA_character_, .x)))
 ```
+
+**Kod ne yapıyor?** İki işlem **bu sırayla** yapılır:
+
+1. `str.strip()` her hücrenin başındaki ve sonundaki boşluk karakterlerini (boşluk, sekme, satır sonu) siler; kelimeler arasındaki boşluklara dokunmaz.
+2. `df.isin(GIZLI_EKSIK)` tablonun her hücresi için "bu değer listede mi?" sorusunu sorar ve aynı boyutta bir `True`/`False` tablosu (*maske*) üretir. `df.mask(maske)` ise maskenin `True` olduğu hücreleri NaN ile değiştirir.
+
+Sıralama neden önemli? Hücrede `" ? "` yazıyorsa bu metin listedeki `"?"` ile eşleşmez; önce boşlukları silmezsek gizli eksik gözden kaçar. Listedeki `""` (boş metin) de aynı nedenle oradadır: Yalnızca boşluklardan oluşan bir hücre, `strip()` sonrasında boş metne dönüşür ve eksik sayılmalıdır.
+
+Neden bunu okuma sırasında (`na_values=GIZLI_EKSIK`) yapmadık? Yapabilirdik, ama o zaman hangi sütunda kaç gizli eksik olduğunu sayamazdık ve boşluklu yazımları yine kaçırırdık. Ayrıca listeye `0` veya `999` gibi değerleri **koymadık**: `0` birçok sütunda gerçek bir değer olabilir (ör. sipariş sayısı, bakiye). Bu tür sayısal "sahte" değerleri sütun sütun, iş kurallarıyla (Adım 2.5) yakalamak daha güvenlidir.
+
+Bu kodda döngü yalnızca sütunlar üzerindedir; satırlar tek tek gezilmez. pandas ve R'ın bir sütunun tamamına tek komutla uygulanan işlemlerine **vektörel işlem** denir. Hem daha kısa yazılır hem de satır satır döngüye göre çok daha hızlı çalışır. R'daki `across(everything(), ...)` ifadesi "aynı fonksiyonu tüm sütunlara uygula" demektir. `NA_character_` yazmamızın nedeni, `if_else()`'in iki koldan da aynı tipte (burada metin) değer beklemesidir.
 
 **Çıktı**
 
@@ -267,6 +287,20 @@ anahtar <- function(x) {
 df$sehir <- unname(STANDART$sehir[anahtar(df$sehir)])
 ```
 
+**Kod ne yapıyor?** `anahtar()` fonksiyonu bir metni adım adım "çıplak" hâline indirir:
+
+* `unicodedata.normalize("NFKD", x)`: Unicode'da `ş` tek bir karakter olarak saklanabilir; NFKD normalizasyonu onu **temel harf + birleşik işaret** (`s` + çengel) olarak ikiye ayırır. `İ` de `I` + üst nokta olur.
+* `unicodedata.combining(c)`: Bir karakterin "birleşik işaret" olup olmadığını söyler. Bunları atınca geriye aksansız harfler kalır: `Tekirdağ` → `Tekirdag`.
+* `replace("ı", "i")`: `ı` Unicode'da ayrıştırılabilen bir harf değildir (noktasız i, kendi başına bir harftir); bu yüzden elle çevrilir.
+* `re.sub(r"[^\w\s]", " ", x)`: Bu **düzenli ifade** (regular expression) "harf, rakam veya boşluk olmayan her karakter" demektir; noktalama işaretlerini boşluğa çevirir. Silmek yerine boşluk koyarız, böylece `"Y.Lisans"` → `"y lisans"` olur, kelimeler birbirine yapışmaz.
+* Son satır, art arda gelen boşlukları (`\s+`) teke indirir ve baştaki/sondaki boşluğu siler.
+
+Ardından `.map(sozluk)` her anahtarı sözlükteki standart yazımla değiştirir. Sözlükte karşılığı olmayan anahtar NaN olur; betik bunları "tanınmayan" diye ayrıca raporlar.
+
+**Neden sözlük?** Aynı varlığın farklı yazımlarını tek bir **kanonik** biçime indirmek, kayıt eşleme (*record linkage*) ve bilgi erişiminin temel tekniğidir. Bunun için iki yol vardır: Burada yaptığımız gibi elle hazırlanmış bir sözlük ya da iki metnin kaç harf farklı olduğunu ölçen **bulanık eşleme** (fuzzy matching, ör. Levenshtein uzaklığı). Bulanık eşleme `Ankra` → `Ankara` hatasını kendiliğinden bulabilirdi; ama `İst.` → `İstanbul` gibi kısaltmaları ve `Altın` → `Gold` gibi eş anlamlıları bulamaz. Üstelik `Lise` ile `Lisans` gibi birbirine benzeyen ama farklı olan kategorileri yanlışlıkla birleştirebilir. Kategori sayısı az ve önceden biliniyorsa, elle yazılmış sözlük en **güvenli ve denetlenebilir** yöntemdir: Her eşlemeyi bir insan onaylamıştır.
+
+R sürümü aynı üç adımı tek bir ICU dönüşüm zinciriyle yapar: `"NFD; [:Nonspacing Mark:] Remove; NFC"` (ayrıştır → birleşik işaretleri sil → yeniden birleştir). `chartr()` karakter karakter değiştirme, `str_squish()` ise boşluk sadeleştirme yapar. R'da sözlük, **adlandırılmış bir vektördür**: `STANDART$sehir["ankra"]` ifadesi `"Ankara"` döndürür; `unname()` sonuçtaki adları temizler.
+
 **Çıktı**
 
 ```text
@@ -316,6 +350,14 @@ tarih_coz <- function(x) {
 }
 ```
 
+**Kod ne yapıyor?** Üç sütun üç farklı yöntemle dönüştürülür, çünkü her birindeki "kir" farklıdır:
+
+* **Yaş:** `str.extract(r"(-?\d+)")` metnin içinden sayıyı **çekip çıkarır**. Düzenli ifadede `\d+` "bir veya daha fazla rakam", `-?` "isteğe bağlı bir eksi işareti", parantez ise "bu kısmı yakala" demektir. `"50 yaş"` → `"50"` olur; içinde hiç rakam olmayan `"otuz beş"` ise NaN olur. Eksi işaretini bilerek yakalıyoruz: `"-4"` değeri `4` olarak okunsaydı geçerli görünen ama yanlış bir yaşa dönüşürdü. `-4` olarak okunduğunda Adım 2.5'teki kural onu imkânsız değer olarak yakalar.
+* **Gelir:** Burada sayıyı çekmek yetmez, çünkü `"36.500 TL"` içindeki nokta bir **binlik ayırıcıdır**. Önce `"TL"`, sonra nokta silinir, ardından metin sayıya çevrilir. `regex=False` parametresi kritiktir: Düzenli ifadelerde `.` "herhangi bir karakter" anlamına gelir; bu parametre olmasa `replace(".", "")` metindeki **bütün** karakterleri silerdi. (Bu kuralı, veride noktanın yalnızca binlik ayırıcı olarak kullanıldığını önce kontrol ettiğimiz için güvenle uygulayabiliyoruz. `36.5` gibi ondalık yazılmış bir değer olsaydı yanlış sonuç verirdi.)
+* **Tarih:** `tarih_coz()` bir **şelale** (cascade) gibi çalışır. Önce tüm değerleri `YYYY-AA-GG` biçimiyle okumayı dener; `errors="coerce"` uymayan değerler için hata vermek yerine boş tarih (NaT) üretir. Sonra yalnızca hâlâ boş kalanlar (`fillna`) bir sonraki biçimle denenir. R'daki `coalesce()` aynı mantıkla "soldan sağa ilk boş olmayan değeri al" der. Üç biçim ayırıcı karakterle (`-`, `/`, `.`) birbirinden ayrıldığı için bir değerin iki biçime birden uyması mümkün değildir.
+
+Bu adımın bilimsel temeli **ölçek türleridir** (Bölüm 3): Ortalama almak, büyüklük karşılaştırmak ya da iki tarih arasındaki farkı hesaplamak ancak değer doğru tipte saklanıyorsa mümkündür. Metin olarak saklanan `"9"`, `"10"`'dan "büyüktür" (alfabetik sıralamada `9` > `1`).
+
 **Çıktı**
 
 ```text
@@ -352,6 +394,15 @@ df <- df |>
   distinct(musteri_id, .keep_all = TRUE) |>
   select(-.eksik)
 ```
+
+**Kod ne yapıyor?** Tekilleştirme iki katmanda yapılır:
+
+1. `drop_duplicates()` **tüm sütunları** aynı olan satırlardan ilkini tutar, diğerlerini siler.
+2. Anahtar bazlı tekilleştirme üç hamlede yapılır: Önce her satırdaki eksik hücre sayısı geçici bir `_eksik` sütununa yazılır. Sonra tablo önce `musteri_id`'ye, aynı müşteri içinde de `_eksik`'e göre küçükten büyüğe sıralanır; böylece her müşterinin **en eksiksiz** kaydı en üste çıkar. Son olarak `drop_duplicates("musteri_id", keep="first")` her müşteriden yalnızca en üstteki kaydı tutar ve geçici sütun silinir.
+
+`kind="stable"` ifadesi, eksik sayısı eşit olan kayıtların sıralamadan önceki göreli sırasını korur. Bu sayede sonuç her çalıştırmada aynı olur ve R'daki `arrange()` (o da kararlı sıralama yapar) ile birebir örtüşür.
+
+**Neden "en eksiksiz" kaydı seçtik?** Aynı varlığın kopyalarından hangisinin "hayatta kalacağına" karar veren kurala, kayıt tekilleştirme literatüründe **hayatta kalma kuralı** (survivorship rule) denir. Başlıca seçenekler şunlardır: İlk kaydı tutmak (basit ama keyfi bir ölçüt), en güncel kaydı tutmak (veride güncelleme tarihi varsa iyi bir seçenektir) ve kopyaları alan alan birleştirmek (en çok bilgiyi korur, ama iki kopya çelişirse hangisinin doğru olduğuna dair ek bir kural gerekir). Bizim verimizde kopyalar yalnızca bazı alanların eksik olup olmamasıyla ayrışıyor; en eksiksiz kaydı tutmak, ek bir kurala gerek kalmadan bilgi kaybını önler.
 
 **Çıktı**
 
@@ -395,6 +446,16 @@ kurallar <- list(
 )
 for (aciklama in names(kurallar)) df[[kurallar[[aciklama]][[1]]]][kurallar[[aciklama]][[2]]] <- NA
 ```
+
+**Kod ne yapıyor?** `kurallar` sözlüğünün her elemanı bir iş kuralıdır: Anahtar kuralın insan tarafından okunabilir açıklaması, değer ise `(sütun adı, ihlal maskesi)` çiftidir. İhlal maskesi, kuralı çiğneyen satırlarda `True` olan bir sütundur. Döngü her kural için iki iş yapar: İhlalleri konsola yazar ve ihlal eden hücreleri NaN yapar.
+
+Maskelerdeki küçük ayrıntılar önemlidir:
+
+* `between(18, 100)` iki ucu da dahil eder; başındaki `~` işareti "değil" demektir. Yani `~df["yas"].between(18, 100)` "18–100 arasında **olmayan**" anlamına gelir.
+* `& df["yas"].notna()` neden gerekli? Eksik bir yaş için `between()` sonucu `False` olur, `~` bunu `True`'ya çevirir ve eksik değer "kural ihlali" sayılırdı. Bu ek koşul, **eksik** ile **geçersiz** değeri birbirinden ayırır. R'daki `%in% TRUE` aynı işi yapar: `NA %in% TRUE` sonucu `FALSE`'tur.
+* E-posta deseni (`^...@...\.[a-z]{2,}$`) şunu söyler: başta (`^`) bir kullanıcı adı, sonra `@`, sonra bir alan adı, bir nokta ve en az iki harfli bir uzantı, ardından metnin sonu (`$`). Gerçek e-posta standardı (RFC 5322) çok daha karmaşıktır; bu, yaygın hataları yakalayan **pratik** bir desendir. `na=True` eksik e-postaları "desene uyuyor" sayarak ihlal listesinin dışında tutar.
+
+**Neden kuralları bir sözlükte topladık?** Kuralları tek tek `if` blokları olarak da yazabilirdik. Ama onları veriden ve koddan ayrı, okunabilir bir liste hâlinde tutmak, veri mühendisliğinde **veri doğrulama şeması** (data validation schema) ya da "veri sözleşmesi" denilen yaklaşımın küçük bir örneğidir. Yeni bir kural eklemek tek satırdır, hepsi aynı döngüyle raporlanır ve bir alan uzmanı (ör. pazarlama ekibi) kodu bilmeden listeyi okuyup "18 yaş sınırı doğru mu?" diye denetleyebilir.
 
 **Çıktı**
 
@@ -442,7 +503,16 @@ ozet <- sip |> group_by(musteri_id) |>
   summarise(siparis_sayisi = n(), toplam_harcama_tl = round(sum(tutar_tl), 2))
 ```
 
-Sipariş verisi "sipariş başına bir satır" düzeyinde, müşteri verisi ise "müşteri başına bir satır" düzeyinde. Birleştirmeden önce siparişleri müşteri düzeyine **toplulaştırmamız** (aggregation) gerekir. Toplulaştırmasaydık, birleştirme sonrasında her müşteri sipariş sayısı kadar tekrarlanırdı.
+**Kod ne yapıyor?** Dört satırın her biri bütünleştirmenin ayrı bir sorununu çözer:
+
+1. `drop_duplicates("siparis_no")`: Sipariş numarası bir siparişin **doğal anahtarıdır**; aynı numaranın iki kez görünmesi, veri aktarımı (ETL) sırasında aynı kaydın iki kez yüklendiği anlamına gelir.
+2. `np.where(koşul, a, b)` vektörel bir "eğer-değilse"dir: Para birimi USD olan satırlarda tutarı kurla çarpar, diğerlerinde tutarı olduğu gibi bırakır. (Sabit kur bir basitleştirmedir; gerçek bir projede her sipariş, **sipariş tarihindeki** kurla çevrilmelidir.)
+3. `str.replace("C-", "")` ve `astype(int)`: `"C-1001"` metnini `1001` sayısına çevirerek iki sistemin anahtarlarını ortak bir biçime getirir. Bu, **varlık tanımlama** (entity identification) sorununun en basit hâlidir.
+4. `groupby("musteri_id").agg(...)`: Siparişleri müşteriye göre gruplar ve her grup için iki özet hesaplar. `siparis_sayisi=("siparis_no", "count")` ifadesi "`siparis_no` sütunundaki değerleri say, sonucu `siparis_sayisi` adıyla yaz" demektir (pandas'ta buna *adlandırılmış toplulaştırma* denir).
+
+**Sıralama neden bu?** Mükerrer siparişler toplulaştırmadan **önce** silinmelidir: Toplama yapıldıktan sonra iki kez sayılmış bir tutar artık ayırt edilemez ve müşterinin harcamasını sessizce şişirir. Para birimi de toplamadan önce çevrilmelidir, çünkü TL ile USD'yi toplamak anlamsızdır.
+
+Sipariş verisi "sipariş başına bir satır" düzeyinde, müşteri verisi ise "müşteri başına bir satır" düzeyinde. Birleştirmeden önce siparişleri müşteri düzeyine **toplulaştırmamız** (aggregation) gerekir. Toplulaştırmasaydık, birleştirme sonrasında her müşteri sipariş sayısı kadar tekrarlanırdı. Verinin hangi düzeyde (bir satır neyi temsil ediyor?) tutulduğuna **ayrıntı düzeyi** (granularity) denir; iki tabloyu birleştirmeden önce ayrıntı düzeylerini eşitlemek bütünleştirmenin altın kuralıdır.
 
 ### 3.4 Birleştirme ve eşleşmeyen kayıtlar
 
@@ -451,6 +521,19 @@ yetim = ozet[~ozet["musteri_id"].isin(df["musteri_id"])]       # R: anti_join(oz
 df = df.merge(ozet, on="musteri_id", how="left")               # R: left_join(df, ozet, by = "musteri_id")
 df[["siparis_sayisi", "toplam_harcama_tl"]] = df[["siparis_sayisi", "toplam_harcama_tl"]].fillna(0)
 ```
+
+**Kod ne yapıyor?** İlk satır bir **anti-birleştirmedir** (anti-join): `isin()` sipariş özetindeki her müşterinin CRM'de olup olmadığını sorar, `~` sonucu tersine çevirir. Böylece "siparişi var ama CRM'de kaydı yok" müşteriler (*yetim kayıtlar*) bulunur. İkinci satır asıl birleştirmedir: `merge(..., how="left")` soldaki tablonun (CRM) **her satırını** korur ve sağdaki tablodan (sipariş özeti) eşleşen bilgiyi yanına ekler; eşleşme yoksa NaN yazar.
+
+**Neden sol birleştirme?** Dört temel birleştirme türü vardır ve her biri farklı bir soruya cevap verir:
+
+| Tür | Sonuçta kimler var? | Bu senaryoda sonucu |
+|---|---|---|
+| `inner` (iç) | Yalnızca iki tabloda da olanlar | Siparişi olmayan 28 müşteri **kaybolurdu** |
+| `left` (sol) | Soldakilerin hepsi | ✔ Tüm CRM müşterileri kalır |
+| `right` (sağ) | Sağdakilerin hepsi | Siparişi olmayanlar kaybolur, yetimler gelir |
+| `outer` (dış) | İki tablodakilerin hepsi | Yaşı, eğitimi ve hedef değişkeni bilinmeyen yetimler gelirdi |
+
+Analiz birimimiz "CRM'deki müşteri" olduğu ve hedef değişken (`kampanya_yanit`) yalnızca CRM'de bulunduğu için doğru seçim sol birleştirmedir. Yetim kayıtları tabloya almıyoruz ama **raporluyoruz**: Gerçek bir projede bu liste, iki sistem arasındaki senkronizasyon hatasını düzeltmesi için veri sahibine iletilir.
 
 ```text
 CRM'de karşılığı olmayan (yetim) sipariş müşterisi: 10 -> [1402, 1407, 1411, ...]
@@ -467,6 +550,10 @@ kor = df[["yas", "gelir_aylik", "gelir_yillik", "memnuniyet",
           "siparis_sayisi", "toplam_harcama_tl"]].corr()        # R: cor(df[sayisal], use = "pairwise.complete.obs")
 ```
 
+**Kod ne yapıyor?** `corr()` seçilen her sütun çifti için **Pearson korelasyon katsayısını** hesaplar ve sonucu bir kare matris olarak döndürür. Katsayı, iki niteliğin kovaryansının standart sapmalarının çarpımına bölünmesiyle bulunur: r = cov(X, Y) / (s_X · s_Y). Bu bölme sayesinde r birimden bağımsızdır ve her zaman −1 ile +1 arasındadır: +1 kusursuz artan, −1 kusursuz azalan bir doğrusal ilişki, 0 ise doğrusal ilişkinin yokluğu demektir. pandas eksik değerleri **çift bazında** atlar: Her çift için yalnızca iki değerin de dolu olduğu satırlar kullanılır (R'daki `use = "pairwise.complete.obs"` ayarının karşılığı).
+
+Fazlalık analizinde mantık şudur: |r| = 1 ise bir nitelik diğerinin doğrusal bir fonksiyonudur (Y = a·X + b) ve tabloya **hiç yeni bilgi** eklemez. Akılda tutulması gereken sınır: Pearson katsayısı yalnızca **doğrusal** ilişkiyi ölçer. r ≈ 0 olması iki niteliğin ilişkisiz olduğunu kanıtlamaz; örneğin U biçimli bir ilişkide de r sıfıra yakın çıkar.
+
 ![Korelasyon matrisi](ciktilar/python/04_korelasyon.png)
 
 `gelir_aylik` ile `gelir_yillik` arasında r = 1.00 çıktı. Bölme işlemi bunun nedenini gösterir: `gelir_yillik / gelir_aylik = 12`, her satırda. Yani `gelir_yillik` yeni bilgi taşımıyor ve **silinir**. Böyle bir sütun bazı modellerde (ör. doğrusal regresyon) çoklu doğrusal bağlantı (multicollinearity) sorununa da yol açar.
@@ -479,6 +566,10 @@ kor = df[["yas", "gelir_aylik", "gelir_yillik", "memnuniyet",
 tablo = pd.crosstab(df["uyelik_tipi"], df["kampanya_yanit"])   # R: table(df$uyelik_tipi, df$kampanya_yanit)
 ki2, p, sd, _ = chi2_contingency(tablo)                         # R: chisq.test(tablo)
 ```
+
+**Kod ne yapıyor?** `crosstab()` iki kategorik niteliğin **çapraz tablosunu** (olumsallık tablosu, contingency table) üretir: Her hücrede, ör. "Gold üyelerden kampanyaya Evet diyenlerin sayısı" yazar. `chi2_contingency()` ise bu tabloyu, "iki nitelik birbirinden bağımsız olsaydı" görmeyi bekleyeceğimiz tabloyla karşılaştırır. Beklenen frekans her hücre için (satır toplamı × sütun toplamı) / genel toplam formülüyle hesaplanır; test istatistiği χ² = Σ (gözlenen − beklenen)² / beklenen'dir. Fonksiyon dört değer döndürür: χ² değeri, p değeri, serbestlik derecesi ((satır − 1) × (sütun − 1)) ve beklenen frekans tablosu. Dördüncüsüne ihtiyacımız olmadığı için onu `_` adlı "çöp" değişkene atarız (Python'da "bu değeri kullanmayacağım" demenin geleneksel yolu).
+
+**p değeri nasıl okunur?** p, "iki nitelik gerçekten bağımsız olsaydı, yalnızca şans eseri bu kadar büyük (ya da daha büyük) bir farkı görme olasılığı"dır. p < 0.05 ise bu olasılık o kadar düşüktür ki bağımsızlık varsayımını (*sıfır hipotezini*) reddederiz. İki uyarı: χ² testi bir ilişkinin **var olup olmadığını** söyler, ne kadar **güçlü** olduğunu söylemez (bunun için Cramér's V gibi ölçüler kullanılır). Ayrıca testin güvenilir olması için beklenen frekansların genellikle en az 5 olması gerekir.
 
 ```text
 uyelik_tipi x kampanya_yanit: χ² = 22.95, sd = 2, p = 0.0000 -> ilişki VAR (p < 0.05)
@@ -507,6 +598,12 @@ alt, ust = q1 - 1.5 * (q3 - q1), q3 + 1.5 * (q3 - q1)
 z = (x - x.mean()) / x.std()                          # R: (x - mean(x)) / sd(x)
 df["gelir_aylik"] = df["gelir_aylik"].clip(lower=alt, upper=ust)   # R: pmin(pmax(x, alt), ust)
 ```
+
+**Kod ne yapıyor?** İlk iki satır Tukey kuralını uygular: `quantile([0.25, 0.75])` verinin %25'lik ve %75'lik noktalarını (Q1 ve Q3) bulur; aradaki fark (IQR) verinin ortadaki yarısının ne kadar yayıldığını gösterir. Sınırlar bu genişliğin 1.5 katı kadar dışarıda çizilir. Üçüncü satır her değerin ortalamadan kaç standart sapma uzakta olduğunu (z-skor) hesaplar. Son satırdaki `clip()` ise alt sınırın altındaki değerleri alt sınıra, üst sınırın üstündekileri üst sınıra eşitler; aradaki değerlere ve eksik değerlere dokunmaz.
+
+**1.5 sayısı nereden geliyor?** Bu katsayı John Tukey'in önerdiği bir uzlaşmadır. Veri normal dağılsaydı bu sınırlar yaklaşık ±2.7 standart sapmaya denk gelir ve verinin yalnızca %0.7 kadarı sınır dışında kalırdı. Yani kural, "normal" veride çok az yanlış alarm verirken gerçekten uzak değerleri yakalar. Daha katı bir ayıklama için 3 katsayısı da kullanılır ("aşırı" aykırı değerler).
+
+**Neden baskılama sınırı olarak IQR sınırını seçtik?** Baskılama için sık kullanılan bir diğer yöntem, verinin %1'lik ve %99'luk yüzdeliklerini sınır almaktır. Biz aykırı değeri **tespit ettiğimiz kuralla aynı sınırı** kullandık; böylece "aykırı sayılan" ile "baskılanan" değerler birebir örtüşür ve karar tutarlı olur. Gelirin alt sınırı negatif çıktığı için (−10.438 TL) pratikte yalnızca üst taraftan baskılama yapılmış olur.
 
 **Çıktı**
 
@@ -542,6 +639,10 @@ df = df[df.isna().mean(axis=1) <= 0.5]                       # R: df[rowMeans(is
 df = df[df["kampanya_yanit"].notna()]                        # hedefi eksik satırlar
 ```
 
+**Kod ne yapıyor?** `df.isna()` her hücre için `True`/`False` döndürür; `mean()` bu değerlerin ortalamasını alır. `True` 1, `False` 0 sayıldığı için ortalama doğrudan **eksik oranını** verir: Bu, veri bilimcilerin sık kullandığı küçük ama güçlü bir hiledir. `mean()` varsayılan olarak her sütunun oranını, `mean(axis=1)` ise her satırın oranını hesaplar. Ardından koşulu sağlayan sütunlar (`drop(columns=...)`) ve satırlar (`df[koşul]`, *boolean indeksleme*) tablodan çıkarılır.
+
+**Sıralama neden önce sütun, sonra satır?** `referans_kodu` sütunu silinmeden satır oranlarına baksaydık, bu %85'i boş sütun **her satırın** eksik oranını yapay olarak yükseltirdi ve aslında bilgi taşıyan bazı satırları da gereksiz yere silebilirdik. %60 ve %50 eşikleri evrensel kurallar değildir; verinin büyüklüğüne ve sütunun önemine göre seçilen pratik değerlerdir. Önemli olan, eşiği **önceden belirleyip açıkça yazmaktır**.
+
 ```text
 Silinen sütun(lar): ['referans_kodu'] (eksik oranı: ['%85'])
 Değerlerinin yarısından fazlası eksik satır: 3 -> [1092, 1142, 1280]
@@ -553,6 +654,15 @@ Hedefi eksik satır: 2 (hedefi tahmin etmeyiz, öğrenmek için kullanırız)
 * Denetimli öğrenmede hedef değişkeni (burada `kampanya_yanit`) eksik olan satır **öğrenme için kullanılamaz**. Hedef asla doldurulmaz.
 
 ### 5.4 Eksiklik rastgele mi?
+
+```python
+pd.DataFrame({
+    "geliri_eksik": df.loc[df["gelir_aylik"].isna(), "egitim"].value_counts(normalize=True),
+    "tum_veri":     df["egitim"].value_counts(normalize=True),
+})                                                 # R: prop.table(table(df$egitim[is.na(df$gelir_aylik)]))
+```
+
+**Kod ne yapıyor?** `value_counts(normalize=True)` bir kategorik sütundaki her değerin **oranını** verir. Aynı hesabı iki grupta yapıyoruz: yalnızca geliri eksik olan müşteriler ve tüm müşteriler. Eksiklik tamamen rastgele olsaydı iki sütunun birbirine çok benzemesi gerekirdi; çünkü rastgele seçilen bir alt grup, bütünün küçük bir kopyası gibi davranır. İki dağılım belirgin biçimde farklıysa eksiklik başka bir niteliğe bağlıdır. Bu, "eksiklik mekanizması" hakkında fikir edinmenin en basit **görsel/tablosal** yoludur. (Daha resmî bir sınama için, "gelir eksik mi?" değişkeniyle `egitim` arasında 3.6'daki gibi bir χ² testi yapılabilir.)
 
 ```text
                geliri_eksik  tum_veri
@@ -602,6 +712,17 @@ knn <- VIM::kNN(knn_girdi, variable = "gelir", k = 5,
                 dist_var = c("yas", "egitim", "uyelik", "harcama"), numFun = mean)
 ```
 
+**Kod ne yapıyor?** Kod, eksik değer doldurmanın dört farklı "zekâ düzeyini" yan yana hesaplar:
+
+* **Mod (kategorikler için):** `mode()` en sık görülen değeri döndürür. Sonuç tek bir değer değil bir seridir, çünkü birden fazla değer eşit sıklıkta olabilir; `[0]` ilkini alır. Şehir gibi **nominal** bir nitelikte ortalama ya da medyan tanımsızdır ("İstanbul ile Ankara'nın ortalaması" olmaz), bu yüzden mod tek seçenektir.
+* **Ortalama ve medyan:** Tüm eksiklere aynı sayıyı yazar. Medyan aykırı değerlerden etkilenmediği için çarpık dağılımlarda ortalamaya tercih edilir.
+* **Sınıf bazında medyan:** `groupby("egitim")["gelir_aylik"].transform("median")` ifadesinde `transform`, `agg`'den farklı olarak tabloyu küçültmez: Her satıra **kendi grubunun** medyanını yazar ve orijinal satır sayısını korur. Böylece sonuç `fillna()`'ya doğrudan verilebilir; her eksik gelir, o kişinin eğitim grubunun medyanıyla doldurulur.
+* **k-NN:** `KNNImputer(n_neighbors=5)` geliri eksik her müşteri için yaş, eğitim, üyelik ve harcama bakımından ona **en çok benzeyen** 5 müşteriyi (Öklid uzaklığına göre) bulur ve onların gelirlerinin ortalamasını yazar. Uzaklık hesaplanacağı için girdiler önce min-maks ile ölçeklenir (nedeni Adım 6.3'te).
+
+Dört yöntemin sonucunu ayrı ayrı bir `yontemler` sözlüğünde tutuyoruz ve tabloya henüz yazmıyoruz. Böylece hepsi **aynı eksik veriden** hesaplanır, adil biçimde karşılaştırılır ve seçilen yöntem en sonda tek bir satırla uygulanır.
+
+**Bilimsel arka plan.** Burada kullandığımız yöntemlerin hepsi **tekli atama** (single imputation) yöntemleridir: Her eksiğe tek bir "en iyi tahmin" yazılır. Bu, doldurulan değerin gerçekte **bilinmediği** gerçeğini gizler; bu yüzden tekli atama varyansı ve belirsizliği olduğundan düşük gösterir. Bu sorunu çözmek için istatistikte **çoklu atama** (multiple imputation) kullanılır: Eksikler birkaç farklı makul değerle defalarca doldurulur ve analiz sonuçları birleştirilir. Bu, ders kapsamının ötesinde ama bilinmesi gereken bir yöntemdir.
+
 **Çıktı**
 
 ```text
@@ -647,7 +768,9 @@ df["uyelik_suresi_yil"] = ((REFERANS_TARIH - df["kayit_tarihi"]).dt.days / 365.2
 df["ort_siparis_tl"] = df["toplam_harcama_tl"] / df["siparis_sayisi"]     # (sıfır siparişte 0)
 ```
 
-Kayıt tarihi tek başına modele pek bir şey söylemez; ama "kaç yıldır müşterimiz?" sorusunun cevabı anlamlı bir özelliktir. Benzer şekilde ortalama sipariş tutarı, toplam harcama ile sipariş sayısından türetilen ve ikisinden farklı bilgi taşıyan yeni bir niteliktir.
+**Kod ne yapıyor?** İki tarihin farkı pandas'ta bir **süre** (timedelta) nesnesidir; `.dt.days` bu süreyi gün sayısına çevirir. 365.25'e bölmemizin nedeni artık yıllardır: Dört yılda bir gelen 29 Şubat, yılın ortalama uzunluğunu 365.25 güne çıkarır. Referans olarak bugünün tarihi yerine sabit bir tarih (`2025-12-31`) kullanıyoruz; böylece betik hangi gün çalıştırılırsa çalıştırılsın **aynı sonucu** üretir. Bilimsel çalışmada buna **tekrar üretilebilirlik** (reproducibility) denir. Ortalama sipariş tutarında ise sıfıra bölmeye dikkat etmek gerekir: pandas'ta 0/0 sonucu NaN, 5/0 sonucu ise sonsuzdur (`inf`). Betikteki tam kod, siparişi olmayan müşteriler için sonucu doğrudan 0 yapar.
+
+Kayıt tarihi tek başına modele pek bir şey söylemez; ama "kaç yıldır müşterimiz?" sorusunun cevabı anlamlı bir özelliktir. Benzer şekilde ortalama sipariş tutarı, toplam harcama ile sipariş sayısından türetilen ve ikisinden farklı bilgi taşıyan yeni bir niteliktir. Bu sürece **özellik mühendisliği** (feature engineering) denir: Alan bilgisini, algoritmanın kendi başına keşfedemeyeceği yeni nitelikler biçiminde veriye eklemek. Pazarlamada yaygın kullanılan **RFM analizi** (Recency: ne zamandır, Frequency: ne sıklıkla, Monetary: ne kadar) de tam olarak bu tür türetilmiş niteliklere dayanır.
 
 ### 6.2 Log dönüşümü
 
@@ -664,6 +787,8 @@ Dikkat: 26 müşterinin harcaması 0; log1p(0) = 0 olduğu için bunlar ayrı bi
 
 Gelir ve harcama gibi değişkenler genellikle **sağa çarpıktır**: Çoğu müşteri az harcar, birkaç müşteri çok harcar. Log dönüşümü büyük değerleri "sıkıştırarak" dağılımı simetriye yaklaştırır. `log(x)` yerine `log(1 + x)` kullanmamızın nedeni, hiç sipariş vermemiş müşterilerin harcamasının 0 olması ve log(0)'ın tanımsız olmasıdır.
 
+**Neden log, neden başka bir dönüşüm değil?** Logaritma **çarpımsal** farkları **toplamsal** farklara çevirir: 1.000 TL ile 10.000 TL arasındaki fark, 10.000 ile 100.000 arasındaki farkla aynı uzaklığa (log ölçeğinde 1 birime) iner. Gelir ve harcama gibi büyüklükler genellikle "yüzde" olarak büyüdüğü için bu ölçek onların doğasına uygundur. Alternatifler de vardır: Karekök dönüşümü daha hafif bir sıkıştırma yapar; **Box-Cox** ve **Yeo-Johnson** dönüşümleri ise en uygun "üssü" veriden kendileri tahmin eder. Biz log'u seçtik, çünkü basit, yorumlanabilir ve `log1p` biçimiyle sıfırlara karşı güvenlidir. Dönüşümün işe yarayıp yaramadığını **çarpıklık** (skewness) katsayısıyla ölçüyoruz: Bu katsayı verinin ortalamadan sapmalarının küplerinin ortalamasıdır (standart sapmanın küpüne bölünmüş hâli). Simetrik dağılımda 0'dır, pozitif değerler sağa çarpıklığı gösterir; |çarpıklık| > 1 genellikle "güçlü çarpık" kabul edilir. 1.68'den −0.53'e inmesi, dağılımın simetriye belirgin biçimde yaklaştığını gösterir.
+
 Sağdaki grafikte 0'daki ayrı yığına dikkat edin: Bu 26 müşteri "harcaması düşük" değil, "**hiç alışveriş yapmamış**" müşterilerdir. Gerçek bir projede bunlar için ayrı bir `siparis_var` (0/1) özelliği eklemek düşünülebilir.
 
 ### 6.3 Normalizasyon
@@ -677,6 +802,13 @@ zskor   = (x - x.mean()) / x.std()                  # R: scale(x)
 
 Ham değerlerde gelir binlerle, yaş onlarla ölçülür. Soldaki grafikte yaşın kutusu sıfırın üstünde bir çizgiye dönüşmüş. k-NN, k-Means veya PCA gibi **uzaklığa ya da varyansa dayalı** bir algoritma bu durumda yaşı neredeyse tamamen yok sayar, çünkü gelirdeki 1.000 TL'lik fark yaştaki 40 yıllık farktan "büyük" görünür. Min-maks her niteliği [0, 1] aralığına, z-skor ise ortalaması 0, standart sapması 1 olan bir ölçeğe taşır. Böylece iki nitelik eşit ağırlıkla karşılaştırılabilir.
 
+**Kod ne yapıyor, hangisini ne zaman seçmeli?** Min-maks formülünde her değerden en küçük değer çıkarılır (en küçük değer 0 olur) ve sonuç aralığın genişliğine bölünür (en büyük değer 1 olur). z-skor formülünde ise ortalama çıkarılır (veri 0 etrafında ortalanır) ve standart sapmaya bölünür (yayılım 1'e eşitlenir). İkisi de verinin **biçimini değiştirmez**, yalnızca ekseni kaydırıp gerer; çarpık bir dağılım ölçeklemeden sonra da çarpıktır.
+
+* **Min-maks**, sonucun belirli bir aralıkta olması gerektiğinde (ör. sinir ağlarının girdileri, görüntü pikselleri) tercih edilir. Zayıf yanı, aykırı değerlere çok duyarlı olmasıdır: Tek bir uç değer en büyük değeri belirler ve diğer bütün değerleri 0'a yakın dar bir bölgeye sıkıştırır.
+* **z-skor** da aykırı değerlerden etkilenir (ortalama ve standart sapma uç değerlere duyarlıdır), ama min-maks kadar değil; ayrıca PCA, doğrusal modeller ve kümeleme gibi ortalama ile varyansa dayalı yöntemlerde standart seçimdir.
+
+Model tablosunda (Adım 7.2) **z-skor** kullandık: Bir sonraki adımda uygulayacağımız PCA varyansa dayalıdır ve ortalaması 0 olan veriyle çalışır.
+
 > **Dikkat — standart sapma tanımı:** pandas `std()` ve R `sd()` n−1'e bölerek **örneklem** standart sapmasını hesaplar. scikit-learn'ün `StandardScaler`'ı ise n'e bölerek **popülasyon** standart sapmasını kullanır. İki dilde aynı sonucu almak için Python'da z-skoru elle (`x.std()` ile) hesapladık.
 
 ### 6.4 Ayrıklaştırma
@@ -687,6 +819,10 @@ pd.qcut(df["yas"], q=4)                          # eşit frekans     R: cut(yas,
 pd.cut(df["yas"], bins=[17, 29, 49, 100],        # alan bilgisiyle
        labels=["Genç", "Orta yaş", "Olgun"])
 ```
+
+**Kod ne yapıyor?** Üç satır, yaşı üç farklı ölçütle "kovalara" böler. `pd.cut(..., bins=4)` en küçük ile en büyük yaş arasını **eşit uzunlukta** dört aralığa ayırır. `pd.qcut(..., q=4)` ise sınırları çeyrekliklere (Q1, medyan, Q3) yerleştirir, böylece her kovaya **yaklaşık eşit sayıda** müşteri düşer. Üçüncü satırda sınırları alan bilgisine göre biz veririz. Bu sınırlar `(17, 29]` biçimindeki aralıklardır: Soldaki yuvarlak parantez "dahil değil", sağdaki köşeli parantez "dahil" demektir. İlk sınırı 18 yerine 17 yazmamızın nedeni budur: 18 yaşındaki bir müşterinin "Genç" kovasına girmesini isteriz.
+
+**Neden ayrıklaştırıyoruz?** Sürekli bir niteliği aralıklara bölmek bilgi kaybıdır (35 ile 48 yaş aynı kovaya düşebilir). Buna karşılık üç fayda sağlar: Küçük ölçüm hatalarını ve gürültüyü yutar, sonuçları "Orta yaş müşteriler daha çok yanıt veriyor" gibi **yorumlanabilir** kılar ve yalnızca kategorik veriyle çalışan algoritmaları (ör. birliktelik kuralları için Apriori) mümkün kılar. Hangi yöntemin seçileceği amaca bağlıdır: Eşit genişlik basittir ama çarpık veride kovaları dengesizleştirir; eşit frekans dengeli kovalar üretir ama sınırları "33.5 yaş" gibi anlamsız olabilir; alan bilgisine dayalı sınırlar ise en yorumlanabilir olanıdır. Raporlama ve sunum için genellikle bu üçüncü yol tercih edilir. (Bu uygulamada model tablosuna yaşın kendisini koyuyoruz; kovalar karşılaştırma amaçlıdır.)
 
 ![Ayrıklaştırma](ciktilar/python/09_ayriklastirma.png)
 
@@ -717,6 +853,10 @@ for (d in sort(unique(df$sehir), method = "radix")) df[[paste0("sehir_", d)]] <-
 * **Sıralı (ordinal) kodlama** yalnızca kategoriler arasında doğal bir sıra varsa doğrudur: Doktora > Lisans > Lise anlamlıdır.
 * **Şehre** sıralı kodlama uygulasaydık (Ankara = 0, İstanbul = 4, …) model "İstanbul, Ankara'nın 4 katıdır" gibi anlamsız bir ilişki öğrenebilirdi. Sırası olmayan (nominal) nitelikler için **one-hot kodlama** kullanılır: Her kategori için ayrı bir 0/1 sütunu oluşturulur.
 
+**Kod ne yapıyor?** Her satır, niteliğin ölçek türüne uygun bir kodlama yapar. Eğitim için `map()` ile bir sözlük üzerinden 0–4 arası sıra numarası verilir; sözlüğü elle yazarız, çünkü doğru sırayı (İlkokul < … < Doktora) alfabe değil alan bilgisi belirler. Cinsiyette `df["cinsiyet"] == "K"` ifadesi `True`/`False` üretir, `astype(int)` bunu 1/0'a çevirir. İki kategorili bir nitelik için **tek bir** 0/1 sütunu yeterlidir: `cinsiyet_K = 0` zaten "Erkek" demektir. Şehirde ise `get_dummies()` her şehir için ayrı bir sütun açar; bir satırda yalnızca kendi şehrinin sütunu 1, diğerleri 0'dır. Sütunları alfabetik sıraya dizmemizin (`sorted`) amacı, Python ve R çıktılarının sütun sırasının da aynı olmasıdır. R'daki `method = "radix"` da bu yüzden vardır: R'ın varsayılan olarak kullandığı yerel ayara (locale) bağlı sıralama yerine, Python gibi karakter kodlarına göre sıralama yapar.
+
+> **Kukla değişken tuzağı (dummy variable trap).** Altı şehir sütununun toplamı her satırda tam olarak 1'dir; yani herhangi bir sütun diğer beşinden hesaplanabilir. Doğrusal regresyon gibi modellerde bu, 3.5'te gördüğümüz **tam çoklu doğrusal bağlantıya** yol açar. Bu yüzden bu modellerde bir sütun atılır (`pd.get_dummies(..., drop_first=True)`); atılan kategori "referans kategori" olur. Karar ağaçları gibi modeller bundan etkilenmez. Biz okunabilirlik için altı sütunu da tuttuk.
+
 ---
 
 ## Adım 7 — Veri indirgeme
@@ -729,7 +869,9 @@ for (d in sort(unique(df$sehir), method = "radix")) df[[paste0("sehir_", d)]] <-
 sabit = [s for s in df.columns if df[s].nunique() == 1]     # R: names(df)[sapply(df, n_distinct) == 1]
 ```
 
-`ulke` sütununda tek bir değer var ("Türkiye"). Varyansı sıfır olan bir nitelik hiçbir kaydı diğerinden ayıramaz, yani bilgi taşımaz. Benzer biçimde `musteri_id`, `ad_soyad` ve `e_posta` her müşteri için farklıdır. Bunlar da genelleştirilebilir bir örüntü taşımaz; model matrisine alınmaz.
+**Kod ne yapıyor?** Bu satır bir **liste üreteci** (list comprehension) ile tablodaki her sütunu gezer ve farklı değer sayısı (`nunique()`) 1 olanları bir listede toplar. Kod tek tek sütun adı yazmak yerine bir kural tanımladığı için, veriye yeni bir sabit sütun eklense onu da kendiliğinden yakalar.
+
+`ulke` sütununda tek bir değer var ("Türkiye"). Varyansı sıfır olan bir nitelik hiçbir kaydı diğerinden ayıramaz, yani bilgi taşımaz. Bilgi kuramının diliyle, böyle bir niteliğin **entropisi sıfırdır**: Değerini öğrenmek, önceden bilmediğimiz hiçbir şeyi söylemez. Benzer biçimde `musteri_id`, `ad_soyad` ve `e_posta` her müşteri için farklıdır. Bunlar da genelleştirilebilir bir örüntü taşımaz; model matrisine alınmaz.
 
 ### 7.2 Model için hazır tablo
 
@@ -741,6 +883,10 @@ Son tablo 295 satır ve 17 sütundan oluşur: kimlik, z-skorla ölçeklenmiş 6 
 pca = PCA().fit(model[OZELLIKLER])               # R: prcomp(model[OZELLIKLER])
 pca.explained_variance_ratio_                    # R: pca$sdev^2 / sum(pca$sdev^2)
 ```
+
+**Kod ne yapıyor?** `PCA()` nesnesini bileşen sayısı vermeden oluşturuyoruz; bu durumda scikit-learn **bütün** bileşenleri (burada 6) hesaplar. Önce hepsine bakıp sonra kaç tanesini tutacağımıza karar vermek için bu bilinçli bir tercihtir. `fit()` verinin kovaryans matrisini hesaplar ve onun **özvektörlerini** bulur: Bunlar, verinin en çok yayıldığı (varyansının en büyük olduğu) ve birbirine dik olan yönlerdir. Her özvektör bir *temel bileşendir* (PC); ona ait **özdeğer**, o yöndeki varyansın büyüklüğüdür. `explained_variance_ratio_` her özdeğerin toplam özdeğere oranını, yani her bileşenin verideki toplam değişkenliğin yüzde kaçını taşıdığını verir. Kümülatif toplamın %90'ı geçtiği nokta, bileşen sayısı için yaygın bir eşiktir. Diğer bir yol, scree grafiğinde eğrinin belirgin biçimde düzleştiği "dirsek" noktasını aramaktır.
+
+**Ölçekleme neden şart?** PCA varyansı en büyük yönü arar. Ölçeklenmemiş veride gelirin varyansı (milyonlarca TL²) yaşın varyansından (yüzlerce yıl²) on binlerce kat büyüktür; PC1 neredeyse tamamen gelirden oluşur ve analiz "gelir hangi yönde değişiyor?" sorusuna indirgenirdi. Bu yüzden PCA'yı Adım 7.2'de z-skorla ölçeklenmiş tabloya uyguluyoruz. (Bu, korelasyon matrisi üzerinde PCA yapmakla eşdeğerdir.)
 
 ```text
 PC1: açıklanan varyans % 29.6   kümülatif % 29.6
@@ -770,6 +916,10 @@ Tüm verideki 'Evet' oranı      : 0.319
 Tabakalı örnek (n = 88)        : 0.318
 1000 basit rastgele örnek (n = 88): en düşük 0.182, en yüksek 0.477, std 0.043
 ```
+
+**Kod ne yapıyor?** `sample(frac=0.30)` tablodan rastgele %30'luk bir örnek çeker. Her satırın seçilme olasılığı eşittir (**basit rastgele örnekleme**). `groupby("kampanya_yanit").sample(frac=0.30)` ise tabloyu önce hedef değişkene göre iki gruba (*tabakaya*) ayırır ve her gruptan **ayrı ayrı** %30 çeker (**tabakalı örnekleme**). Betikte `random_state` parametresiyle rastgele sayı üretecinin başlangıç değerini (*tohum*, seed) sabitliyoruz; böylece "rastgele" örnek her çalıştırmada aynı çıkar ve sonuçlar tekrar üretilebilir.
+
+Basit rastgele örneklemeyi neden tek seferde değil de 1000 kez yapıyoruz? Tek bir örnek şans eseri iyi ya da kötü çıkabilir. Bir yöntemi değerlendirmek için onun **tekrar tekrar uygulandığında** nasıl davrandığına bakmak gerekir; istatistikte buna **örnekleme dağılımı** denir. Bu sayının teorik bir karşılığı da vardır: n büyüklüğündeki bir örnekte oranın standart hatası √(p(1 − p) / n) formülüyle hesaplanır. p = 0.319 ve n = 88 için bu değer yaklaşık 0.050'dir. Sonlu popülasyondan iadesiz çekim yaptığımız için uygulanan düzeltmeyle (√((N − n) / (N − 1))) 0.042'ye iner. Simülasyonda bulduğumuz 0.043 bu değerle neredeyse aynıdır.
 
 Basit rastgele örneklemeyi 1000 kez tekrarladık: Kampanyaya yanıt verenlerin oranı şansa bağlı olarak %18 ile %48 arasında oynadı. **Tabakalı örnekleme** ise her sınıftan ayrı ayrı %30 örnek aldığı için oranı her seferinde korur. Dengesiz sınıflı verilerde ve eğitim/test ayrımında bu özellikle önemlidir (Python'da `train_test_split(..., stratify=y)`, R'da `rsample::initial_split(..., strata = y)`).
 
