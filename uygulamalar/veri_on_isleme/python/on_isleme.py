@@ -50,6 +50,8 @@ VERI = KLASOR / "veri"
 CIKTI = KLASOR / "ciktilar" / "python"
 CIKTI.mkdir(parents=True, exist_ok=True)
 
+# "Bugün" yerine sabit bir tarih: betik hangi gün çalışırsa çalışsın aynı sonucu üretir
+# (tekrar üretilebilirlik / reproducibility).
 REFERANS_TARIH = pd.Timestamp("2025-12-31")   # analizin yapıldığı gün
 USD_TL = 40.0                                  # sabit kabul edilen döviz kuru
 GIZLI_EKSIK = ["?", "-", "N/A", "Bilinmiyor", ""]
@@ -94,28 +96,36 @@ def kaydet(fig, ad):
 # =============================================================================
 baslik("1. VERİYİ TANIMA")
 
-# Önce "saf" okuma: pandas sütun tiplerini kendisi tahmin etsin
-saf = pd.read_csv(VERI / "musteriler_kirli.csv")
+# Önce "saf" okuma: pandas sütun tiplerini kendisi tahmin etsin (tip çıkarımı).
+# Bu tablo yalnızca teşhis içindir: Tek bir "?" bile sütunun tamamını metin yapar,
+# böylece hangi sütunlarda sayıya benzemeyen değer olduğunu görürüz.
+saf =pd.read_csv(VERI / "musteriler_kirli.csv")
 alt_baslik("pandas'ın tahmin ettiği sütun tipleri")
 print(saf.dtypes.to_string())
 print("\nyas, gelir_aylik ve memnuniyet sayı olmalıydı ama 'object' (metin) okundu:")
 print("bu sütunlarda sayıya çevrilemeyen değerler var. Bu yüzden veriyi önce METİN")
 print("olarak okuyup her sütunu bilinçli olarak dönüştüreceğiz.")
 
-# Tüm sütunları metin olarak oku; yalnızca tamamen boş hücreler NaN olsun
+# Tüm sütunları metin olarak oku; yalnızca tamamen boş hücreler NaN olsun.
+# keep_default_na=False: pandas "NA", "N/A", "null" gibi ~20 metni kendiliğinden NaN
+# yapmasın; gizli eksikleri 2.1'de KENDİMİZ bulup sayacağız.
 ham = pd.read_csv(VERI / "musteriler_kirli.csv", dtype=str,
                   keep_default_na=False, na_values=[""])
-df = ham.copy()
+df = ham.copy()     # ham'a dokunmuyoruz: 8. adımdaki önce/sonra raporu için saklanır
 
 alt_baslik("Boyut ve ilk satırlar")
 print(f"{df.shape[0]} satır, {df.shape[1]} sütun")
 print(df.head(8).to_string())
 
 alt_baslik("Kategorik sütunlarda kaç farklı yazım var?")
+# nunique() = farklı değer sayısı (kardinalite). 6 şehir beklerken 33 görmek,
+# yazım tutarsızlığının kesin işaretidir.
 for s in ["cinsiyet", "sehir", "egitim", "uyelik_tipi", "kampanya_yanit"]:
     print(f"{s:15s}: {df[s].nunique():3d} farklı değer -> {sorted(df[s].dropna().unique())[:8]} ...")
 
 alt_baslik("Hızlı kalite kontrolleri")
+# duplicated() her satır için True/False döndürür; sum() True'ları sayar (True = 1).
+# Tüm satıra göre ve anahtara göre sayım arasındaki fark "yarı kopyaları" gösterir.
 print(f"Boş hücre sayısı (yalnızca tamamen boş olanlar): {df.isna().sum().sum()}")
 print(f"Birebir aynı (mükerrer) satır sayısı          : {df.duplicated().sum()}")
 print(f"Tekrarlanan musteri_id sayısı                 : {df['musteri_id'].duplicated().sum()}")
@@ -127,11 +137,15 @@ baslik("2. VERİ TEMİZLEME")
 
 # --- 2.1 Boşluklar ve gizli eksik değerler ------------------------------------
 alt_baslik("2.1 Baş/son boşlukları silme ve gizli eksik değerleri NaN yapma")
+# Sıralama önemli: Önce boşluklar silinir, yoksa " ? " listedeki "?" ile eşleşmez.
+# Listedeki "" de bu yüzden var: Yalnızca boşluktan oluşan hücre strip() sonrası "" olur.
 for s in df.columns:
     df[s] = df[s].str.strip()
 
 bos_hucre = ham.isna().sum()
 gizli = df.isin(GIZLI_EKSIK).sum()
+# isin() her hücre için True/False maskesi üretir; mask() True olan hücreleri NaN yapar.
+# 0 ve 999 listede yok: 0 bazı sütunlarda gerçek değerdir; onları 2.5'te kurallarla yakalarız.
 df = df.mask(df.isin(GIZLI_EKSIK))     # "?", "-", "N/A", "Bilinmiyor" -> NaN
 
 eksik_tablo = pd.DataFrame({"bos_hucre": bos_hucre, "gizli_eksik": gizli})
@@ -177,11 +191,16 @@ def anahtar(x):
         return x
     x = unicodedata.normalize("NFKD", x)                       # ş -> s + çengel, İ -> I + nokta
     x = "".join(c for c in x if not unicodedata.combining(c))  # birleşik işaretleri at
-    x = x.replace("ı", "i").lower()
-    x = re.sub(r"[^\w\s]", " ", x)                             # noktalama -> boşluk
+    x = x.replace("ı", "i").lower()                            # ı ayrıştırılamaz, elle çevrilir
+    x = re.sub(r"[^\w\s]", " ", x)                             # noktalama -> boşluk (silme değil:
+                                                               # "Y.Lisans" -> "y lisans")
     return re.sub(r"\s+", " ", x).strip()
 
 
+# Anahtar -> standart yazım sözlüğü. Neden bulanık eşleme (Levenshtein) değil? Bulanık
+# eşleme "İst." gibi kısaltmaları ve "Altın" -> "Gold" gibi eş anlamlıları bulamaz,
+# "Lise" ile "Lisans"ı yanlışlıkla birleştirebilir. Kategori sayısı az ve biliniyorsa
+# elle yazılmış sözlük en güvenli ve denetlenebilir yöntemdir.
 STANDART = {
     "sehir": {"istanbul": "İstanbul", "ist": "İstanbul", "ankara": "Ankara", "ankra": "Ankara",
               "izmir": "İzmir", "tekirdag": "Tekirdağ", "bursa": "Bursa", "antalya": "Antalya"},
@@ -198,7 +217,7 @@ sehir_once = df["sehir"].copy()
 for sutun, sozluk in STANDART.items():
     once = df[sutun].nunique()
     anahtarlar = df[sutun].map(anahtar)
-    yeni = anahtarlar.map(sozluk)
+    yeni = anahtarlar.map(sozluk)          # sözlükte olmayan anahtar NaN olur -> "tanınmayan"
     taninmayan = df.loc[anahtarlar.notna() & yeni.isna(), sutun].unique()
     df[sutun] = yeni
     print(f"{sutun:15s}: {once:3d} farklı yazım -> {df[sutun].nunique()} kategori"
@@ -248,12 +267,16 @@ kaydet(fig, "02_metin_standardizasyonu.png")
 alt_baslik("2.3 Metin olarak saklanmış sayıları ve tarihleri dönüştürme")
 
 yas_metin = df["yas"].copy()
+# Desen: isteğe bağlı eksi (-?) + bir veya daha fazla rakam (\d+). Eksiyi bilerek yakalıyoruz:
+# "-4" sessizce 4 olmasın, -4 olarak kalsın ki 2.5'teki kural onu imkânsız değer diye yakalasın.
 df["yas"] = pd.to_numeric(df["yas"].str.extract(r"(-?\d+)")[0])       # "50 yaş" -> 50
 print("yas         : '... yaş' biçimindekiler ->",
       yas_metin[yas_metin.str.contains("yaş", na=False)].tolist(),
       "| sayıya çevrilemeyen ->", yas_metin[yas_metin.notna() & df["yas"].isna()].tolist())
 
 gelir_metin = df["gelir_aylik"].copy()
+# "36.500 TL": nokta binlik ayırıcıdır (veride ondalık nokta yok, önceden kontrol edildi).
+# regex=False şart: düzenli ifadede "." HERHANGİ bir karakter demektir; o zaman her şey silinirdi.
 df["gelir_aylik"] = pd.to_numeric(
     df["gelir_aylik"].str.replace("TL", "", regex=False).str.replace(".", "", regex=False).str.strip())
 tl_li = gelir_metin.str.contains("TL", na=False)
@@ -265,7 +288,12 @@ for s in ["musteri_id", "gelir_yillik", "memnuniyet"]:
 
 
 def tarih_coz(seri):
-    """Üç farklı biçimi sırayla dener: 2023-05-14, 14/05/2023, 14.05.2023."""
+    """Üç farklı biçimi sırayla dener: 2023-05-14, 14/05/2023, 14.05.2023.
+
+    Şelale (cascade) mantığı: errors="coerce" uymayan değeri hata yerine NaT yapar;
+    sonraki biçim yalnızca hâlâ boş kalanlara (fillna) uygulanır. Biçimleri açıkça
+    yazıyoruz, çünkü otomatik tahmin 03/08/2019'u sessizce 8 Mart sanabilir.
+    """
     sonuc = pd.to_datetime(seri, format="%Y-%m-%d", errors="coerce")
     for bicim in ["%d/%m/%Y", "%d.%m.%Y"]:
         sonuc = sonuc.fillna(pd.to_datetime(seri, format=bicim, errors="coerce"))
@@ -293,8 +321,13 @@ print(f"Silindikten sonra aynı musteri_id'ye sahip kayıt: {len(tekrar)} "
       f"({tekrar['musteri_id'].nunique()} müşteri). Örnek:")
 print(tekrar.head(4)[["musteri_id", "ad_soyad", "sehir", "gelir_aylik", "memnuniyet"]].to_string(index=False))
 
-# Aynı müşterinin kayıtlarından EN EKSİKSİZ olanı tut
-df["_eksik"] = df.isna().sum(axis=1)
+# Aynı müşterinin kayıtlarından EN EKSİKSİZ olanı tut ("hayatta kalma kuralı").
+# Alternatifler: ilk kayıt (keyfi), en güncel kayıt (tarih damgası gerekir), alan alan
+# birleştirme (çelişki kuralı gerekir). Kopyalar yalnızca eksiklikle ayrıştığı için
+# en eksiksiz kayıt bilgi kaybı olmadan seçilir.
+df["_eksik"] = df.isna().sum(axis=1)                 # satırdaki eksik hücre sayısı
+# Müşteri içinde az eksikli kayıt üste çıkar; kind="stable" eşitlerde orijinal sırayı
+# korur, böylece sonuç her seferinde (ve R'daki arrange ile) aynıdır.
 df = (df.sort_values(["musteri_id", "_eksik"], kind="stable")
         .drop_duplicates("musteri_id", keep="first")
         .drop(columns="_eksik")
@@ -304,7 +337,13 @@ print(f"Anahtar bazlı tekilleştirmeden sonra: {len(df)} satır, "
 
 # --- 2.5 Geçersiz değerler (iş kuralları) ---------------------------------------
 alt_baslik("2.5 Geçersiz / imkânsız değerler (alan bilgisine dayalı kurallar)")
+# Pratik bir desen: kullanıcı adı @ alan adı . en az 2 harfli uzantı (tam standart RFC 5322
+# çok daha karmaşıktır).
 EPOSTA_DESENI = r"^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+# Her kural: açıklama -> (sütun, ihlal maskesi). Kuralları koddan ayrı bir liste olarak
+# tutmak küçük bir "veri doğrulama şeması"dır: Yeni kural tek satır, alan uzmanı okuyabilir.
+# "& notna()" eksik değerin ihlal sayılmasını önler: NaN.between() False, ~False ise True olurdu.
+# e-postada na=True aynı işi görür (eksik e-posta "desene uyuyor" sayılır).
 kurallar = {
     "yas 18-100 arasında olmalı": ("yas", ~df["yas"].between(18, 100) & df["yas"].notna()),
     "gelir_aylik 0 < g < 1.000.000": ("gelir_aylik", ~df["gelir_aylik"].between(1, 999_999) & df["gelir_aylik"].notna()),
@@ -355,17 +394,24 @@ sip = pd.read_csv(VERI / "siparisler.csv")
 print(f"siparisler.csv: {sip.shape[0]} satır. İlk satırlar:")
 print(sip.head(4).to_string(index=False))
 
+# Sıralama: mükerrerler ve para birimi TOPLULAŞTIRMADAN ÖNCE düzeltilmeli; toplamdan sonra
+# iki kez sayılmış bir tutar ayırt edilemez, TL ile USD'yi toplamak da anlamsızdır.
 alt_baslik("3.1 Sipariş verisindeki mükerrer kayıtlar")
 print(f"Aynı siparis_no ile iki kez aktarılmış sipariş: {sip['siparis_no'].duplicated().sum()}")
 sip = sip.drop_duplicates("siparis_no")
 
 alt_baslik("3.2 Değer çakışması: farklı para birimleri")
 print(sip["para_birimi"].value_counts().to_string())
+# np.where(koşul, a, b): vektörel "eğer-değilse". Sabit kur bir basitleştirmedir; gerçek
+# projede her sipariş, sipariş tarihindeki kurla çevrilir.
 sip["tutar_tl"] = np.where(sip["para_birimi"] == "USD", sip["tutar"] * USD_TL, sip["tutar"])
 print(f"USD tutarlar 1 USD = {USD_TL:.0f} TL kabulüyle TL'ye çevrildi.")
 
 alt_baslik("3.3 Varlık tanımlama: 'C-1001' (sipariş sistemi) = 1001 (CRM)")
 sip["musteri_id"] = sip["cust_id"].str.replace("C-", "", regex=False).astype(int)
+# Ayrıntı düzeyini eşitle: sipariş başına satır -> müşteri başına satır. Toplulaştırmasaydık
+# birleştirmeden sonra her müşteri sipariş sayısı kadar tekrarlanırdı.
+# Adlandırılmış toplulaştırma: yeni_ad=(sütun, fonksiyon)
 ozet = (sip.groupby("musteri_id")
            .agg(siparis_sayisi=("siparis_no", "count"), toplam_harcama_tl=("tutar_tl", "sum"))
            .reset_index())
@@ -374,8 +420,11 @@ print("Sipariş satırları müşteri düzeyine toplulaştırıldı (aggregation
 print(ozet.head(4).to_string(index=False))
 
 alt_baslik("3.4 Birleştirme (left join) ve eşleşmeyen kayıtlar")
-yetim = ozet[~ozet["musteri_id"].isin(df["musteri_id"])]
+yetim = ozet[~ozet["musteri_id"].isin(df["musteri_id"])]     # anti-join: siparişte var, CRM'de yok
 print(f"CRM'de karşılığı olmayan (yetim) sipariş müşterisi: {len(yetim)} -> {yetim['musteri_id'].tolist()}")
+# Neden left join? Analiz birimi CRM müşterisi ve hedef değişken yalnızca CRM'de var.
+# inner join siparişsiz müşterileri kaybederdi; outer join demografisi ve hedefi olmayan
+# yetimleri getirirdi. Yetimleri tabloya almıyor, yalnızca raporluyoruz.
 df = df.merge(ozet, on="musteri_id", how="left")
 siparissiz = df["siparis_sayisi"].isna().sum()
 print(f"Hiç siparişi olmayan CRM müşterisi              : {siparissiz}")
@@ -385,6 +434,9 @@ print("Bu müşterilerin eksik değeri 'bilinmiyor' değil 'sıfır sipariş' de
 
 alt_baslik("3.5 Fazlalık analizi: Pearson korelasyonu")
 sayisal = ["yas", "gelir_aylik", "gelir_yillik", "memnuniyet", "siparis_sayisi", "toplam_harcama_tl"]
+# Pearson r = cov(X, Y) / (s_X · s_Y), -1 ile +1 arası, birimden bağımsız. Eksikler çift
+# bazında atlanır. |r| ≈ 1 ise bir sütun diğerinin doğrusal fonksiyonudur (fazlalık).
+# Not: r yalnızca DOĞRUSAL ilişkiyi ölçer; r ≈ 0 ilişkisizlik kanıtı değildir.
 kor = df[sayisal].corr()
 print(kor.round(3).to_string())
 ciftler = [(a, b, kor.loc[a, b]) for i, a in enumerate(sayisal) for b in sayisal[i + 1:]
@@ -410,7 +462,10 @@ df = df.drop(columns="gelir_yillik")
 
 alt_baslik("3.6 Kategorik nitelikler arasında ilişki: ki-kare (χ²) testi")
 for nitelik in ["uyelik_tipi", "sehir"]:
-    tablo = pd.crosstab(df[nitelik], df["kampanya_yanit"])
+    tablo = pd.crosstab(df[nitelik], df["kampanya_yanit"])     # çapraz (olumsallık) tablosu
+    # Gözlenen frekansları "bağımsız olsalardı" beklenenlerle karşılaştırır:
+    # χ² = Σ (G - B)² / B, sd = (satır - 1)(sütun - 1). 4. değer (beklenen tablo) kullanılmıyor: _
+    # p < 0.05 -> bağımsızlık reddedilir. χ² ilişkinin VARLIĞINI söyler, gücünü değil.
     ki2, p, sd, _ = chi2_contingency(tablo)
     karar = "ilişki VAR (p < 0.05)" if p < 0.05 else "anlamlı ilişki yok"
     print(f"{nitelik} x kampanya_yanit: χ² = {ki2:.2f}, sd = {sd}, p = {p:.4f} -> {karar}")
@@ -423,6 +478,11 @@ baslik("4. AYKIRI DEĞERLER")
 
 
 def iqr_sinirlari(x):
+    """Tukey kuralı: [Q1 - 1.5·IQR, Q3 + 1.5·IQR].
+
+    1.5 katsayısı normal dağılımda yaklaşık ±2.7σ'ya denk gelir (verinin ~%0.7'si dışarıda
+    kalır). Medyan/çeyrekliklere dayandığı için uç değerlerden etkilenmez (sağlam, robust).
+    """
     q1, q3 = x.quantile([0.25, 0.75])
     return q1 - 1.5 * (q3 - q1), q3 + 1.5 * (q3 - q1), q1, q3
 
@@ -450,6 +510,9 @@ print("                   IQR sınırlarına baskılandı (winsorizing / capping
 print("toplam_harcama_tl: Sağa çarpık, doğal bir dağılım -> 6. adımda log dönüşümü uygulanacak.")
 gelir_once = df["gelir_aylik"].copy()
 alt_, ust, _, _ = iqr_sinirlari(df["gelir_aylik"].dropna())
+# clip(): sınır dışındakileri sınıra eşitler, aradakilere ve NaN'lere dokunmaz. Tespitte
+# kullandığımız sınırın aynısı (ör. %1-%99 yüzdelik değil): "aykırı" = "baskılanan".
+# Alt sınır negatif olduğundan pratikte yalnızca üstten baskılanır.
 df["gelir_aylik"] = df["gelir_aylik"].clip(lower=alt_, upper=ust)
 print(f"Baskılanan değer sayısı: {(gelir_once != df['gelir_aylik']).sum() - gelir_once.isna().sum()}")
 
@@ -477,6 +540,9 @@ print("Şu anki eksik değer sayıları:")
 print(df.isna().sum()[df.isna().sum() > 0].to_string())
 
 alt_baslik("5.1 Çoğunlukla boş sütunları silme (eşik %60)")
+# isna().mean(): True = 1 olduğundan ortalama doğrudan eksik ORANIDIR.
+# Önce sütun, sonra satır: %85'i boş sütun kalsaydı her satırın eksik oranını yapay olarak
+# artırır, gereksiz satır silinmesine yol açardı. Eşikler (%60, %50) pratik seçimlerdir.
 oranlar = df.isna().mean()
 silinecek = oranlar[oranlar > 0.60].index.tolist()
 print(f"Silinen sütun(lar): {silinecek} (eksik oranı: {[f'%{100 * oranlar[s]:.0f}' for s in silinecek]})")
@@ -493,6 +559,8 @@ print(f"Hedefi eksik satır: {df['kampanya_yanit'].isna().sum()} (hedefi tahmin 
 df = df[df["kampanya_yanit"].notna()].reset_index(drop=True)
 
 alt_baslik("5.4 Eksiklik rastgele mi? (gelir_aylik)")
+# Eksiklik tamamen rastgele (MCAR) olsaydı geliri eksik olanların eğitim dağılımı tüm
+# verininkine benzerdi; belirgin fark, eksikliğin eğitime bağlı (MAR) olduğunu gösterir.
 egitim_dagilim = pd.DataFrame({
     "geliri_eksik": df.loc[df["gelir_aylik"].isna(), "egitim"].value_counts(normalize=True),
     "tum_veri": df["egitim"].value_counts(normalize=True),
@@ -506,6 +574,8 @@ print(f"Eğitim gruplarına göre beklenen gelirleri ort. {beklenen:,.0f} TL, ge
 print("Genel ortalamayla doldurmak bu kişilerin gelirini olduğundan yüksek gösterir.")
 
 alt_baslik("5.5 Kategorik sütunlar: mod (en sık değer) ile doldurma")
+# Nominal nitelikte ortalama/medyan tanımsızdır, mod tek seçenektir. mode() birden fazla
+# değer döndürebilir (eşit sıklık), [0] ilkini alır.
 for s in ["cinsiyet", "sehir", "egitim"]:
     mod = df[s].mode()[0]
     print(f"{s:10s}: {df[s].isna().sum()} eksik -> '{mod}'")
@@ -515,6 +585,10 @@ alt_baslik("5.6 gelir_aylik için doldurma yöntemlerinin karşılaştırılmas�
 EGITIM_SIRA = {"İlkokul": 0, "Lise": 1, "Lisans": 2, "Yüksek Lisans": 3, "Doktora": 4}
 UYELIK_SIRA = {"Standart": 0, "Gold": 1, "Platin": 2}
 eksik_gelir = df["gelir_aylik"].isna()
+# Dört yöntem aynı eksik veriden ayrı ayrı hesaplanır, tabloya henüz yazılmaz; adil
+# karşılaştırmadan sonra seçilen yöntem tek satırla uygulanır (aşağıda).
+# transform("median"), agg'den farklı olarak tabloyu küçültmez: her satıra kendi grubunun
+# medyanını yazar, böylece doğrudan fillna()'ya verilebilir.
 yontemler = {
     "Ortalama": df["gelir_aylik"].fillna(df["gelir_aylik"].mean()),
     "Medyan": df["gelir_aylik"].fillna(df["gelir_aylik"].median()),
@@ -538,6 +612,8 @@ for ad, seri in yontemler.items():
     print(f"{ad:26s} {seri.mean():10,.0f} {seri.std():10,.0f} {seri[eksik_gelir].mean():28,.0f}")
 print("Ortalama/medyan ile doldurma tüm eksiklere AYNI değeri verir: varyans yapay olarak düşer.")
 print("Seçilen yöntem: eğitim grubunun medyanı (sınıf bazında doldurma).")
+# Neden? MAR yapısını hesaba katar, basit ve açıklanabilirdir. Hepsi "tekli atama"dır:
+# doldurulan değerin belirsizliğini gizler; ileri yöntem çoklu atamadır (multiple imputation).
 
 fig, axlar = plt.subplots(2, 2, figsize=(13, 7.5), sharex=True, sharey=True)
 kutular = np.arange(0, 80_001, 2_500)
@@ -578,6 +654,9 @@ baslik("6. VERİ DÖNÜŞTÜRME")
 temiz = df.copy()     # okunabilir, temizlenmiş tablo (kodlanmamış hâli) ayrıca kaydedilecek
 
 alt_baslik("6.1 Özellik türetme (feature construction)")
+# Tarih farkı bir süre (timedelta); .dt.days gün sayısı. 365.25: artık yılların ortalaması.
+# Sıfıra bölme: pandas'ta 0/0 = NaN, x/0 = inf; siparişi olmayanlara doğrudan 0 yazıyoruz.
+# Bu türetilmiş nitelikler pazarlamadaki RFM (Recency, Frequency, Monetary) fikrine dayanır.
 df["uyelik_suresi_yil"] = ((REFERANS_TARIH - df["kayit_tarihi"]).dt.days / 365.25).round(2)
 df["ort_siparis_tl"] = np.where(df["siparis_sayisi"] > 0,
                                 df["toplam_harcama_tl"] / df["siparis_sayisi"].replace(0, 1), 0).round(2)
@@ -586,11 +665,14 @@ print(df[["musteri_id", "kayit_tarihi", "uyelik_suresi_yil", "siparis_sayisi",
 
 
 def carpiklik(x):
+    """Çarpıklık: 3. standart moment. 0 simetrik, > 0 sağa çarpık; |g| > 1 güçlü çarpık."""
     x = np.asarray(x, dtype=float)
     return np.mean((x - x.mean()) ** 3) / np.std(x) ** 3
 
 
 alt_baslik("6.2 Log dönüşümü (sağa çarpık dağılımlar için)")
+# Log çarpımsal farkları toplamsala çevirir (1.000 -> 10.000 ile 10.000 -> 100.000 aynı uzaklık).
+# Alternatifler: karekök (daha hafif), Box-Cox / Yeo-Johnson (üssü veriden tahmin eder).
 df["log_harcama"] = np.log1p(df["toplam_harcama_tl"]).round(4)      # log(1 + x): sıfırlar için güvenli
 pozitif = df["toplam_harcama_tl"] > 0
 cark_once = carpiklik(df.loc[pozitif, "toplam_harcama_tl"])
@@ -618,7 +700,10 @@ kaydet(fig, "07_log_donusumu.png")
 
 alt_baslik("6.3 Normalizasyon: min-maks ve z-skor")
 ornek = pd.DataFrame({"yas": df["yas"], "gelir_aylik": df["gelir_aylik"]})
-minmaks = (ornek - ornek.min()) / (ornek.max() - ornek.min())
+# İkisi de dağılımın BİÇİMİNİ değiştirmez, yalnızca ekseni kaydırıp gerer.
+# min-maks: [0, 1], sınırlı aralık gerektiğinde; tek bir uç değer herkesi sıkıştırır.
+# z-skor  : ort. 0, std 1; PCA, doğrusal modeller, kümeleme için standart seçim.
+minmaks =(ornek - ornek.min()) / (ornek.max() - ornek.min())
 zskor = (ornek - ornek.mean()) / ornek.std()        # pandas std: n-1 (R'daki sd/scale ile aynı)
 print(pd.concat([ornek.add_prefix("ham_"), minmaks.add_prefix("minmaks_").round(3),
                  zskor.add_prefix("z_").round(3)], axis=1).head(5).to_string(index=False))
@@ -643,9 +728,11 @@ fig.suptitle("Ölçekleme: farklı birimlerdeki nitelikleri karşılaştırılab
 kaydet(fig, "08_olcekleme.png")
 
 alt_baslik("6.4 Ayrıklaştırma: yaşı aralıklara bölme")
-df["yas_esit_genislik"] = pd.cut(df["yas"], bins=4)
-df["yas_esit_frekans"] = pd.qcut(df["yas"], q=4)
-df["yas_grubu"] = pd.cut(df["yas"], bins=[17, 29, 49, 100], labels=["Genç", "Orta yaş", "Olgun"])
+df["yas_esit_genislik"] = pd.cut(df["yas"], bins=4)        # min-maks arası 4 eşit uzunlukta aralık
+df["yas_esit_frekans"] = pd.qcut(df["yas"], q=4)           # çeyrekliklerde böl: kovalarda benzer sayı
+# Alan bilgisiyle: aralıklar (17, 29] biçimindedir (sol açık, sağ kapalı); 18'in "Genç"e
+# girmesi için ilk sınır 17.
+df["yas_grubu"] =pd.cut(df["yas"], bins=[17, 29, 49, 100], labels=["Genç", "Orta yaş", "Olgun"])
 for s in ["yas_esit_genislik", "yas_esit_frekans", "yas_grubu"]:
     print(f"{s}:\n{df[s].value_counts(sort=False).to_string()}\n")
 medyan_yas = df["yas"].median()
@@ -672,8 +759,11 @@ df["egitim_kod"] = df["egitim"].map(EGITIM_SIRA)              # sıralı (ordina
 df["uyelik_kod"] = df["uyelik_tipi"].map(UYELIK_SIRA)         # sıralı: Standart < Gold < Platin
 df["cinsiyet_K"] = (df["cinsiyet"] == "K").astype(int)        # ikili (binary) kodlama
 df["kampanya_yanit"] = (df["kampanya_yanit"] == "Evet").astype(int)
+# Şehre sıralı kod verilseydi model "İstanbul = 4 × Ankara" gibi anlamsız bir sıra öğrenirdi.
+# Altı sütunun toplamı her satırda 1'dir (kukla değişken tuzağı); doğrusal modellerde bir
+# sütun atılır (drop_first=True). Okunabilirlik için hepsini tutuyoruz.
 sehir_dummy = pd.get_dummies(df["sehir"], prefix="sehir", dtype=int)   # one-hot (nominal)
-sehir_dummy = sehir_dummy[sorted(sehir_dummy.columns)]
+sehir_dummy = sehir_dummy[sorted(sehir_dummy.columns)]                 # R ile aynı sütun sırası
 df = pd.concat([df, sehir_dummy], axis=1)
 print("egitim  ->", EGITIM_SIRA)
 print("uyelik  ->", UYELIK_SIRA)
@@ -686,6 +776,8 @@ print(pd.concat([df[["sehir"]], sehir_dummy], axis=1).head(4).to_string(index=Fa
 baslik("7. VERİ İNDİRGEME")
 
 alt_baslik("7.1 Bilgi taşımayan sütunlar")
+# Tek değerli sütun hiçbir kaydı diğerinden ayıramaz (varyans = entropi = 0). Sütun adı
+# yazmak yerine kural tanımladığımız için yeni bir sabit sütun da kendiliğinden yakalanır.
 sabit = [s for s in df.columns if df[s].nunique() == 1]
 print(f"Tek bir değer alan (sabit) sütunlar: {sabit} -> silindi")
 df = df.drop(columns=sabit)
@@ -701,8 +793,11 @@ print(f"{model.shape[0]} satır, {model.shape[1]} sütun")
 print(model.head(3).to_string(index=False))
 
 alt_baslik("7.3 Temel Bileşenler Analizi (PCA)")
+# Bileşen sayısı verilmedi: önce TÜM bileşenleri görüp sonra karar vereceğiz. fit() kovaryans
+# matrisinin özvektörlerini (varyansın en büyük, birbirine dik yönleri) bulur. Girdi z-skorla
+# ölçeklendi (7.2); yoksa varyansı milyonlarca olan gelir PC1'i tek başına ele geçirirdi.
 pca = PCA().fit(model[OZELLIKLER])
-aciklanan = pca.explained_variance_ratio_
+aciklanan = pca.explained_variance_ratio_      # her özdeğer / toplam özdeğer
 kumulatif = np.cumsum(aciklanan)
 for i, (a, k) in enumerate(zip(aciklanan, kumulatif), 1):
     print(f"PC{i}: açıklanan varyans %{100 * a:5.1f}   kümülatif %{100 * k:5.1f}")
@@ -739,6 +834,9 @@ fig.suptitle(f"PCA: {len(OZELLIKLER)} sayısal nitelik", fontsize=14, fontweight
 kaydet(fig, "10_pca.png")
 
 alt_baslik("7.4 Örnekleme: basit rastgele ve tabakalı (%30)")
+# Tek bir örnek şanslı/şanssız çıkabilir; 1000 tekrar, yöntemin örnekleme dağılımını gösterir.
+# random_state (tohum) "rastgele" örneği tekrar üretilebilir kılar.
+# Tabakalı: groupby(hedef) ile her sınıftan AYRI AYRI %30 çekilir, sınıf oranı korunur.
 basit_oranlar = np.array([model.sample(frac=0.30, random_state=i)["kampanya_yanit"].mean()
                           for i in range(1000)])
 tabakali = model.groupby("kampanya_yanit", group_keys=False).sample(frac=0.30, random_state=1)

@@ -56,6 +56,8 @@ VERI <- file.path(KLASOR, "veri")
 CIKTI <- file.path(KLASOR, "ciktilar", "r")
 dir.create(CIKTI, recursive = TRUE, showWarnings = FALSE)
 
+# "Bugün" yerine sabit bir tarih: betik hangi gün çalışırsa çalışsın aynı sonucu üretir
+# (tekrar üretilebilirlik / reproducibility).
 REFERANS_TARIH <- as.Date("2025-12-31")   # analizin yapıldığı gün
 USD_TL <- 40                              # sabit kabul edilen döviz kuru
 GIZLI_EKSIK <- c("?", "-", "N/A", "Bilinmiyor", "")
@@ -92,8 +94,10 @@ ana_baslik <- function(metin) {
 # =============================================================================
 baslik("1. VERİYİ TANIMA")
 
-# Önce "saf" okuma: readr sütun tiplerini kendisi tahmin etsin
-saf <- read_csv(file.path(VERI, "musteriler_kirli.csv"), show_col_types = FALSE)
+# Önce "saf" okuma: readr sütun tiplerini kendisi tahmin etsin (tip çıkarımı).
+# Bu tablo yalnızca teşhis içindir: Tek bir "?" bile sütunun tamamını metin yapar,
+# böylece hangi sütunlarda sayıya benzemeyen değer olduğunu görürüz.
+saf <-read_csv(file.path(VERI, "musteriler_kirli.csv"), show_col_types = FALSE)
 alt_baslik("readr'ın tahmin ettiği sütun tipleri")
 print(sapply(saf, function(s) class(s)[1]))
 cat("\nyas, gelir_aylik ve memnuniyet sayı olmalıydı ama 'character' (metin) okundu:\n")
@@ -104,13 +108,15 @@ cat("olarak okuyup her sütunu bilinçli olarak dönüştüreceğiz.\n")
 # boşluklar silinmesin (trim_ws = FALSE) ki sorunları görebilelim
 ham <- read_csv(file.path(VERI, "musteriler_kirli.csv"),
                 col_types = cols(.default = col_character()), na = "", trim_ws = FALSE)
-df <- ham
+df <- ham     # ham'a dokunmuyoruz: 8. adımdaki önce/sonra raporu için saklanır
 
 alt_baslik("Boyut ve ilk satırlar")
 cat(nrow(df), "satır,", ncol(df), "sütun\n")
 print(as.data.frame(head(df, 8)))
 
 alt_baslik("Kategorik sütunlarda kaç farklı yazım var?")
+# Farklı değer sayısı (kardinalite): 6 şehir beklerken 33 görmek, yazım tutarsızlığının
+# kesin işaretidir.
 for (s in c("cinsiyet", "sehir", "egitim", "uyelik_tipi", "kampanya_yanit")) {
   degerler <- sort(unique(na.omit(df[[s]])))
   cat(sprintf("%s: %3d farklı değer -> %s ...\n", sol(s, 15), length(degerler),
@@ -118,6 +124,8 @@ for (s in c("cinsiyet", "sehir", "egitim", "uyelik_tipi", "kampanya_yanit")) {
 }
 
 alt_baslik("Hızlı kalite kontrolleri")
+# duplicated() her satır için TRUE/FALSE döndürür; sum() TRUE'ları sayar (TRUE = 1).
+# Tüm satıra göre ve anahtara göre sayım arasındaki fark "yarı kopyaları" gösterir.
 cat("Boş hücre sayısı (yalnızca tamamen boş olanlar):", sum(is.na(df)), "\n")
 cat("Birebir aynı (mükerrer) satır sayısı          :", sum(duplicated(df)), "\n")
 cat("Tekrarlanan musteri_id sayısı                 :", sum(duplicated(df$musteri_id)), "\n")
@@ -129,10 +137,15 @@ baslik("2. VERİ TEMİZLEME")
 
 # --- 2.1 Boşluklar ve gizli eksik değerler ------------------------------------
 alt_baslik("2.1 Baş/son boşlukları silme ve gizli eksik değerleri NA yapma")
+# Sıralama önemli: Önce boşluklar silinir, yoksa " ? " listedeki "?" ile eşleşmez.
+# Listedeki "" de bu yüzden var: Yalnızca boşluktan oluşan hücre str_trim() sonrası "" olur.
+# across(everything(), f): aynı fonksiyonu tüm sütunlara uygula (vektörel, satır döngüsü yok).
 df <- df |> mutate(across(everything(), str_trim))
 
 bos_hucre <- colSums(is.na(ham))
 gizli <- colSums(sapply(df, function(s) s %in% GIZLI_EKSIK))
+# if_else() iki koldan aynı tipi bekler; bu yüzden NA değil NA_character_ (metin NA).
+# 0 ve 999 listede yok: 0 bazı sütunlarda gerçek değerdir; onları 2.5'te kurallarla yakalarız.
 df <- df |> mutate(across(everything(), ~ if_else(.x %in% GIZLI_EKSIK, NA_character_, .x)))
 
 eksik_tablo <- tibble(sutun = names(bos_hucre), bos_hucre = bos_hucre, gizli_eksik = gizli) |>
@@ -172,13 +185,20 @@ alt_baslik("2.2 Kategorik sütunlarda yazım birliği")
 
 # Karşılaştırma anahtarı: aksanları ve noktalamayı at, küçült, boşlukları sadeleştir.
 # "İstanbul", " İSTANBUL ", "Istanbul", "i̇stanbul", "İst." -> "istanbul" / "ist"
+# ICU zinciri: ayrıştır (NFD: ş -> s + çengel) -> birleşik işaretleri sil -> yeniden birleştir.
 anahtar <- function(x) {
   x <- stri_trans_general(x, "NFD; [:Nonspacing Mark:] Remove; NFC")  # ş -> s, İ -> I, i̇ -> i
-  x <- tolower(chartr("ı", "i", x))
-  x <- str_replace_all(x, "[^[:alnum:][:space:]]", " ")                # noktalama -> boşluk
-  str_squish(x)
+  x <- tolower(chartr("ı", "i", x))                                    # ı ayrıştırılamaz, elle çevrilir
+  x <- str_replace_all(x, "[^[:alnum:][:space:]]", " ")                # noktalama -> boşluk (silme değil:
+                                                                       # "Y.Lisans" -> "y lisans")
+  str_squish(x)                                                        # baş/son + çoklu boşluk
 }
 
+# Anahtar -> standart yazım sözlüğü (adlandırılmış vektör: STANDART$sehir["ankra"] -> "Ankara").
+# Neden bulanık eşleme (Levenshtein) değil? Bulanık eşleme "İst." gibi kısaltmaları ve
+# "Altın" -> "Gold" gibi eş anlamlıları bulamaz, "Lise" ile "Lisans"ı yanlışlıkla
+# birleştirebilir. Kategori sayısı az ve biliniyorsa elle yazılmış sözlük en güvenli ve
+# denetlenebilir yöntemdir.
 STANDART <- list(
   sehir = c(istanbul = "İstanbul", ist = "İstanbul", ankara = "Ankara", ankra = "Ankara",
             izmir = "İzmir", tekirdag = "Tekirdağ", bursa = "Bursa", antalya = "Antalya"),
@@ -195,7 +215,7 @@ sehir_once <- df$sehir
 for (sutun in names(STANDART)) {
   once <- n_distinct(na.omit(df[[sutun]]))
   anahtarlar <- anahtar(df[[sutun]])
-  yeni <- unname(STANDART[[sutun]][anahtarlar])
+  yeni <- unname(STANDART[[sutun]][anahtarlar])    # sözlükte olmayan anahtar NA -> "tanınmayan"
   taninmayan <- unique(df[[sutun]][!is.na(anahtarlar) & is.na(yeni)])
   df[[sutun]] <- yeni
   cat(sprintf("%s: %3d farklı yazım -> %d kategori%s\n", sol(sutun, 15), once,
@@ -237,13 +257,17 @@ kaydet(g1 + g2 + plot_layout(widths = c(1.2, 1)) + ana_baslik("Şehir sütununun
 alt_baslik("2.3 Metin olarak saklanmış sayıları ve tarihleri dönüştürme")
 
 yas_metin <- df$yas
-df$yas <- as.numeric(str_extract(df$yas, "-?\\d+"))                  # "50 yaş" -> 50
+# Desen: isteğe bağlı eksi (-?) + bir veya daha fazla rakam (\\d+). Eksiyi bilerek yakalıyoruz:
+# "-4" sessizce 4 olmasın, -4 olarak kalsın ki 2.5'teki kural onu imkânsız değer diye yakalasın.
+df$yas <-as.numeric(str_extract(df$yas, "-?\\d+"))                  # "50 yaş" -> 50
 cat("yas         : '... yaş' biçimindekiler ->",
     paste0("'", yas_metin[str_detect(yas_metin, "yaş") %in% TRUE], "'", collapse = ", "),
     "| sayıya çevrilemeyen ->", yas_metin[!is.na(yas_metin) & is.na(df$yas)], "\n")
 
 gelir_metin <- df$gelir_aylik
-df$gelir_aylik <- as.numeric(str_trim(str_remove_all(str_remove(df$gelir_aylik, "TL"), fixed("."))))
+# "36.500 TL": nokta binlik ayırıcıdır (veride ondalık nokta yok, önceden kontrol edildi).
+# fixed(".") şart: düzenli ifadede "." HERHANGİ bir karakter demektir; o zaman her şey silinirdi.
+df$gelir_aylik <-as.numeric(str_trim(str_remove_all(str_remove(df$gelir_aylik, "TL"), fixed("."))))
 tl_li <- which(str_detect(gelir_metin, "TL"))
 cat(sprintf("gelir_aylik : %d değer 'TL' içeriyordu, ör. %s\n", length(tl_li),
             paste0("'", gelir_metin[tl_li[1:3]], "' -> ", df$gelir_aylik[tl_li[1:3]], collapse = ", ")))
@@ -251,6 +275,8 @@ cat(sprintf("gelir_aylik : %d değer 'TL' içeriyordu, ör. %s\n", length(tl_li)
 df <- df |> mutate(across(c(musteri_id, gelir_yillik, memnuniyet), as.numeric))
 
 # Üç farklı biçimi sırayla dener: 2023-05-14, 14/05/2023, 14.05.2023
+# Uymayan biçim NA verir; coalesce() soldan sağa ilk NA olmayan sonucu alır (şelale mantığı).
+# Biçimleri açıkça yazıyoruz, çünkü otomatik tahmin 03/08/2019'u sessizce 8 Mart sanabilir.
 tarih_coz <- function(x) {
   coalesce(as.Date(x, format = "%Y-%m-%d"),
            as.Date(x, format = "%d/%m/%Y"),
@@ -278,10 +304,13 @@ cat(sprintf("Silindikten sonra aynı musteri_id'ye sahip kayıt: %d (%d müşter
             nrow(tekrar), n_distinct(tekrar$musteri_id)))
 print(as.data.frame(head(select(tekrar, musteri_id, ad_soyad, sehir, gelir_aylik, memnuniyet), 4)))
 
-# Aynı müşterinin kayıtlarından EN EKSİKSİZ olanı tut
+# Aynı müşterinin kayıtlarından EN EKSİKSİZ olanı tut ("hayatta kalma kuralı").
+# Alternatifler: ilk kayıt (keyfi), en güncel kayıt (tarih damgası gerekir), alan alan
+# birleştirme (çelişki kuralı gerekir). Kopyalar yalnızca eksiklikle ayrıştığı için
+# en eksiksiz kayıt bilgi kaybı olmadan seçilir.
 df <- df |>
-  mutate(.eksik = rowSums(is.na(across(everything())))) |>
-  arrange(musteri_id, .eksik) |>
+  mutate(.eksik = rowSums(is.na(across(everything())))) |>   # satırdaki eksik hücre sayısı
+  arrange(musteri_id, .eksik) |>                              # kararlı sıralama: eşitlerde sıra korunur
   distinct(musteri_id, .keep_all = TRUE) |>
   select(-.eksik)
 cat(sprintf("Anahtar bazlı tekilleştirmeden sonra: %d satır, tekrarlanan musteri_id = %d\n",
@@ -289,7 +318,12 @@ cat(sprintf("Anahtar bazlı tekilleştirmeden sonra: %d satır, tekrarlanan must
 
 # --- 2.5 Geçersiz değerler (iş kuralları) ---------------------------------------
 alt_baslik("2.5 Geçersiz / imkânsız değerler (alan bilgisine dayalı kurallar)")
+# Pratik bir desen: kullanıcı adı @ alan adı . en az 2 harfli uzantı (tam standart RFC 5322
+# çok daha karmaşıktır).
 EPOSTA_DESENI <- "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$"
+# Her kural: açıklama = list(sütun, ihlal maskesi). Kuralları koddan ayrı bir liste olarak
+# tutmak küçük bir "veri doğrulama şeması"dır: Yeni kural tek satır, alan uzmanı okuyabilir.
+# "%in% TRUE" ve "& !is.na()" eksik değerin ihlal sayılmasını önler (NA %in% TRUE -> FALSE).
 kurallar <- list(
   "yas 18-100 arasında olmalı"      = list("yas", !between(df$yas, 18, 100) %in% TRUE & !is.na(df$yas)),
   "gelir_aylik 0 < g < 1.000.000"   = list("gelir_aylik", !between(df$gelir_aylik, 1, 999999) & !is.na(df$gelir_aylik)),
@@ -340,17 +374,22 @@ sip <- read_csv(file.path(VERI, "siparisler.csv"), show_col_types = FALSE)
 cat("siparisler.csv:", nrow(sip), "satır. İlk satırlar:\n")
 print(as.data.frame(head(sip, 4)))
 
+# Sıralama: mükerrerler ve para birimi TOPLULAŞTIRMADAN ÖNCE düzeltilmeli; toplamdan sonra
+# iki kez sayılmış bir tutar ayırt edilemez, TL ile USD'yi toplamak da anlamsızdır.
 alt_baslik("3.1 Sipariş verisindeki mükerrer kayıtlar")
 cat("Aynı siparis_no ile iki kez aktarılmış sipariş:", sum(duplicated(sip$siparis_no)), "\n")
 sip <- distinct(sip, siparis_no, .keep_all = TRUE)
 
 alt_baslik("3.2 Değer çakışması: farklı para birimleri")
 print(table(sip$para_birimi))
+# Sabit kur bir basitleştirmedir; gerçek projede her sipariş, sipariş tarihindeki kurla çevrilir.
 sip <- sip |> mutate(tutar_tl = if_else(para_birimi == "USD", tutar * USD_TL, tutar))
 cat("USD tutarlar 1 USD =", USD_TL, "TL kabulüyle TL'ye çevrildi.\n")
 
 alt_baslik("3.3 Varlık tanımlama: 'C-1001' (sipariş sistemi) = 1001 (CRM)")
 sip <- sip |> mutate(musteri_id = as.numeric(str_remove(cust_id, "C-")))
+# Ayrıntı düzeyini eşitle: sipariş başına satır -> müşteri başına satır. Toplulaştırmasaydık
+# birleştirmeden sonra her müşteri sipariş sayısı kadar tekrarlanırdı.
 ozet <- sip |>
   group_by(musteri_id) |>
   summarise(siparis_sayisi = n(), toplam_harcama_tl = round(sum(tutar_tl), 2))
@@ -358,8 +397,11 @@ cat("Sipariş satırları müşteri düzeyine toplulaştırıldı (aggregation):
 print(as.data.frame(head(ozet, 4)))
 
 alt_baslik("3.4 Birleştirme (left join) ve eşleşmeyen kayıtlar")
-yetim <- anti_join(ozet, df, by = "musteri_id")
+yetim <- anti_join(ozet, df, by = "musteri_id")     # siparişte var, CRM'de yok
 cat("CRM'de karşılığı olmayan (yetim) sipariş müşterisi:", nrow(yetim), "->", yetim$musteri_id, "\n")
+# Neden left join? Analiz birimi CRM müşterisi ve hedef değişken yalnızca CRM'de var.
+# inner join siparişsiz müşterileri kaybederdi; full join demografisi ve hedefi olmayan
+# yetimleri getirirdi. Yetimleri tabloya almıyor, yalnızca raporluyoruz.
 df <- left_join(df, ozet, by = "musteri_id")
 cat("Hiç siparişi olmayan CRM müşterisi              :", sum(is.na(df$siparis_sayisi)), "\n")
 df <- df |> mutate(siparis_sayisi = replace_na(siparis_sayisi, 0L),
@@ -368,6 +410,9 @@ cat("Bu müşterilerin eksik değeri 'bilinmiyor' değil 'sıfır sipariş' deme
 
 alt_baslik("3.5 Fazlalık analizi: Pearson korelasyonu")
 sayisal <- c("yas", "gelir_aylik", "gelir_yillik", "memnuniyet", "siparis_sayisi", "toplam_harcama_tl")
+# Pearson r = cov(X, Y) / (s_X · s_Y), -1 ile +1 arası, birimden bağımsız. Eksikler çift
+# bazında atlanır. |r| ≈ 1 ise bir sütun diğerinin doğrusal fonksiyonudur (fazlalık).
+# Not: r yalnızca DOĞRUSAL ilişkiyi ölçer; r ≈ 0 ilişkisizlik kanıtı değildir.
 kor <- cor(df[sayisal], use = "pairwise.complete.obs")
 print(round(kor, 3))
 for (i in seq_along(sayisal)) for (j in seq_along(sayisal)) {
@@ -392,6 +437,9 @@ df <- select(df, -gelir_yillik)
 
 alt_baslik("3.6 Kategorik nitelikler arasında ilişki: ki-kare (χ²) testi")
 for (nitelik in c("uyelik_tipi", "sehir")) {
+  # Gözlenen frekansları "bağımsız olsalardı" beklenenlerle karşılaştırır:
+  # χ² = Σ (G - B)² / B, sd = (satır - 1)(sütun - 1); beklenen tablo test$expected içindedir.
+  # p < 0.05 -> bağımsızlık reddedilir. χ² ilişkinin VARLIĞINI söyler, gücünü değil.
   test <- chisq.test(table(df[[nitelik]], df$kampanya_yanit))
   cat(sprintf("%s x kampanya_yanit: χ² = %.2f, sd = %d, p = %.4f -> %s\n", nitelik,
               test$statistic, test$parameter, test$p.value,
@@ -404,6 +452,8 @@ print(round(prop.table(table(df$uyelik_tipi, df$kampanya_yanit), 1), 2))
 # =============================================================================
 baslik("4. AYKIRI DEĞERLER")
 
+# Tukey kuralı: [Q1 - 1.5·IQR, Q3 + 1.5·IQR]. 1.5 katsayısı normal dağılımda yaklaşık ±2.7σ'ya
+# denk gelir (verinin ~%0.7'si dışarıda kalır). Çeyrekliklere dayandığı için sağlamdır (robust).
 iqr_sinirlari <- function(x) {
   q <- quantile(x, c(0.25, 0.75), na.rm = TRUE)
   c(alt = q[[1]] - 1.5 * (q[[2]] - q[[1]]), ust = q[[2]] + 1.5 * (q[[2]] - q[[1]]), q1 = q[[1]], q3 = q[[2]])
@@ -433,7 +483,10 @@ cat("                   IQR sınırlarına baskılandı (winsorizing / capping).
 cat("toplam_harcama_tl: Sağa çarpık, doğal bir dağılım -> 6. adımda log dönüşümü uygulanacak.\n")
 gelir_once <- df$gelir_aylik
 sinir <- iqr_sinirlari(df$gelir_aylik)
-df$gelir_aylik <- pmin(pmax(df$gelir_aylik, sinir["alt"]), sinir["ust"])
+# pmax alttan, pmin üstten keser; aradakilere ve NA'lere dokunmaz. Tespitte kullandığımız
+# sınırın aynısı (ör. %1-%99 yüzdelik değil): "aykırı" = "baskılanan".
+# Alt sınır negatif olduğundan pratikte yalnızca üstten baskılanır.
+df$gelir_aylik <-pmin(pmax(df$gelir_aylik, sinir["alt"]), sinir["ust"])
 cat("Baskılanan değer sayısı:", sum(gelir_once != df$gelir_aylik, na.rm = TRUE), "\n")
 
 aykiri_d <- bind_rows(tibble(gelir = gelir_once, panel = "Önce"),
@@ -464,6 +517,9 @@ eksikler <- colSums(is.na(df))
 print(eksikler[eksikler > 0])
 
 alt_baslik("5.1 Çoğunlukla boş sütunları silme (eşik %60)")
+# colMeans(is.na()): TRUE = 1 olduğundan ortalama doğrudan eksik ORANIDIR.
+# Önce sütun, sonra satır: %85'i boş sütun kalsaydı her satırın eksik oranını yapay olarak
+# artırır, gereksiz satır silinmesine yol açardı. Eşikler (%60, %50) pratik seçimlerdir.
 oranlar <- colMeans(is.na(df))
 silinecek <- names(oranlar)[oranlar > 0.60]
 cat("Silinen sütun(lar):", silinecek, "(eksik oranı:", paste0("%", round(100 * oranlar[silinecek])), ")\n")
@@ -483,6 +539,8 @@ df <- filter(df, !is.na(kampanya_yanit))
 alt_baslik("5.4 Eksiklik rastgele mi? (gelir_aylik)")
 EGITIM_SIRA <- c("İlkokul" = 0, "Lise" = 1, "Lisans" = 2, "Yüksek Lisans" = 3, "Doktora" = 4)
 UYELIK_SIRA <- c("Standart" = 0, "Gold" = 1, "Platin" = 2)
+# Eksiklik tamamen rastgele (MCAR) olsaydı geliri eksik olanların eğitim dağılımı tüm
+# verininkine benzerdi; belirgin fark, eksikliğin eğitime bağlı (MAR) olduğunu gösterir.
 egitim_f <- factor(df$egitim, levels = names(EGITIM_SIRA))
 print(round(cbind(geliri_eksik = prop.table(table(egitim_f[is.na(df$gelir_aylik)])),
                   tum_veri = prop.table(table(egitim_f))), 2))
@@ -494,6 +552,8 @@ cat(sprintf("Eğitim gruplarına göre beklenen gelirleri ort. %s TL, genel orta
 cat("Genel ortalamayla doldurmak bu kişilerin gelirini olduğundan yüksek gösterir.\n")
 
 alt_baslik("5.5 Kategorik sütunlar: mod (en sık değer) ile doldurma")
+# Nominal nitelikte ortalama/medyan tanımsızdır, mod tek seçenektir. R'da hazır bir mod
+# fonksiyonu yok: frekans tablosunun en büyük elemanının adını alıyoruz.
 mod_bul <- function(x) names(which.max(table(x)))
 for (s in c("cinsiyet", "sehir", "egitim")) {
   m <- mod_bul(df[[s]])
@@ -503,6 +563,10 @@ for (s in c("cinsiyet", "sehir", "egitim")) {
 
 alt_baslik("5.6 gelir_aylik için doldurma yöntemlerinin karşılaştırılması")
 eksik_gelir <- is.na(df$gelir_aylik)
+# Dört yöntem aynı eksik veriden ayrı ayrı hesaplanır, tabloya henüz yazılmaz; adil
+# karşılaştırmadan sonra seçilen yöntem tek satırla uygulanır (aşağıda).
+# group_by + mutate tabloyu küçültmez (summarise'ın aksine): her satıra kendi grubunun
+# medyanını yazar.
 yontemler <- list(
   "Ortalama" = replace_na(df$gelir_aylik, mean(df$gelir_aylik, na.rm = TRUE)),
   "Medyan" = replace_na(df$gelir_aylik, median(df$gelir_aylik, na.rm = TRUE)),
@@ -529,6 +593,8 @@ for (ad in names(yontemler)) {
 }
 cat("Ortalama/medyan ile doldurma tüm eksiklere AYNI değeri verir: varyans yapay olarak düşer.\n")
 cat("Seçilen yöntem: eğitim grubunun medyanı (sınıf bazında doldurma).\n")
+# Neden? MAR yapısını hesaba katar, basit ve açıklanabilirdir. Hepsi "tekli atama"dır:
+# doldurulan değerin belirsizliğini gizler; ileri yöntem çoklu atamadır (ör. mice paketi).
 
 doldurma_d <- bind_rows(lapply(names(yontemler), function(ad)
   tibble(gelir = yontemler[[ad]], yontem = sprintf("%s  (std = %s)", ad, nokta(sd(yontemler[[ad]]))),
@@ -571,6 +637,9 @@ baslik("6. VERİ DÖNÜŞTÜRME")
 temiz <- df     # okunabilir, temizlenmiş tablo (kodlanmamış hâli) ayrıca kaydedilecek
 
 alt_baslik("6.1 Özellik türetme (feature construction)")
+# İki tarihin farkı gün cinsinden bir süredir; 365.25: artık yılların ortalaması.
+# Sıfıra bölme: 0/0 = NaN, x/0 = Inf; siparişi olmayanlara doğrudan 0 yazıyoruz.
+# Bu türetilmiş nitelikler pazarlamadaki RFM (Recency, Frequency, Monetary) fikrine dayanır.
 df <- df |> mutate(
   uyelik_suresi_yil = round(as.numeric(REFERANS_TARIH - kayit_tarihi) / 365.25, 2),
   ort_siparis_tl = if_else(siparis_sayisi > 0, round(toplam_harcama_tl / pmax(siparis_sayisi, 1), 2), 0)
@@ -578,9 +647,12 @@ df <- df |> mutate(
 print(as.data.frame(head(select(df, musteri_id, kayit_tarihi, uyelik_suresi_yil, siparis_sayisi,
                                 toplam_harcama_tl, ort_siparis_tl), 5)))
 
-carpiklik <- function(x) mean((x - mean(x))^3) / mean((x - mean(x))^2)^1.5
+# Çarpıklık: 3. standart moment. 0 simetrik, > 0 sağa çarpık; |g| > 1 güçlü çarpık.
+carpiklik <- function(x)mean((x - mean(x))^3) / mean((x - mean(x))^2)^1.5
 
 alt_baslik("6.2 Log dönüşümü (sağa çarpık dağılımlar için)")
+# Log çarpımsal farkları toplamsala çevirir (1.000 -> 10.000 ile 10.000 -> 100.000 aynı uzaklık).
+# Alternatifler: karekök (daha hafif), Box-Cox / Yeo-Johnson (üssü veriden tahmin eder).
 df$log_harcama <- round(log1p(df$toplam_harcama_tl), 4)       # log(1 + x): sıfırlar için güvenli
 pozitif <- df$toplam_harcama_tl > 0
 cark_once <- carpiklik(df$toplam_harcama_tl[pozitif])
@@ -607,6 +679,9 @@ kaydet(g1 + g2 + ana_baslik("Log dönüşümü sağa çarpık dağılımı simet
        "07_log_donusumu.png", 13, 4.8)
 
 alt_baslik("6.3 Normalizasyon: min-maks ve z-skor")
+# İkisi de dağılımın BİÇİMİNİ değiştirmez, yalnızca ekseni kaydırıp gerer.
+# min-maks: [0, 1], sınırlı aralık gerektiğinde; tek bir uç değer herkesi sıkıştırır.
+# z-skor (scale): ort. 0, std 1; PCA, doğrusal modeller, kümeleme için standart seçim.
 min_maks <- function(x) (x - min(x)) / (max(x) - min(x))
 ornek <- tibble(ham_yas = df$yas, ham_gelir_aylik = df$gelir_aylik,
                 minmaks_yas = min_maks(df$yas), minmaks_gelir_aylik = min_maks(df$gelir_aylik),
@@ -634,9 +709,12 @@ kaydet(g, "08_olcekleme.png", 14, 4.5)
 
 alt_baslik("6.4 Ayrıklaştırma: yaşı aralıklara bölme")
 df <- df |> mutate(
-  yas_esit_genislik = cut(yas, breaks = 4),
-  yas_esit_frekans = cut(yas, breaks = quantile(yas, probs = seq(0, 1, 0.25)), include.lowest = TRUE),
-  yas_grubu = cut(yas, breaks = c(17, 29, 49, 100), labels = c("Genç", "Orta yaş", "Olgun"))
+  yas_esit_genislik = cut(yas, breaks = 4),                       # min-maks arası 4 eşit uzunlukta aralık
+  yas_esit_frekans = cut(yas, breaks = quantile(yas, probs = seq(0, 1, 0.25)),
+                         include.lowest = TRUE),                  # çeyrekliklerde böl: kovalarda benzer sayı
+  # Alan bilgisiyle: aralıklar (17, 29] biçimindedir (sol açık, sağ kapalı); 18'in "Genç"e
+  # girmesi için ilk sınır 17.
+  yas_grubu =cut(yas, breaks = c(17, 29, 49, 100), labels = c("Genç", "Orta yaş", "Olgun"))
 )
 for (s in c("yas_esit_genislik", "yas_esit_frekans", "yas_grubu")) {
   cat(s, ":\n", sep = "")
@@ -666,6 +744,9 @@ df <- df |> mutate(
   cinsiyet_K = as.integer(cinsiyet == "K"),          # ikili (binary) kodlama
   kampanya_yanit = as.integer(kampanya_yanit == "Evet")
 )
+# Şehre sıralı kod verilseydi model "İstanbul = 4 × Ankara" gibi anlamsız bir sıra öğrenirdi.
+# Altı sütunun toplamı her satırda 1'dir (kukla değişken tuzağı); doğrusal modellerde bir
+# sütun atılır. Okunabilirlik için hepsini tutuyoruz.
 sehir_duzeyleri <- sort(unique(df$sehir), method = "radix")   # Python ile aynı sıra (Unicode)
 for (d in sehir_duzeyleri) df[[paste0("sehir_", d)]] <- as.integer(df$sehir == d)   # one-hot (nominal)
 sehir_sutunlari <- paste0("sehir_", sehir_duzeyleri)
@@ -680,6 +761,8 @@ print(as.data.frame(head(df[c("sehir", sehir_sutunlari)], 4)))
 baslik("7. VERİ İNDİRGEME")
 
 alt_baslik("7.1 Bilgi taşımayan sütunlar")
+# Tek değerli sütun hiçbir kaydı diğerinden ayıramaz (varyans = entropi = 0). Sütun adı
+# yazmak yerine kural tanımladığımız için yeni bir sabit sütun da kendiliğinden yakalanır.
 sabit <- names(df)[sapply(df, n_distinct) == 1]
 cat("Tek bir değer alan (sabit) sütunlar:", sabit, "-> silindi\n")
 df <- select(df, -all_of(sabit))
@@ -694,8 +777,11 @@ cat(nrow(model), "satır,", ncol(model), "sütun\n")
 print(as.data.frame(head(model, 3)))
 
 alt_baslik("7.3 Temel Bileşenler Analizi (PCA)")
+# prcomp TÜM bileşenleri hesaplar; önce hepsini görüp sonra karar veririz. Bileşenler,
+# varyansın en büyük ve birbirine dik yönleridir (kovaryans matrisinin özvektörleri). Girdi
+# z-skorla ölçeklendi (7.2); yoksa varyansı milyonlarca olan gelir PC1'i tek başına ele geçirirdi.
 pca <- prcomp(model[OZELLIKLER])        # nitelikler zaten standartlaştırıldı
-aciklanan <- pca$sdev^2 / sum(pca$sdev^2)
+aciklanan <- pca$sdev^2 / sum(pca$sdev^2)      # özdeğer = sdev²; her özdeğer / toplam
 kumulatif <- cumsum(aciklanan)
 for (i in seq_along(aciklanan))
   cat(sprintf("PC%d: açıklanan varyans %%%5.1f   kümülatif %%%5.1f\n", i, 100 * aciklanan[i], 100 * kumulatif[i]))
@@ -733,6 +819,9 @@ g2 <- ggplot(skor, aes(PC1, PC2, colour = yanit)) +
 kaydet(g1 + g2 + ana_baslik(sprintf("PCA: %d sayısal nitelik", length(OZELLIKLER))), "10_pca.png", 13, 5)
 
 alt_baslik("7.4 Örnekleme: basit rastgele ve tabakalı (%30)")
+# Tek bir örnek şanslı/şanssız çıkabilir; 1000 tekrar, yöntemin örnekleme dağılımını gösterir.
+# set.seed (tohum) "rastgele" örneği tekrar üretilebilir kılar.
+# Tabakalı: group_by(hedef) ile her sınıftan AYRI AYRI %30 çekilir, sınıf oranı korunur.
 set.seed(1)
 basit_oranlar <- replicate(1000, mean(slice_sample(model, prop = 0.30)$kampanya_yanit))
 tabakali <- model |> group_by(kampanya_yanit) |> slice_sample(prop = 0.30) |> ungroup()
