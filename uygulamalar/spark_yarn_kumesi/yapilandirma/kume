@@ -1,0 +1,39 @@
+#!/bin/bash
+# Lab Hadoop + Spark kumesini yonetir. Master (NameNode, ResourceManager) Gigabyte'ta calisir;
+# komut hangi lab makinesinden verilirse verilsin is Gigabyte uzerinden yapilir.
+# Kullanim: kume baslat | durdur | durum
+. "$HOME/bigdata/ortam.sh"
+MASTER=192.168.1.10
+SSH_MASTER="ssh -i $HOME/.ssh/id_lab -o BatchMode=yes -o ConnectTimeout=10 $MASTER"
+
+benim_ip=$(ip -4 -o addr show | grep -oE '192\.168\.1\.[0-9]+' | head -1)
+if [ "$benim_ip" != "$MASTER" ]; then
+    exec $SSH_MASTER "bash -lc '\$HOME/bigdata/kume $*'"
+fi
+
+case "$1" in
+    baslat)
+        start-dfs.sh
+        start-yarn.sh
+        mapred --daemon start historyserver
+        "$SPARK_HOME/sbin/start-history-server.sh"
+        hdfs dfsadmin -safemode wait
+        ;;
+    durdur)
+        "$SPARK_HOME/sbin/stop-history-server.sh"
+        mapred --daemon stop historyserver
+        stop-yarn.sh
+        stop-dfs.sh
+        ;;
+    durum)
+        echo "== HDFS (http://$MASTER:9870)"
+        hdfs dfsadmin -report 2>/dev/null | grep -E "^Live datanodes|^Dead datanodes|^Name:|^DFS Remaining:" | sed 's/^/  /'
+        echo "== YARN (http://$MASTER:8088)"
+        yarn node -list -all 2>/dev/null | grep -E "RUNNING|LOST|UNHEALTHY|SHUTDOWN|DECOMMISSIONED" | awk '{print "  " $1, $2, "konteyner:", $NF}'
+        echo "== Spark History Server: http://$MASTER:18080"
+        ;;
+    *)
+        echo "Kullanim: kume baslat | durdur | durum"
+        exit 1
+        ;;
+esac

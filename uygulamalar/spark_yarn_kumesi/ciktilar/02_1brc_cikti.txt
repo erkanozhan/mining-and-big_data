@@ -1,0 +1,30 @@
+Spark arayüzü: http://192.168.1.11:4040
+CSV bölüm (partition) sayısı: 20
+=== Spark'ın fiziksel planı ===
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- Sort [istasyon#0 ASC NULLS FIRST], true, 0
+   +- Exchange rangepartitioning(istasyon#0 ASC NULLS FIRST, 200), ENSURE_REQUIREMENTS, [plan_id=21]
+      +- HashAggregate(keys=[istasyon#0], functions=[min(sicaklik#1), avg(sicaklik#1), max(sicaklik#1), count(1)])
+         +- Exchange hashpartitioning(istasyon#0, 200), ENSURE_REQUIREMENTS, [plan_id=18]
+            +- HashAggregate(keys=[istasyon#0], functions=[partial_min(sicaklik#1), partial_avg(sicaklik#1), partial_max(sicaklik#1), partial_count(1)])
+               +- FileScan csv [istasyon#0,sicaklik#1] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://192.168.1.10:9000/veri/olcumler_csv], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<istasyon:string,sicaklik:double>
+[süre] 1) CSV'den oku + grupla: 33.2 sn
+İlk 10 istasyon:
+  Adana           min= -19.5  ort= 19.1  max= 56.4  n=1,234,803
+  Adıyaman        min= -22.7  ort= 17.0  max= 56.3  n=1,231,681
+  Afyonkarahisar  min= -27.8  ort= 11.3  max= 52.2  n=1,234,902
+  Aksaray         min= -25.2  ort= 12.2  max= 49.7  n=1,234,015
+  Amasya          min= -24.8  ort= 13.6  max= 51.1  n=1,234,749
+  Ankara          min= -27.2  ort= 11.9  max= 53.1  n=1,232,699
+  Antalya         min= -24.0  ort= 18.7  max= 57.0  n=1,235,894
+  Ardahan         min= -34.1  ort=  3.8  max= 46.7  n=1,235,407
+  Artvin          min= -24.9  ort= 12.3  max= 50.5  n=1,234,510
+  Aydın           min= -19.4  ort= 17.6  max= 63.8  n=1,235,211
+[süre] 2a) Veriyi belleğe al (cache + count): 20.8 sn
+[süre] 2b) Bellekteki veriden grupla: 3.8 sn
+[süre] CSV → Parquet dönüşümü (bir kez): 37.2 sn
+[süre] 3) Parquet'ten oku + grupla: 6.5 sn
+Satır sayısı : 100,000,000
+CSV boyutu   : 1.28 GB
+Parquet boyut: 0.21 GB  (6.0 kat küçük)

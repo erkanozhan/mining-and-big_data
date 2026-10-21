@@ -1,0 +1,7 @@
+Eğitim: 464,809 satır   Test: 116,203 satır   Çekirdek: 8
+[süre] Çapraz doğrulamalı arama (tek makine): 75.6 sn
+  ağaç= 20  derinlik= 10  →  0.7509
+  ağaç= 40  derinlik= 10  →  0.7532
+  ağaç= 20  derinlik= 15  →  0.8233
+  ağaç= 40  derinlik= 15  →  0.8230
+En iyi: {'max_depth': 15, 'n_estimators': 20}   Test doğruluğu: 0.8295

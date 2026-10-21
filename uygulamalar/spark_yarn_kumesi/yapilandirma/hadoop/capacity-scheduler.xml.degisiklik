@@ -1,0 +1,7 @@
+<!-- capacity-scheduler.xml dosyasında değiştirilen TEK özellik.
+     Varsayılan DefaultResourceCalculator yalnızca belleğe bakar; çekirdekleri saymaz.
+     DominantResourceCalculator bellek ve çekirdeği birlikte hesaba katar. -->
+  <property>
+    <name>yarn.scheduler.capacity.resource-calculator</name>
+    <value>org.apache.hadoop.yarn.util.resource.DominantResourceCalculator</value>
+  </property>

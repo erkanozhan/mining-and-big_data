@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <!-- Her blok 2 farkli dugumde saklanir (3 dugumluk kume) -->
+  <property><name>dfs.replication</name><value>2</value></property>
+  <property><name>dfs.namenode.name.dir</name><value>file:///home/hduser/bigdata/veri/namenode</value></property>
+  <property><name>dfs.datanode.data.dir</name><value>file:///home/hduser/bigdata/veri/datanode</value></property>
+  <!-- Kampus DNS lab makinelerinin adlarini cozmuyor; IP ile kayda izin ver -->
+  <property><name>dfs.namenode.datanode.registration.ip-hostname-check</name><value>false</value></property>
+  <property><name>dfs.namenode.http-address</name><value>192.168.1.10:9870</value></property>
+</configuration>

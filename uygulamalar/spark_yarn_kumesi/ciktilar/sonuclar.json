@@ -1,0 +1,276 @@
+{
+  "01_veri_uretimi": {
+    "satir": 100000000,
+    "bolum": 40,
+    "bayt": 1284819923,
+    "sure_sn": 60.1
+  },
+  "02_1brc": {
+    "satir": 100000000,
+    "csv_bayt": 1284819923,
+    "parquet_bayt": 213779068,
+    "csv_sn": 33.2,
+    "cache_yukleme_sn": 20.8,
+    "cache_sorgu_sn": 3.8,
+    "parquet_sn": 6.5
+  },
+  "03_kelime_sayma": {
+    "girdi_bayt": 400001800,
+    "mapreduce_sn": 48.2,
+    "spark_rdd_sn": 18.7,
+    "spark_dataframe_sn": 15.2
+  },
+  "04_mllib_p1": {
+    "paralellik": 1,
+    "sure_sn": 374.7,
+    "izgara": [
+      {
+        "numTrees": 20,
+        "maxDepth": 10,
+        "dogruluk": 0.7401
+      },
+      {
+        "numTrees": 20,
+        "maxDepth": 15,
+        "dogruluk": 0.7915
+      },
+      {
+        "numTrees": 40,
+        "maxDepth": 10,
+        "dogruluk": 0.7375
+      },
+      {
+        "numTrees": 40,
+        "maxDepth": 15,
+        "dogruluk": 0.7916
+      }
+    ],
+    "test_dogruluk": 0.7923,
+    "onemli_nitelikler": [
+      [
+        "rakim",
+        0.371
+      ],
+      [
+        "koruma_alani_4",
+        0.071
+      ],
+      [
+        "yol_uzaklik",
+        0.062
+      ],
+      [
+        "yangin_noktasi_uzaklik",
+        0.05
+      ],
+      [
+        "toprak_22",
+        0.034
+      ],
+      [
+        "toprak_12",
+        0.031
+      ],
+      [
+        "toprak_4",
+        0.027
+      ],
+      [
+        "su_yatay_uzaklik",
+        0.027
+      ]
+    ]
+  },
+  "04_mllib_p4": {
+    "paralellik": 4,
+    "sure_sn": 272.0,
+    "izgara": [
+      {
+        "numTrees": 20,
+        "maxDepth": 10,
+        "dogruluk": 0.7321
+      },
+      {
+        "numTrees": 20,
+        "maxDepth": 15,
+        "dogruluk": 0.792
+      },
+      {
+        "numTrees": 40,
+        "maxDepth": 10,
+        "dogruluk": 0.7334
+      },
+      {
+        "numTrees": 40,
+        "maxDepth": 15,
+        "dogruluk": 0.7904
+      }
+    ],
+    "test_dogruluk": 0.7939,
+    "onemli_nitelikler": [
+      [
+        "rakim",
+        0.362
+      ],
+      [
+        "koruma_alani_4",
+        0.074
+      ],
+      [
+        "yol_uzaklik",
+        0.069
+      ],
+      [
+        "yangin_noktasi_uzaklik",
+        0.051
+      ],
+      [
+        "toprak_22",
+        0.037
+      ],
+      [
+        "toprak_12",
+        0.032
+      ],
+      [
+        "su_yatay_uzaklik",
+        0.029
+      ],
+      [
+        "toprak_4",
+        0.028
+      ]
+    ]
+  },
+  "05_olcekleme": [
+    {
+      "executor": 1,
+      "cekirdek": 2,
+      "sure_sn": 74.4,
+      "makineler": {
+        "Mini": {
+          "executor": 1,
+          "gorev": 30,
+          "gorev_ms": 276136,
+          "okunan_bayt": 2569639846,
+          "mb_per_sn_cekirdek": 9.3
+        }
+      },
+      "hizlanma": 1.0
+    },
+    {
+      "executor": 2,
+      "cekirdek": 4,
+      "sure_sn": 45.6,
+      "makineler": {
+        "Vento": {
+          "executor": 1,
+          "gorev": 13,
+          "gorev_ms": 190257,
+          "okunan_bayt": 995753125,
+          "mb_per_sn_cekirdek": 5.2
+        },
+        "Gigabyte": {
+          "executor": 1,
+          "gorev": 17,
+          "gorev_ms": 167831,
+          "okunan_bayt": 1573886721,
+          "mb_per_sn_cekirdek": 9.4
+        }
+      },
+      "hizlanma": 1.63
+    },
+    {
+      "executor": 3,
+      "cekirdek": 6,
+      "sure_sn": 32.4,
+      "makineler": {
+        "Vento": {
+          "executor": 1,
+          "gorev": 7,
+          "gorev_ms": 124561,
+          "okunan_bayt": 674519289,
+          "mb_per_sn_cekirdek": 5.4
+        },
+        "Gigabyte": {
+          "executor": 1,
+          "gorev": 12,
+          "gorev_ms": 102968,
+          "okunan_bayt": 963630486,
+          "mb_per_sn_cekirdek": 9.4
+        },
+        "Mini": {
+          "executor": 1,
+          "gorev": 11,
+          "gorev_ms": 98808,
+          "okunan_bayt": 931490071,
+          "mb_per_sn_cekirdek": 9.4
+        }
+      },
+      "hizlanma": 2.3
+    },
+    {
+      "executor": 4,
+      "cekirdek": 8,
+      "sure_sn": 28.6,
+      "makineler": {
+        "Mini": {
+          "executor": 2,
+          "gorev": 16,
+          "gorev_ms": 197649,
+          "okunan_bayt": 1316957552,
+          "mb_per_sn_cekirdek": 6.7
+        },
+        "Vento": {
+          "executor": 1,
+          "gorev": 4,
+          "gorev_ms": 85225,
+          "okunan_bayt": 385447682,
+          "mb_per_sn_cekirdek": 4.5
+        },
+        "Gigabyte": {
+          "executor": 1,
+          "gorev": 10,
+          "gorev_ms": 85462,
+          "okunan_bayt": 867234612,
+          "mb_per_sn_cekirdek": 10.1
+        }
+      },
+      "hizlanma": 2.6
+    },
+    {
+      "executor": 6,
+      "cekirdek": 12,
+      "sure_sn": 24.5,
+      "makineler": {
+        "Gigabyte": {
+          "executor": 3,
+          "gorev": 15,
+          "gorev_ms": 249557,
+          "okunan_bayt": 1349077708,
+          "mb_per_sn_cekirdek": 5.4
+        },
+        "Mini": {
+          "executor": 2,
+          "gorev": 11,
+          "gorev_ms": 135036,
+          "okunan_bayt": 835133866,
+          "mb_per_sn_cekirdek": 6.2
+        },
+        "Vento": {
+          "executor": 1,
+          "gorev": 4,
+          "gorev_ms": 84900,
+          "okunan_bayt": 385428272,
+          "mb_per_sn_cekirdek": 4.5
+        }
+      },
+      "hizlanma": 3.04
+    }
+  ],
+  "04b_sklearn_tek_makine": {
+    "cekirdek": 8,
+    "sure_sn": 75.6,
+    "test_dogruluk": 0.8295
+  }
+}

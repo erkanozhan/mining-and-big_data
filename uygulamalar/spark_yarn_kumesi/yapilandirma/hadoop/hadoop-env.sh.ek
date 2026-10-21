@@ -1,0 +1,16 @@
+# ===== FX lab kumesi (Gigabyte .10 = master; Mini .11, Vento .12) =====
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export HADOOP_HOME=$HOME/bigdata/hadoop
+# SSH baglantisi id_lab anahtariyla (parolasiz) yapilir
+export HADOOP_SSH_OPTS="-i $HOME/.ssh/id_lab -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new"
+# Makineler birbirinin adini cozemedigi icin her dugum kendini yerel ag IP'siyle tanitir
+export FX_IP=$(ip -4 -o addr show | grep -oE '192\.168\.1\.[0-9]+' | head -1)
+# Heterojen kume: her dugum YARN'a kendi kapasitesi kadar bellek/cekirdek verir.
+# Cekirdek sayisina 1 eklenir: Spark'in ApplicationMaster konteyneri (1 sanal cekirdek) hangi
+# dugume duserse dussun, o dugumdeki executor'lar yine sigsin.
+case "$FX_IP" in
+  192.168.1.10) export FX_NM_MB=8192 FX_NM_CORES=9 ;;   # Gigabyte: i7-4790K, 16 GB
+  192.168.1.11) export FX_NM_MB=4096 FX_NM_CORES=5 ;;   # Mini: i5-6500T, 8 GB (derste masaustu de calisiyor)
+  192.168.1.12) export FX_NM_MB=3072 FX_NM_CORES=3 ;;   # Vento: Core2 Duo E8400, 6 GB
+  *)            export FX_NM_MB=2048 FX_NM_CORES=2 ;;
+esac

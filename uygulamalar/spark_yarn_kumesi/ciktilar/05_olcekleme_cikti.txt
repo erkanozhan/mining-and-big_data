@@ -1,0 +1,11 @@
+1 executor (2 çekirdek):   74.4 sn   Mini: 1 ex, 9.3 MB/sn/çekirdek
+2 executor (4 çekirdek):   45.6 sn   Gigabyte: 1 ex, 9.4 MB/sn/çekirdek  Vento: 1 ex, 5.2 MB/sn/çekirdek
+3 executor (6 çekirdek):   32.4 sn   Gigabyte: 1 ex, 9.4 MB/sn/çekirdek  Mini: 1 ex, 9.4 MB/sn/çekirdek  Vento: 1 ex, 5.4 MB/sn/çekirdek
+4 executor (8 çekirdek):   28.6 sn   Gigabyte: 1 ex, 10.1 MB/sn/çekirdek  Mini: 2 ex, 6.7 MB/sn/çekirdek  Vento: 1 ex, 4.5 MB/sn/çekirdek
+6 executor (12 çekirdek):   24.5 sn   Gigabyte: 3 ex, 5.4 MB/sn/çekirdek  Mini: 2 ex, 6.2 MB/sn/çekirdek  Vento: 1 ex, 4.5 MB/sn/çekirdek
+Hızlanma (1 executor'a göre):
+  1 executor → 1.00 kat  (ideal: 1 kat)
+  2 executor → 1.63 kat  (ideal: 2 kat)
+  3 executor → 2.30 kat  (ideal: 3 kat)
+  4 executor → 2.60 kat  (ideal: 4 kat)
+  6 executor → 3.04 kat  (ideal: 6 kat)

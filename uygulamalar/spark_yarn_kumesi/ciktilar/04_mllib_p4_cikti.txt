@@ -1,0 +1,19 @@
+Spark arayüzü: http://192.168.1.11:4040
+Eğitim: 465,122 satır   Test: 115,890 satır
+[süre] Çapraz doğrulamalı arama (paralellik=4): 272.0 sn
+Hiperparametre birleşimleri (3 katın ortalama doğruluğu):
+  ağaç= 20  derinlik= 10  →  0.7321
+  ağaç= 20  derinlik= 15  →  0.7920
+  ağaç= 40  derinlik= 10  →  0.7334
+  ağaç= 40  derinlik= 15  →  0.7904
+En iyi model: ağaç=20, derinlik=15
+Test doğruluğu: 0.7939
+En önemli 8 nitelik:
+  rakim                     0.362
+  koruma_alani_4            0.074
+  yol_uzaklik               0.069
+  yangin_noktasi_uzaklik    0.051
+  toprak_22                 0.037
+  toprak_12                 0.032
+  su_yatay_uzaklik          0.029
+  toprak_4                  0.028

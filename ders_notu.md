@@ -8,6 +8,7 @@ Notlar bu nedenle iki kısımdan oluşur:
 
 * **Kısım I — Veri Madenciliği:** Süreç modelleri, veriyi tanıma ve hazırlama, temel görevler (birliktelik kuralları, sınıflandırma, kümeleme, aykırı değer tespiti), model değerlendirme ve ileri konular. Kısım, klasik algoritmaların neden büyük veride tıkandığını ve bu sorunun nasıl aşıldığını tartışan bir köprü bölümüyle biter.
 * **Kısım II — Büyük Veri Teknolojileri:** Büyük verinin tanımı ve 5V, Hadoop (HDFS, YARN, MapReduce), kurulum ve uygulamalar, Hive, Pig, Mahout ve Spark.
+* **Ek not — [Spark ve YARN ile Dağıtık Veri Madenciliği](spark_ders_notu.md):** Laboratuvardaki üç makineyle kurulan gerçek bir Hadoop + Spark kümesi. 1BRC, kelime sayma (MapReduce ve Spark), MLlib ile hiperparametre araması ve ölçekleme deneyi.
 
 ![Dersin yol haritası](images/vm-ders-haritasi.svg)
 
@@ -1544,6 +1545,8 @@ print(duckdb.sql("""
 """))
 ```
 
+> **Spark ile devamı:** Aynı problem 100 milyon satırla laboratuvar kümesinde Spark ile çözülmüştür: [spark_ders_notu.md, 8. bölüm](spark_ders_notu.md#8-uygulama-2-1brcyi-spark-ile-çözmek).
+
 > **Kısım II'ye köprü:** Paralel Python çözümündeki yapıya dikkat edin. Önce veri parçalara bölünüyor, her parça bağımsız olarak işlenip ara sonuçlar (istasyon → min/maks/toplam/sayı) üretiliyor, sonra bu ara sonuçlar birleştiriliyor. Bu, **MapReduce** programlama modelinin ta kendisidir: Bölme ve parçaları işleme adımı **Map**, birleştirme adımı **Reduce**'tur. Hadoop bu fikri tek makinenin çekirdeklerinden binlerce makineye, dosya sisteminden hata toleransına kadar her şeyiyle ölçekler.
 
 ***
@@ -2062,6 +2065,8 @@ Yahoo tarafından geliştirilen Pig, "Pig Latin" adı verilen bir betik dili kul
 
 Spark, Hadoop ekosistemindeki en önemli kırılma noktalarından biridir. MapReduce modelindeki disk I/O (girdi/çıktı) darboğazını aşmak için RDD (Resilient Distributed Datasets) yapısını kullanır. Veriyi belleğe yükler ve iş bitene kadar orada tutar. Bu, iteratif algoritmalar (örneğin makine öğrenmesi) için performansı 100 kata kadar artırabilir.
 Spark sadece hızlı değildir; aynı zamanda Spark SQL, Spark Streaming, MLlib (Makine Öğrenmesi) ve GraphX (Çizge İşleme) gibi modülleri tek bir çatı altında toplar. Yani hem veriyi işleyip hem de üzerinde makine öğrenmesi modelini aynı platformda koşturabilirsiniz.
+
+> **Uygulamalı devam:** Spark'ın mimarisi, YARN üzerinde çalışması ve laboratuvardaki üç makineli kümede yapılan ölçümler ayrı bir notta anlatılmıştır: [Spark ve YARN ile Dağıtık Veri Madenciliği](spark_ders_notu.md).
 
 ### Apache Mahout ve Makine Öğrenmesi
 

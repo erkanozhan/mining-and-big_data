@@ -1,0 +1,21 @@
+[süre] 1) Hadoop MapReduce WordCount: 48.2 sn
+Spark arayüzü: http://192.168.1.11:4040
+Girdi: hdfs:///veri/kitaplar (400 MB)
+[süre] 2) Spark RDD (Python): 18.7 sn
+[süre] 3) Spark DataFrame: 15.2 sn
+En sık 15 kelime (RDD ↔ DataFrame):
+  the         3,689,350    the         3,689,350
+  and         2,460,850    and         2,460,850
+  to          1,847,175    to          1,847,175
+  of          1,815,900    of          1,815,900
+  a           1,511,725    a           1,511,725
+  i           1,341,475    i           1,341,475
+  in          1,142,400    in          1,142,400
+  he          1,004,975    he          1,004,975
+  that          941,450    that          941,450
+  it            910,400    it            910,400
+  was           852,950    was           852,950
+  his           744,625    his           744,625
+  you           726,900    you           726,900
+  with          612,100    with          612,100
+  as            517,625    as            517,625
