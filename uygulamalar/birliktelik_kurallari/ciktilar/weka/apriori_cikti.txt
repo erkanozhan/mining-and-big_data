@@ -1,0 +1,95 @@
+WARNING: core mtj jar files are not available as resources to this classloader (jdk.internal.loader.ClassLoaders$AppClassLoader@33909752)
+
+Apriori
+=======
+
+Minimum support: 0.1 (100 instances)
+Minimum metric <confidence>: 0.6
+Number of cycles performed: 18
+
+Generated sets of large itemsets:
+
+Size of set of large itemsets L(1): 16
+
+Large Itemsets L(1):
+ekmek=t 624
+sut=t 257
+peynir=t 278
+zeytin=t 203
+yumurta=t 207
+cay=t 191
+seker=t 168
+bez=t 162
+mama=t 128
+islak_mendil=t 117
+makarna=t 221
+domates_sosu=t 126
+cips=t 139
+kola=t 161
+su=t 317
+muz=t 144
+
+Size of set of large itemsets L(2): 20
+
+Large Itemsets L(2):
+ekmek=t sut=t 144
+ekmek=t peynir=t 171
+ekmek=t zeytin=t 120
+ekmek=t yumurta=t 125
+ekmek=t cay=t 127
+ekmek=t seker=t 115
+ekmek=t makarna=t 145
+ekmek=t kola=t 101
+ekmek=t su=t 184
+peynir=t zeytin=t 175
+peynir=t yumurta=t 138
+peynir=t cay=t 138
+peynir=t seker=t 110
+zeytin=t yumurta=t 121
+zeytin=t cay=t 111
+yumurta=t cay=t 100
+cay=t seker=t 133
+bez=t mama=t 128
+bez=t islak_mendil=t 117
+makarna=t domates_sosu=t 126
+
+Size of set of large itemsets L(3): 3
+
+Large Itemsets L(3):
+ekmek=t peynir=t zeytin=t 106
+peynir=t zeytin=t yumurta=t 103
+peynir=t cay=t seker=t 102
+
+Best rules found:
+
+  1. mama=t 128 ==> bez=t 128    <conf:(1)> lift:(6.17) lev:(0.11) [107] conv:(107.26)
+  2. domates_sosu=t 126 ==> makarna=t 126    <conf:(1)> lift:(4.52) lev:(0.1) [98] conv:(98.15)
+  3. islak_mendil=t 117 ==> bez=t 117    <conf:(1)> lift:(6.17) lev:(0.1) [98] conv:(98.05)
+  4. peynir=t seker=t 110 ==> cay=t 102    <conf:(0.93)> lift:(4.85) lev:(0.08) [80] conv:(9.89)
+  5. ekmek=t zeytin=t 120 ==> peynir=t 106    <conf:(0.88)> lift:(3.18) lev:(0.07) [72] conv:(5.78)
+  6. zeytin=t 203 ==> peynir=t 175    <conf:(0.86)> lift:(3.1) lev:(0.12) [118] conv:(5.05)
+  7. zeytin=t yumurta=t 121 ==> peynir=t 103    <conf:(0.85)> lift:(3.06) lev:(0.07) [69] conv:(4.6)
+  8. seker=t 168 ==> cay=t 133    <conf:(0.79)> lift:(4.14) lev:(0.1) [100] conv:(3.78)
+  9. bez=t 162 ==> mama=t 128    <conf:(0.79)> lift:(6.17) lev:(0.11) [107] conv:(4.04)
+ 10. cay=t seker=t 133 ==> peynir=t 102    <conf:(0.77)> lift:(2.76) lev:(0.07) [65] conv:(3)
+ 11. peynir=t yumurta=t 138 ==> zeytin=t 103    <conf:(0.75)> lift:(3.68) lev:(0.07) [74] conv:(3.06)
+ 12. peynir=t cay=t 138 ==> seker=t 102    <conf:(0.74)> lift:(4.4) lev:(0.08) [78] conv:(3.1)
+ 13. cay=t 191 ==> peynir=t 138    <conf:(0.72)> lift:(2.6) lev:(0.08) [84] conv:(2.55)
+ 14. bez=t 162 ==> islak_mendil=t 117    <conf:(0.72)> lift:(6.17) lev:(0.1) [98] conv:(3.11)
+ 15. cay=t 191 ==> seker=t 133    <conf:(0.7)> lift:(4.14) lev:(0.1) [100] conv:(2.69)
+ 16. seker=t 168 ==> ekmek=t 115    <conf:(0.68)> lift:(1.1) lev:(0.01) [10] conv:(1.17)
+ 17. yumurta=t 207 ==> peynir=t 138    <conf:(0.67)> lift:(2.4) lev:(0.08) [80] conv:(2.14)
+ 18. cay=t 191 ==> ekmek=t 127    <conf:(0.66)> lift:(1.07) lev:(0.01) [7] conv:(1.1)
+ 19. makarna=t 221 ==> ekmek=t 145    <conf:(0.66)> lift:(1.05) lev:(0.01) [7] conv:(1.08)
+ 20. seker=t 168 ==> peynir=t 110    <conf:(0.65)> lift:(2.36) lev:(0.06) [63] conv:(2.06)
+ 21. peynir=t 278 ==> zeytin=t 175    <conf:(0.63)> lift:(3.1) lev:(0.12) [118] conv:(2.13)
+ 22. kola=t 161 ==> ekmek=t 101    <conf:(0.63)> lift:(1.01) lev:(0) [0] conv:(0.99)
+ 23. ekmek=t peynir=t 171 ==> zeytin=t 106    <conf:(0.62)> lift:(3.05) lev:(0.07) [71] conv:(2.06)
+ 24. peynir=t 278 ==> ekmek=t 171    <conf:(0.62)> lift:(0.99) lev:(-0) [-2] conv:(0.97)
+ 25. seker=t 168 ==> peynir=t cay=t 102    <conf:(0.61)> lift:(4.4) lev:(0.08) [78] conv:(2.16)
+ 26. peynir=t zeytin=t 175 ==> ekmek=t 106    <conf:(0.61)> lift:(0.97) lev:(-0) [-3] conv:(0.94)
+ 27. yumurta=t 207 ==> ekmek=t 125    <conf:(0.6)> lift:(0.97) lev:(-0) [-4] conv:(0.94)
+
+=== Evaluation ===
+
+

@@ -1,0 +1,145 @@
+
+======================================================================
+Adım 1 — Veriyi okuma
+======================================================================
+1000 fiş okundu. İlk üç fiş:
+   ['peynir', 'zeytin', 'cay', 'makarna', 'domates_sosu', 'kiyma', 'cips', 'su']
+   ['ekmek', 'sut', 'cips', 'kola', 'su']
+   ['ekmek', 'sut', 'peynir', 'zeytin', 'yumurta', 'su']
+
+======================================================================
+Adım 2 — İkili (one-hot) tablo
+======================================================================
+Tablo boyutu: 1000 fiş x 20 ürün
+   bez  cay  cips  deterjan  domates_sosu  ekmek  islak_mendil  kahve  kiyma  kola  makarna  mama  muz  peynir  seker  su  sut  yumurta  yumusatici  zeytin
+0    0    1     1         0             1      0             0      0      1     0        1     0    0       1      0   1    0        0           0       1
+1    0    0     1         0             0      1             0      0      0     1        0     0    0       0      0   1    1        0           0       0
+2    0    0     0         0             0      1             0      0      0     0        0     0    0       1      0   1    1        1           0       1
+
+Ürün destekleri (çoktan aza):
+ekmek           0.624
+su              0.317
+peynir          0.278
+sut             0.257
+makarna         0.221
+yumurta         0.207
+zeytin          0.203
+cay             0.191
+seker           0.168
+bez             0.162
+kola            0.161
+muz             0.144
+cips            0.139
+mama            0.128
+domates_sosu    0.126
+islak_mendil    0.117
+deterjan        0.085
+kiyma           0.071
+kahve           0.070
+yumusatici      0.061
+
+======================================================================
+Adım 3 — Sık öğe kümeleri (min_sup = 0.1)
+======================================================================
+Boyuta göre sık öğe kümesi sayısı (Weka'daki L(1), L(2), L(3)):
+k
+1    16
+2    20
+3     3
+
+Apriori 39 küme, FP-Growth 39 küme buldu. Kümeler aynı mı? True
+Süre: Apriori 2.8 ms, FP-Growth 7.8 ms
+
+3-öğe kümeleri (Weka'daki L(3)):
+  {cay, peynir, seker}             destek = 0.102  (102 fiş)
+  {ekmek, peynir, zeytin}          destek = 0.106  (106 fiş)
+  {peynir, yumurta, zeytin}        destek = 0.103  (103 fiş)
+
+======================================================================
+Adım 4 — Kurallar (min_conf = 0.6)
+======================================================================
+27 kural bulundu (Weka da 27 kural bulur).
+
+                            kural  destek  güven  lift  leverage  conviction
+1                 {mama} => {bez}   0.128   1.00  6.17     0.107         inf
+2         {islak_mendil} => {bez}   0.117   1.00  6.17     0.098         inf
+3     {domates_sosu} => {makarna}   0.126   1.00  4.52     0.098         inf
+4        {peynir, seker} => {cay}   0.102   0.93  4.85     0.081       11.12
+5     {ekmek, zeytin} => {peynir}   0.106   0.88  3.18     0.073        6.19
+6            {zeytin} => {peynir}   0.175   0.86  3.10     0.119        5.23
+7   {yumurta, zeytin} => {peynir}   0.103   0.85  3.06     0.069        4.85
+8                {seker} => {cay}   0.133   0.79  4.14     0.101        3.88
+9                 {bez} => {mama}   0.128   0.79  6.17     0.107        4.15
+10       {cay, seker} => {peynir}   0.102   0.77  2.76     0.065        3.10
+11  {peynir, yumurta} => {zeytin}   0.103   0.75  3.68     0.075        3.14
+12       {cay, peynir} => {seker}   0.102   0.74  4.40     0.079        3.19
+13              {cay} => {peynir}   0.138   0.72  2.60     0.085        2.60
+14        {bez} => {islak_mendil}   0.117   0.72  6.17     0.098        3.18
+15               {cay} => {seker}   0.133   0.70  4.14     0.101        2.74
+16             {seker} => {ekmek}   0.115   0.68  1.10     0.010        1.19
+17          {yumurta} => {peynir}   0.138   0.67  2.40     0.080        2.17
+18               {cay} => {ekmek}   0.127   0.66  1.07     0.008        1.12
+19           {makarna} => {ekmek}   0.145   0.66  1.05     0.007        1.09
+20            {seker} => {peynir}   0.110   0.65  2.36     0.063        2.09
+21           {peynir} => {zeytin}   0.175   0.63  3.10     0.119        2.15
+22              {kola} => {ekmek}   0.101   0.63  1.01     0.001        1.01
+23    {ekmek, peynir} => {zeytin}   0.106   0.62  3.05     0.071        2.10
+24            {peynir} => {ekmek}   0.171   0.62  0.99    -0.002        0.98
+25       {seker} => {cay, peynir}   0.102   0.61  4.40     0.079        2.19
+26    {peynir, zeytin} => {ekmek}   0.106   0.61  0.97    -0.003        0.95
+27           {yumurta} => {ekmek}   0.125   0.60  0.97    -0.004        0.95
+
+======================================================================
+Adım 5 — Güven yüksek ama lift ≈ 1 olan kurallar
+======================================================================
+Ekmeğin desteği 0.624. Fişlerin çoğunda zaten ekmek var;
+bu yüzden '... => {ekmek}' kurallarının güveni yüksek ama lift değeri 1'e yakın:
+
+                          kural  destek  güven  lift  leverage  conviction
+16           {seker} => {ekmek}   0.115   0.68  1.10     0.010        1.19
+18             {cay} => {ekmek}   0.127   0.66  1.07     0.008        1.12
+19         {makarna} => {ekmek}   0.145   0.66  1.05     0.007        1.09
+22            {kola} => {ekmek}   0.101   0.63  1.01     0.001        1.01
+24          {peynir} => {ekmek}   0.171   0.62  0.99    -0.002        0.98
+26  {peynir, zeytin} => {ekmek}   0.106   0.61  0.97    -0.003        0.95
+27         {yumurta} => {ekmek}   0.125   0.60  0.97    -0.004        0.95
+
+Gerçekten ilginç kurallar (lift > 2), lift değerine göre:
+                            kural  destek  güven  lift  leverage  conviction
+1                 {mama} => {bez}   0.128   1.00  6.17     0.107         inf
+2         {islak_mendil} => {bez}   0.117   1.00  6.17     0.098         inf
+14        {bez} => {islak_mendil}   0.117   0.72  6.17     0.098        3.18
+9                 {bez} => {mama}   0.128   0.79  6.17     0.107        4.15
+4        {peynir, seker} => {cay}   0.102   0.93  4.85     0.081       11.12
+3     {domates_sosu} => {makarna}   0.126   1.00  4.52     0.098         inf
+25       {seker} => {cay, peynir}   0.102   0.61  4.40     0.079        2.19
+12       {cay, peynir} => {seker}   0.102   0.74  4.40     0.079        3.19
+8                {seker} => {cay}   0.133   0.79  4.14     0.101        3.88
+15               {cay} => {seker}   0.133   0.70  4.14     0.101        2.74
+11  {peynir, yumurta} => {zeytin}   0.103   0.75  3.68     0.075        3.14
+5     {ekmek, zeytin} => {peynir}   0.106   0.88  3.18     0.073        6.19
+6            {zeytin} => {peynir}   0.175   0.86  3.10     0.119        5.23
+21           {peynir} => {zeytin}   0.175   0.63  3.10     0.119        2.15
+7   {yumurta, zeytin} => {peynir}   0.103   0.85  3.06     0.069        4.85
+23    {ekmek, peynir} => {zeytin}   0.106   0.62  3.05     0.071        2.10
+10       {cay, seker} => {peynir}   0.102   0.77  2.76     0.065        3.10
+13              {cay} => {peynir}   0.138   0.72  2.60     0.085        2.60
+17          {yumurta} => {peynir}   0.138   0.67  2.40     0.080        2.17
+20            {seker} => {peynir}   0.110   0.65  2.36     0.063        2.09
+
+======================================================================
+Adım 6 — min_sup = 0.05 ile yeniden deneme
+======================================================================
+102 sık öğe kümesi, 142 kural.
+0.10 eşiğinde görünmeyen, lift > 2 olan kurallardan bazıları:
+  {deterjan} => {yumusatici}  destek=0.061  güven=0.72  lift=11.76
+  {yumusatici} => {deterjan}  destek=0.061  güven=1.00  lift=11.76
+  {kiyma} => {domates_sosu, makarna}  destek=0.054  güven=0.76  lift=6.04
+  {kiyma, makarna} => {domates_sosu}  destek=0.054  güven=0.76  lift=6.04
+  {kiyma} => {domates_sosu}  destek=0.054  güven=0.76  lift=6.04
+  {domates_sosu, kiyma} => {makarna}  destek=0.054  güven=1.00  lift=4.52
+  {kiyma} => {makarna}  destek=0.071  güven=1.00  lift=4.52
+  {cips, ekmek} => {kola}  destek=0.054  güven=0.64  lift=3.95
+  {cips} => {kola}  destek=0.087  güven=0.63  lift=3.89
+
+Kurallar ve sık öğe kümeleri ciktilar\python klasörüne kaydedildi.

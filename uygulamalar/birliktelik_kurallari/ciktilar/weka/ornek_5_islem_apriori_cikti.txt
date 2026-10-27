@@ -1,0 +1,41 @@
+WARNING: core mtj jar files are not available as resources to this classloader (jdk.internal.loader.ClassLoaders$AppClassLoader@33909752)
+
+Apriori
+=======
+
+Minimum support: 0.6 (3 instances)
+Minimum metric <confidence>: 0.7
+Number of cycles performed: 8
+
+Generated sets of large itemsets:
+
+Size of set of large itemsets L(1): 4
+
+Large Itemsets L(1):
+ekmek=t 4
+sut=t 4
+bez=t 4
+mama=t 3
+
+Size of set of large itemsets L(2): 4
+
+Large Itemsets L(2):
+ekmek=t sut=t 3
+ekmek=t bez=t 3
+sut=t bez=t 3
+bez=t mama=t 3
+
+Best rules found:
+
+ 1. mama=t 3 ==> bez=t 3    <conf:(1)> lift:(1.25) lev:(0.12) [0] conv:(0.6)
+ 2. sut=t 4 ==> ekmek=t 3    <conf:(0.75)> lift:(0.94) lev:(-0.04) [0] conv:(0.4)
+ 3. ekmek=t 4 ==> sut=t 3    <conf:(0.75)> lift:(0.94) lev:(-0.04) [0] conv:(0.4)
+ 4. bez=t 4 ==> ekmek=t 3    <conf:(0.75)> lift:(0.94) lev:(-0.04) [0] conv:(0.4)
+ 5. ekmek=t 4 ==> bez=t 3    <conf:(0.75)> lift:(0.94) lev:(-0.04) [0] conv:(0.4)
+ 6. bez=t 4 ==> sut=t 3    <conf:(0.75)> lift:(0.94) lev:(-0.04) [0] conv:(0.4)
+ 7. sut=t 4 ==> bez=t 3    <conf:(0.75)> lift:(0.94) lev:(-0.04) [0] conv:(0.4)
+ 8. bez=t 4 ==> mama=t 3    <conf:(0.75)> lift:(1.25) lev:(0.12) [0] conv:(0.8)
+
+=== Evaluation ===
+
+

@@ -1,0 +1,40 @@
+support,itemsets
+0.162,{bez}
+0.191,{cay}
+0.139,{cips}
+0.126,{domates_sosu}
+0.624,{ekmek}
+0.117,{islak_mendil}
+0.161,{kola}
+0.221,{makarna}
+0.128,{mama}
+0.144,{muz}
+0.278,{peynir}
+0.168,{seker}
+0.317,{su}
+0.257,{sut}
+0.207,{yumurta}
+0.203,{zeytin}
+0.117,"{bez, islak_mendil}"
+0.128,"{bez, mama}"
+0.127,"{cay, ekmek}"
+0.138,"{cay, peynir}"
+0.133,"{cay, seker}"
+0.1,"{cay, yumurta}"
+0.111,"{cay, zeytin}"
+0.126,"{domates_sosu, makarna}"
+0.101,"{ekmek, kola}"
+0.145,"{ekmek, makarna}"
+0.171,"{ekmek, peynir}"
+0.115,"{ekmek, seker}"
+0.184,"{ekmek, su}"
+0.144,"{ekmek, sut}"
+0.125,"{ekmek, yumurta}"
+0.12,"{ekmek, zeytin}"
+0.11,"{peynir, seker}"
+0.138,"{peynir, yumurta}"
+0.175,"{peynir, zeytin}"
+0.121,"{yumurta, zeytin}"
+0.102,"{cay, peynir, seker}"
+0.106,"{ekmek, peynir, zeytin}"
+0.103,"{peynir, yumurta, zeytin}"

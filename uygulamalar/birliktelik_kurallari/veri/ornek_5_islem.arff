@@ -1,0 +1,17 @@
+% Ders notu Bölüm 6.1-6.2'deki 5 fişlik elle hesaplama örneği.
+
+@relation ornek_5_islem
+
+@attribute ekmek {t}
+@attribute sut {t}
+@attribute bez {t}
+@attribute mama {t}
+@attribute kola {t}
+@attribute yumurta {t}
+
+@data
+t,t,?,?,?,?
+t,?,t,t,?,t
+?,t,t,t,t,?
+t,t,t,t,?,?
+t,t,t,?,t,?
