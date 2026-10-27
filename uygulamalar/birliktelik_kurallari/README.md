@@ -10,6 +10,7 @@ Bu uygulama, ders notunun **6. Sık Örüntüler ve Birliktelik Kuralları** bö
 1. [Veri seti](#1-veri-seti)
 2. [Isınma: Ders notundaki 5 fişi Weka'da doğrulamak](#2-isınma-ders-notundaki-5-fişi-wekada-doğrulamak)
 3. [Weka ile Apriori](#3-weka-ile-apriori)
+   - [Leverage ve conviction'ı anlamak](#leverage-ve-convictionı-anlamak)
 4. [Weka ile FP-Growth](#4-weka-ile-fp-growth)
 5. [Sonuçları yorumlamak](#5-sonuçları-yorumlamak)
 6. [Python karşılığı](#6-python-karşılığı)
@@ -170,10 +171,74 @@ Best rules found:
 | `bez=t 128` | X ve Y'nin birlikte geçtiği fiş sayısı: 128 → destek = 128/1000 = 0.128 |
 | `conf:(1)` | Güven = 128/128 = 1.00: Mama alan herkes bez de almış |
 | `lift:(6.17)` | Lift = 1.00 / 0.162 (bezin desteği) = 6.17 |
-| `lev:(0.11) [107]` | Leverage = P(X∪Y) − P(X)·P(Y) = 0.128 − 0.128·0.162 ≈ 0.107. Köşeli parantezdeki 107, bunun fiş sayısı karşılığıdır: "Bağımsızlık durumuna göre 107 fiş fazla" |
-| `conv:(107.26)` | Conviction = (1 − destek(Y)) / (1 − güven). Kuralın ne kadar az yanıldığını ölçer; 1 bağımsızlık demektir. Bu kural hiç yanılmadığı için çok büyüktür (Bölüm 6'daki nota bakın) |
+| `lev:(0.11) [107]` | Leverage: Mama ve bez, birbirinden bağımsız olsalardı beklenenden **107 fiş daha fazla** birlikte alınmış (aşağıda ayrıntılı) |
+| `conv:(107.26)` | Conviction: Kural, bağımsızlık durumuna göre **çok daha az yanılıyor**; burada hiç yanılmıyor (aşağıda ayrıntılı) |
 
-Ders notunda tanımlanan destek, güven ve lift'e ek olarak Weka iki ölçü daha verir. **Leverage**, birlikte görülme oranının bağımsızlık durumunda beklenenden ne kadar *fazla* olduğudur (lift oranı, leverage farkı ölçer). **Conviction** ise kuralın yanılma oranını, X ve Y bağımsız olsaydı beklenecek yanılma oranıyla karşılaştırır.
+### Leverage ve conviction'ı anlamak
+
+Ders notunda tanımlanan destek, güven ve lift'e ek olarak Weka iki ölçü daha verir. İkisi de lift gibi aynı soruyu sorar: **"X ile Y'nin birbiriyle hiçbir ilgisi olmasaydı ne görürdük, gerçekte ne görüyoruz?"** Farkları, neyi karşılaştırdıklarıdır:
+
+- **Leverage**, X ile Y'nin *birlikte alınma* sayısını karşılaştırır.
+- **Conviction**, kuralın *yanıldığı* fiş sayısını karşılaştırır.
+
+Örnek olarak `{zeytin} ⇒ {peynir}` kuralını kullanalım. 1000 fişin 203'ünde zeytin, 278'inde peynir, 175'inde ikisi birlikte var.
+
+#### Leverage: "Beklenenden kaç fiş fazla?"
+
+$$\text{leverage}(X \Rightarrow Y) = \text{destek}(X \cup Y) - \text{destek}(X) \times \text{destek}(Y)$$
+
+| Adım | Hesap | Fiş sayısıyla |
+|---|---|---|
+| 1. Bağımsız olsalardı birlikte görülme oranı | 0.203 × 0.278 = 0.056 | 1000 fişte ≈ **56** fiş |
+| 2. Gerçekte birlikte görülme oranı | 175 / 1000 = 0.175 | **175** fiş |
+| 3. Fark (leverage) | 0.175 − 0.056 = **0.119** | 175 − 56 ≈ **118** fiş fazla |
+
+Weka'nın `lev:(0.12) [118]` çıktısı tam olarak budur: Parantezdeki 0.12 oran, köşeli parantezdeki 118 ise fiş sayısı karşılığıdır.
+
+- **leverage > 0:** Birlikte, beklenenden sık alınıyorlar.
+- **leverage = 0:** Bağımsızlar.
+- **leverage < 0:** Beklenenden seyrek alınıyorlar. Örneğin `{yumurta} ⇒ {ekmek}` için beklenen 129 fiş, gerçek 125 fiştir. Weka bu yüzden `lev:(-0) [-4]` yazar.
+
+**Lift ile farkı nedir?** İkisi de aynı iki sayıyı (gerçek ve beklenen) karşılaştırır. Lift bu iki sayıyı **böler** (175 / 56 = 3.10 kat), leverage ise **çıkarır** (175 − 56 = 118 fiş). Bu fark, nadir ürünlerde önem kazanır. Bağımsızlıkta 2 fişte görülmesi beklenen bir çift 6 fişte görülürse lift yine 3'tür. Ama leverage yalnızca 4 fiş fazlalık gösterir; yani ilişki güçlüdür, fakat mağazaya etkisi küçüktür. Kısacası lift **ilişkinin gücünü**, leverage ise **ilişkinin kaç müşteriyi etkilediğini** gösterir.
+
+#### Conviction: "Kural, bağımsızlığa göre kaç kat daha az yanılıyor?"
+
+Bir kural, X'in olup Y'nin olmadığı fişlerde **yanılır**. `{zeytin} ⇒ {peynir}` kuralı için bunlar, zeytin alıp peynir almayan müşterilerdir.
+
+$$\text{conviction}(X \Rightarrow Y) = \frac{1 - \text{destek}(Y)}{1 - \text{güven}(X \Rightarrow Y)} = \frac{\text{bağımsızlıkta beklenen yanılma}}{\text{gerçek yanılma}}$$
+
+| Adım | Hesap | Fiş sayısıyla |
+|---|---|---|
+| 1. Bağımsız olsalardı yanılma oranı: Peynirsiz fiş oranı | 1 − 0.278 = 0.722 | Zeytinli 203 fişin ≈ **146.6**'sı |
+| 2. Gerçek yanılma oranı | 1 − 0.862 = 0.138 | 203 − 175 = **28** fiş |
+| 3. Oran (conviction) | 0.722 / 0.138 = **5.23** | 146.6 / 28 = **5.23** |
+
+Yani bu kural, zeytin ile peynirin ilgisiz olduğu bir dünyaya göre **5 kat daha az yanılıyor**.
+
+- **conviction = 1:** Bağımsızlar; kural, şansa göre daha iyi değil.
+- **conviction > 1:** Kural şanstan daha az yanılıyor. Değer büyüdükçe kural daha güvenilir olur.
+- **conviction = ∞:** Kural hiç yanılmıyor. `{mama} ⇒ {bez}` kuralında bağımsızlıkta 128 × 0.838 ≈ 107.3 yanılma beklenir, gerçekte ise hiç yoktur (0). Sıfıra bölme olmasın diye Weka paydaya 1 ekler: 107.3 / (0 + 1) = **107.26**. Weka'nın `conv:(107.26)` çıktısı budur.
+
+**Yön önemlidir.** Destek, lift ve leverage **simetriktir**: `{zeytin} ⇒ {peynir}` ile `{peynir} ⇒ {zeytin}` aynı değerleri verir. Güven ve conviction ise **yönlüdür**:
+
+| Kural | Güven | Lift | Leverage | Conviction |
+|---|---|---|---|---|
+| {zeytin} ⇒ {peynir} | 0.86 | 3.10 | 0.119 | 5.23 |
+| {peynir} ⇒ {zeytin} | 0.63 | 3.10 | 0.119 | 2.15 |
+| {mama} ⇒ {bez} | 1.00 | 6.17 | 0.107 | ∞ |
+| {bez} ⇒ {mama} | 0.79 | 6.17 | 0.107 | 4.15 |
+
+Lift bu iki ürünün ilişkili olduğunu söyler ama kuralın hangi yönde kurulacağını söylemez. Conviction ise "zeytin alan peynir de alır" yönünün, tersinden daha sağlam olduğunu gösterir.
+
+**Özet: Beş ölçü hangi soruyu yanıtlar?**
+
+| Ölçü | Yanıtladığı soru | Bağımsızlıkta değeri | Yönlü mü? |
+|---|---|---|---|
+| Destek | X ve Y fişlerin ne kadarında birlikte var? | — | Hayır |
+| Güven | X alanların ne kadarı Y de alıyor? | destek(Y) | Evet |
+| Lift | Birlikte alınma, beklenenin kaç katı? | 1 | Hayır |
+| Leverage | Birlikte alınma, beklenenden ne kadar fazla? | 0 | Hayır |
+| Conviction | Kural, beklenenden kaç kat az yanılıyor? | 1 | Evet |
 
 > **"Number of cycles performed: 18" ne demek?** Weka'nın Apriori'si destek eşiğini doğrudan kullanmaz. `upperBoundMinSupport` (1.0) değerinden başlar, eşiği her turda `delta` (0.05) kadar düşürür ve `numRules` sayıda kural bulunca durur. Eşik `lowerBoundMinSupport` değerinin altına inemez. Burada 0.95 → 0.90 → … → 0.10 arasında 18 tur yapılmıştır. `numRules` değerini 100 yaptığımız için Weka 27 kuralla yetinmeyip 0.10'a kadar inmiştir. Varsayılan `numRules = 10` ile bıraksaydınız, Weka 10 kural bulduğu ilk eşikte duracaktı ve sonuç, eşiği tam 0.10 olan Python sonucuyla karşılaştırılamazdı.
 
@@ -297,7 +362,7 @@ kurallar = association_rules(sik_fp, num_itemsets=len(X),
 
 **Adım 5** lift değeri 1'e yakın "ekmek kurallarını" ve lift > 2 olan ilginç kuralları ayrı ayrı listeler. **Adım 6** destek eşiğini 0.05'e düşürür ve 0.10'da kaybolan deterjan–yumuşatıcı, kıyma–domates sosu ve cips–kola kurallarını gösterir. Kurallar ve sık öğe kümeleri `ciktilar/python/` altına CSV olarak kaydedilir.
 
-> **Conviction neden farklı?** Güveni 1 olan kurallarda conviction'ın paydası $1 - \text{güven} = 0$ olur. Python bu durumda `inf` (sonsuz) yazar. Weka ise paydaya 1 fiş ekleyerek düzeltme yapar ve sonlu ama çok büyük bir sayı (107.26) verir. Diğer kurallarda da bu düzeltme yüzünden iki aracın conviction değerleri biraz farklıdır (ör. 9.89 ve 11.12). Destek, güven, lift ve leverage ise birebir aynıdır.
+> **Conviction neden farklı?** Güveni 1 olan kurallarda conviction'ın paydası $1 - \text{güven} = 0$ olur. Python bu durumda `inf` (sonsuz) yazar. Weka ise paydaya 1 fiş ekleyerek düzeltme yapar ve sonlu ama çok büyük bir sayı (107.26) verir. Diğer kurallarda da bu düzeltme yüzünden iki aracın conviction değerleri biraz farklıdır. Örneğin `{peynir, seker} ⇒ {cay}` kuralında beklenen yanılma 89.0 fiş, gerçek yanılma 8 fiştir. Python 89.0 / 8 = 11.12 verir, Weka ise 89.0 / (8 + 1) = 9.89. Destek, güven, lift ve leverage ise birebir aynıdır.
 
 > **Hız karşılaştırması hakkında.** Betik iki algoritmanın sürelerini de yazdırır. Bu küçük veride (20 ürün, 1000 fiş) `mlxtend`'in Apriori'si FP-Growth kadar, hatta ondan hızlı çalışabilir, çünkü vektörel (numpy) hesap kullanır. FP-Growth'un üstünlüğü yüzlerce/binlerce ürün, milyonlarca fiş ve düşük destek eşiğinde ortaya çıkar. Bu yüzden Spark MLlib büyük veri için Apriori'yi değil, FP-Growth'u sunar.
 
