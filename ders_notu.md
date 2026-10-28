@@ -258,7 +258,7 @@ Anscombe dörtlüsü (Anscombe's quartet) görselleştirmenin neden vazgeçilmez
 
 ### 3.4 Benzerlik ve Uzaklık Ölçüleri
 
-Kümeleme, k-en yakın komşu ve aykırı değer tespiti gibi pek çok yöntem tek bir soruya dayanır: **"İki nesne birbirine ne kadar benziyor?"** Bu soruyu sayısallaştıran fonksiyonlara **uzaklık (distance)** veya **benzemezlik (dissimilarity)** ölçüleri denir. Bir uzaklık ölçüsü genellikle şu özellikleri sağlamalıdır: negatif olmama, simetri ($d(x,y)=d(y,x)$) ve üçgen eşitsizliği ($d(x,z) \le d(x,y)+d(y,z)$).
+Kümeleme, k-en yakın komşu ve aykırı değer tespiti gibi pek çok yöntem tek bir soruya dayanır: **"İki nesne birbirine ne kadar benziyor?"** Bu soruyu sayısallaştıran fonksiyonlara **uzaklık (distance)** veya **benzemezlik (dissimilarity)** ölçüleri denir. Bir uzaklık ölçüsü genellikle şu özellikleri sağlamalıdır: negatif olmama, simetri: $d(x,y)=d(y,x)$ ve üçgen eşitsizliği: $d(x,z) \le d(x,y)+d(y,z)$.
 
 **Sayısal nitelikler için Minkowski ailesi.** $p$ boyutlu iki nokta $x$ ve $y$ için:
 
@@ -1546,9 +1546,9 @@ Derin öğrenmenin son on yıldaki yükselişinin üç temel nedeni vardır: **b
 | Algoritma | Yaklaşık maliyet | Büyük veride sorun |
 |---|---|---|
 | k-NN (tek tahmin) | $O(n \cdot p)$ | Her tahminde tüm veri taranır |
-| Hiyerarşik kümeleme | $O(n^2)$ bellek, $O(n^2)$–$O(n^3)$ zaman | 10⁶ noktada pratikte imkânsız |
+| Hiyerarşik kümeleme | $O(n^2)$ bellek, $O(n^2)$ – $O(n^3)$ zaman | 10⁶ noktada pratikte imkânsız |
 | Apriori | Her seviyede bir tam tarama + aday patlaması | Çok sayıda disk taraması |
-| SVM (çekirdekli) | $O(n^2)$–$O(n^3)$ | Milyonlarca örnekte çok yavaş |
+| SVM (çekirdekli) | $O(n^2)$ – $O(n^3)$ | Milyonlarca örnekte çok yavaş |
 | k-Means (iterasyon başına) | $O(n \cdot k \cdot p)$ | Ölçeklenebilir, paralelleştirilebilir |
 
 **Witten ve arkadaşlarına göre büyük veri setlerinden öğrenmenin yolları:**
