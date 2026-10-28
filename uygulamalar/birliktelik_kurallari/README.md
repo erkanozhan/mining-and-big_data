@@ -187,7 +187,9 @@ Ders notunda tanımlanan destek, güven ve lift'e ek olarak Weka iki ölçü dah
 
 $$\text{leverage}(X \Rightarrow Y) = \text{destek}(X \cup Y) - \text{destek}(X) \times \text{destek}(Y)$$
 
-$$\underbrace{\text{leverage}(X \Rightarrow Y)}_{\substack{\text{beklenenden}\\\text{fazlalık}}} = \overbrace{\text{destek}(X \cup Y)}^{\substack{\text{gerçekte birlikte}\\\text{görülme oranı}}} - \overbrace{\text{destek}(X) \times \text{destek}(Y)}^{\substack{\text{bağımsız olsalardı beklenen}\\\text{birlikte görülme oranı}}}$$
+```math
+\underbrace{\text{leverage}(X \Rightarrow Y)}_{\substack{\text{beklenenden}\\\text{fazlalık}}} = \overbrace{\text{destek}(X \cup Y)}^{\substack{\text{gerçekte birlikte}\\\text{görülme oranı}}} - \overbrace{\text{destek}(X) \times \text{destek}(Y)}^{\substack{\text{bağımsız olsalardı beklenen}\\\text{birlikte görülme oranı}}}
+```
 
 **Nasıl okunur?** "X ise Y kuralının leverage'ı eşittir, X birleşim Y'nin desteği eksi X'in desteği çarpı Y'nin desteği."
 
@@ -211,7 +213,9 @@ Bir kural, X'in olup Y'nin olmadığı fişlerde **yanılır**. `{zeytin} ⇒ {p
 
 $$\text{conviction}(X \Rightarrow Y) = \frac{1 - \text{destek}(Y)}{1 - \text{güven}(X \Rightarrow Y)} = \frac{\text{bağımsızlıkta beklenen yanılma}}{\text{gerçek yanılma}}$$
 
-$$\underbrace{\text{conviction}(X \Rightarrow Y)}_{\substack{\text{kural kaç kat}\\\text{az yanılıyor?}}} = \frac{\overbrace{1 - \text{destek}(Y)}^{\substack{\text{Y'siz fiş oranı: bağımsızlıkta}\\\text{beklenen yanılma oranı}}}}{\underbrace{1 - \text{güven}(X \Rightarrow Y)}_{\substack{\text{X alıp Y almayanların oranı:}\\\text{gerçek yanılma oranı}}}}$$
+```math
+\underbrace{\text{conviction}(X \Rightarrow Y)}_{\substack{\text{kural kaç kat}\\\text{az yanılıyor?}}} = \frac{\overbrace{1 - \text{destek}(Y)}^{\substack{\text{Y'siz fiş oranı: bağımsızlıkta}\\\text{beklenen yanılma oranı}}}}{\underbrace{1 - \text{güven}(X \Rightarrow Y)}_{\substack{\text{X alıp Y almayanların oranı:}\\\text{gerçek yanılma oranı}}}}
+```
 
 **Nasıl okunur?** "X ise Y kuralının conviction'ı eşittir, bir eksi Y'nin desteği, bölü bir eksi X ise Y kuralının güveni."
 
