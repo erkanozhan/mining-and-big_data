@@ -236,6 +236,12 @@ Dağılım simetrikse bu üç ölçü birbirine yakındır. Gelir gibi **sağa �
 
 **Beş sayı özeti ve kutu grafiği.** *Minimum, Q1, Medyan, Q3, Maksimum* değerlerine **beş sayı özeti** denir ve **kutu grafiği (box plot)** ile görselleştirilir. Kutu Q1'den Q3'e uzanır, içindeki çizgi medyandır. Bıyıklar (whiskers), aykırı sayılmayan en uç değerlere kadar uzanır. **Q1 − 1.5·IQR**'nin altında veya **Q3 + 1.5·IQR**'nin üstünde kalan noktalar aykırı değer adayı olarak tek tek işaretlenir.
 
+```math
+\underbrace{\overbrace{Q_1}^{\text{1. çeyrek}} - \overbrace{1.5 \cdot \text{IQR}}^{\substack{\text{kutu boyunun}\\\text{1.5 katı}}}}_{\substack{\text{alt sınır: altındaki noktalar}\\\text{aykırı değer adayı}}} \qquad \underbrace{\overbrace{Q_3}^{\text{3. çeyrek}} + \overbrace{1.5 \cdot \text{IQR}}^{\substack{\text{kutu boyunun}\\\text{1.5 katı}}}}_{\substack{\text{üst sınır: üstündeki noktalar}\\\text{aykırı değer adayı}}}
+```
+
+**Ne anlatıyor?** Kutunun boyu (IQR = Q3 − Q1) 1.5 ile çarpılır ve bu pay, kutunun alt kenarından (Q1) aşağıya, üst kenarından (Q3) yukarıya doğru eklenir. Bu iki sınırın dışında kalan noktalar, verinin ortadaki yarısından alışılmadık ölçüde uzak olduğu için aykırı değer adayı sayılır.
+
 ![Kutu grafiğinin anatomisi](images/vm-kutu-grafigi.svg)
 
 Şekildeki örnekte 40 öğrencinin sınav notları kullanılmıştır: Q1 = 63, medyan = 70, Q3 = 77, dolayısıyla IQR = 14'tür. Aykırı değer sınırları 63 − 1.5·14 = **42** ve 77 + 1.5·14 = **98** olarak hesaplanır. Bu nedenle 15, 30 ve 99 notları aykırı değer olarak işaretlenmiş, bıyıklar ise sınırlar içindeki en uç değerlere (48 ve 90) kadar uzanmıştır. Sınıf ortalaması (68.6) iki düşük aykırı değer yüzünden medyanın (70) altında kalmıştır.
@@ -426,6 +432,12 @@ Bu yönler, verinin kovaryans matrisinin **özvektörleridir (eigenvectors)**. H
 **Ne anlatıyor?** Değerin ortalamadan kaç standart sapma uzakta olduğu bulunur. Sınav ortalaması 60, standart sapma 10 ise 80 alan öğrencinin z-skoru (80 − 60) / 10 = **2**'dir.
 
 * **Ondalık ölçekleme:** $v' = v / 10^j$ (en büyük mutlak değer 1'in altına inecek şekilde).
+
+```math
+\underbrace{v'}_{\text{yeni değer}} = \frac{\overbrace{v}^{\text{özgün değer}}}{\underbrace{10^j}_{\substack{\text{10'un j. kuvveti: en büyük mutlak}\\\text{değeri 1'in altına indirir}}}}
+```
+
+**Ne anlatıyor?** Değer 10'un bir kuvvetine bölünür; böylece yalnızca ondalık virgülün yeri kayar. j, verideki en büyük mutlak değer 1'in altına inecek biçimde seçilir. Bütün değerler aynı sayıya bölündüğü için aralarındaki oranlar değişmez.
 
 **Ayrıklaştırma (discretization).** Sürekli bir niteliği aralıklara bölerek kategorik hâle getirir. Örneğin yaş → {genç, orta yaş, yaşlı}. Bazı algoritmalar (ör. klasik Apriori, bazı Naive Bayes sürümleri) yalnızca kategorik veriyle çalışır. Yaklaşımlar:
 
@@ -928,6 +940,12 @@ Aynı hesap diğer nitelikler için yapıldığında: Kazanç(Nem) = 0.152, Kaza
 
 **Diğer bölme ölçütleri.** Bilgi kazancı çok değerli niteliklere (ör. müşteri numarası) yanlıdır; her müşteriye ayrı dal açan bir nitelik mükemmel(!) kazanç verir. C4.5 bu sorunu **kazanç oranı (gain ratio)** ile düzeltir. CART ise **Gini indeksi** kullanır: $\text{Gini}(S) = 1 - \sum_i p_i^2$. scikit-learn'ün karar ağaçları varsayılan olarak Gini ile çalışan, ikili bölmeler yapan CART algoritmasını kullanır.
 
+```math
+\underbrace{\text{Gini}(S)}_{\substack{\text{S kümesinin}\\\text{safsızlığı}}} = 1 - \underbrace{\sum_{i}}_{\substack{\text{bütün sınıflar}\\\text{için topla}}} \overbrace{p_i^2}^{\substack{\text{i. sınıfın oranının}\\\text{karesi}}}
+```
+
+**Ne anlatıyor?** Gini indeksi de entropi gibi bir kümedeki sınıf karışıklığını ölçer: Her sınıfın oranının karesi alınır, bu kareler toplanır ve sonuç 1'den çıkarılır. Karelerin toplamı, kümeden (iadeli olarak) rastgele çekilen iki örneğin aynı sınıftan çıkma olasılığıdır; Gini ise bu iki örneğin farklı sınıflardan çıkma olasılığını verir. Bütün örnekler aynı sınıftaysa Gini 0'dır. Logaritma içermediği için entropiden daha hızlı hesaplanır.
+
 **Budama (pruning).** Sınırsız büyüyen bir ağaç, gürültü dahil eğitim verisindeki her ayrıntıyı ezberler. **Ön budama (pre-pruning)**, ağacın büyümesini erken durdurur (maksimum derinlik, yapraktaki minimum örnek sayısı). **Son budama (post-pruning)** ise ağacı tam büyütüp sonra genellemeye katkı sağlamayan dalları keser.
 
 **Python ile bilgi kazancı ve karar ağacı:**
@@ -1024,9 +1042,7 @@ Laplace düzeltmesinde payın yanında paydanın da büyütülmesi gerekir. Aksi
 \underbrace{P(x_j = v \mid C)}_{\substack{\text{düzeltilmiş}\\\text{olasılık}}} = \frac{\overbrace{n_{v,C}}^{\substack{\text{C sınıfında v değerini}\\\text{alan örnek sayısı}}} + 1}{\underbrace{n_C}_{\substack{\text{C sınıfındaki}\\\text{örnek sayısı}}} + \underbrace{\lvert V_j \rvert}_{\substack{\text{niteliğin farklı}\\\text{değer sayısı}}}}
 ```
 
-**Ne anlatıyor?** Her değerin sayımına 1 eklenir; böylece eğitimde hiç görülmemiş bir değer de sıfır olmayan küçük bir olasılık alır. Paydaya değer sayısının eklenmesi, olasılıkların toplamının yine 1 olmasını sağlar.
-
-**Ne anlatıyor?** Her değere, veride hiç görülmemiş olsa bile "bir kez görülmüş" muamelesi yapılır. Niteliğin $\lvert V_j \rvert$ farklı değeri olduğu için paya toplam $\lvert V_j \rvert$ tane 1 eklenmiş olur; paydaya da aynı sayı eklenince olasılıkların toplamı yine 1 kalır.
+**Ne anlatıyor?** Her değere, veride hiç görülmemiş olsa bile "bir kez görülmüş" muamelesi yapılır; böylece eğitimde hiç görülmemiş bir değer de sıfır olmayan küçük bir olasılık alır. Niteliğin $\lvert V_j \rvert$ farklı değeri olduğu için paya toplam $\lvert V_j \rvert$ tane 1 eklenmiş olur; paydaya da aynı sayı eklenince olasılıkların toplamı yine 1 kalır.
 
 **Örnek:** Hava Durumu niteliğinin 3 değeri vardır (Güneşli, Bulutlu, Yağmurlu). Tenis oynanmayan 5 günün hiçbiri bulutlu değildir:
 
@@ -1107,6 +1123,26 @@ Dört kutunun adları şunlardır:
 | **GN (TN)** | Gerçek Negatif | True Negative | Gerçekte negatif, model de negatif dedi |
 
 > **Adları karıştırmamak için:** İkinci kelime (*Pozitif/Negatif*) modelin **ne dediğini**, ilk kelime (*Gerçek/Sahte*) bu sözün **doğru çıkıp çıkmadığını** söyler. "Sahte Negatif", modelin "negatif" dediği, ama bu sözün sahte çıktığı, yani aslında pozitif olan örnektir. Metinde ve formüllerde literatürle uyum için İngilizce kısaltmalar (TP, FN, FP, TN) kullanılmaya devam edilecektir.
+
+Şekildeki metriklerin açıklamalı formülleri şunlardır:
+
+```math
+\text{Doğruluk} = \frac{\overbrace{\text{TP} + \text{TN}}^{\text{doğru tahminler}}}{\underbrace{\text{TP} + \text{TN} + \text{FP} + \text{FN}}_{\text{bütün tahminler}}}
+```
+
+**Ne anlatıyor?** Doğruluk, modelin doğru sınıflandırdığı örneklerin bütün örneklere oranıdır. Hatanın türünü (FP mi, FN mi) ayırt etmez; bu yüzden aşağıda görülecek doğruluk paradoksuna açıktır.
+
+```math
+\text{Kesinlik} = \frac{\overbrace{\text{TP}}^{\substack{\text{isabetli}\\\text{"pozitif" kararlar}}}}{\underbrace{\text{TP} + \text{FP}}_{\substack{\text{modelin "pozitif"}\\\text{dediği bütün örnekler}}}} \qquad \text{Duyarlılık} = \frac{\overbrace{\text{TP}}^{\substack{\text{yakalanan}\\\text{pozitifler}}}}{\underbrace{\text{TP} + \text{FN}}_{\substack{\text{gerçekte pozitif olan}\\\text{bütün örnekler}}}}
+```
+
+**Ne anlatıyor?** İki metriğin payı aynıdır (TP); fark paydadadır. Kesinlik, modelin "pozitif" dediği örneklerin ne kadarının gerçekten pozitif olduğunu; duyarlılık ise gerçekte pozitif olan örneklerin ne kadarının yakalandığını gösterir. Özgüllük, duyarlılığın negatif sınıf için hesaplanmış karşılığıdır: $\text{TN} / (\text{TN} + \text{FP})$.
+
+```math
+\underbrace{\text{F1}}_{\substack{\text{kesinlik ve duyarlılığın}\\\text{harmonik ortalaması}}} = \frac{\overbrace{2 \cdot \text{Kesinlik} \cdot \text{Duyarlılık}}^{\text{iki metriğin çarpımının 2 katı}}}{\underbrace{\text{Kesinlik} + \text{Duyarlılık}}_{\text{iki metriğin toplamı}}}
+```
+
+**Ne anlatıyor?** F1, kesinlik ile duyarlılığın harmonik ortalamasıdır. Aritmetik ortalamadan farkı, küçük olan değere daha çok ağırlık vermesidir: İki metrikten biri 0'a yaklaştığında F1 de 0'a yaklaşır. Bu yüzden F1'in yüksek çıkması için kesinliğin ve duyarlılığın birlikte yüksek olması gerekir.
 
 **Örnek: Hastalık taraması.** 1000 kişi taranıyor, bunlardan 50'si gerçekten hasta. Modelimizin sonuçları:
 
@@ -1382,6 +1418,13 @@ Etiketli veri varsa aykırı değer tespiti bir sınıflandırma problemine dön
 **İstatistiksel (model tabanlı) yöntemler.** Normal verinin bir olasılık dağılımına uyduğu varsayılır. Bu modele göre olasılığı çok düşük kalan noktalar aykırıdır.
 
 * **Z-skor kuralı:** $|z| = |x - \mu| / \sigma > 3$ olan noktalar aykırıdır (normal dağılımda verinin %99.7'si ±3σ içindedir).
+
+```math
+\underbrace{|z|}_{\substack{\text{z-skorunun}\\\text{mutlak değeri}}} = \frac{\overbrace{|x - \mu|}^{\substack{\text{ortalamadan uzaklık}\\\text{(işaretsiz)}}}}{\underbrace{\sigma}_{\text{standart sapma}}} > \underbrace{3}_{\substack{\text{eşik: 3 standart}\\\text{sapma}}}
+```
+
+**Ne anlatıyor?** Noktanın ortalamadan kaç standart sapma uzakta olduğu, yönüne bakılmaksızın hesaplanır; bu uzaklık 3 standart sapmayı aşıyorsa nokta aykırı sayılır. Ortalama ve standart sapma da aykırı değerlerden etkilendiği için birkaç çok uç değer içeren verilerde bu kural, aykırı değerleri gözden kaçırabilir.
+
 * **IQR kuralı (Tukey):** Kutu grafiğindeki bıyıkların dışı. Dağılım varsayımı yapmaz, aykırı değerlere dayanıklıdır (bkz. Bölüm 3.2).
 * **Çok değişkenli:** Mahalanobis uzaklığı, Gauss karışım modelleri.
 
@@ -1672,6 +1715,12 @@ Büyük veri teknolojileri **yatay ölçeklemeyi** esas alır. Google'ın 2000'l
 **Hesaplamayı veriye götürmek (data locality).** Dağıtık sistemlerde en pahalı işlem, veriyi ağ üzerinden taşımaktır. 1 TB veriyi işlem sunucusuna taşımak yerine, birkaç kilobaytlık programı verinin bulunduğu düğümlere göndermek çok daha verimlidir. Bu ilke, Kısım II'de göreceğimiz HDFS ve YARN tasarımının merkezindedir.
 
 > **Amdahl Yasası:** Paralelleştirmenin de bir sınırı vardır. Bir programın paralelleştirilemeyen (seri) kısmının oranı $s$ ise, $N$ işlemciyle elde edilebilecek en yüksek hızlanma $\frac{1}{s + (1-s)/N}$ olur. Programın %10'u seri ise, sonsuz işlemciyle bile en fazla **10 kat** hızlanma elde edilir. Bu yüzden MapReduce ve Spark gibi çerçeveler işi, birbirinden bağımsız ve **utanç verici derecede paralel (embarrassingly parallel)** parçalara bölmeye çalışır.
+>
+> ```math
+> \underbrace{\text{Hızlanma}(N)}_{\substack{\text{N işlemciyle en}\\\text{yüksek hızlanma}}} = \frac{\overbrace{1}^{\substack{\text{tek işlemcideki}\\\text{süre (1 birim)}}}}{\underbrace{s}_{\substack{\text{seri kısım:}\\\text{kısalmaz}}} + \underbrace{(1-s)/N}_{\substack{\text{paralel kısım:}\\\text{N işlemciye bölünür}}}}
+> ```
+>
+> **Ne anlatıyor?** Programın tek işlemcideki çalışma süresi 1 birim kabul edilir. Paralel kısım N işlemciye bölündükçe kısalır, ama seri kısım (s) olduğu gibi kalır; N ne kadar büyürse büyüsün payda s'nin altına inemez. Bu yüzden hızlanma hiçbir zaman 1/s'yi aşamaz.
 
 ### 12.3 Sharding ve Replikasyon
 
