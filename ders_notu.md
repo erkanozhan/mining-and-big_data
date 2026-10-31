@@ -190,7 +190,7 @@ Niteliklerin bir de **ayrık (discrete)** ya da **sürekli (continuous)** olup o
 
 Veriyi tanımanın ilk adımı birkaç özet istatistiğe bakmaktır.
 
-> **Formülleri okuma rehberi.** Bu notta önemli formüllerin hemen altında aynı formülün **açıklamalı** bir kopyası vardır: Üst ve alt parantezler (︷ ︸), formülün hangi parçasının ne anlama geldiğini gösterir. **"Nasıl okunur?"** satırı ise formülün sesli okunuşudur. En sık karşılaşacağınız semboller:
+> **Formülleri okuma rehberi.** Bu notta önemli formüllerin hemen altında aynı formülün **açıklamalı** bir kopyası vardır: Üst ve alt parantezler (︷ ︸), formülün hangi parçasının ne anlama geldiğini gösterir. **"Ne anlatıyor?"** satırı ise formülün ne söylediğini sade bir dille açıklar; tablodaki "Nasıl okunur?" sütunu yalnızca sembollerin okunuşunu verir. En sık karşılaşacağınız semboller:
 >
 > | Sembol | Nasıl okunur? | Anlamı |
 > |---|---|---|
@@ -214,7 +214,7 @@ Veriyi tanımanın ilk adımı birkaç özet istatistiğe bakmaktır.
 \underbrace{\bar{x}}_{\text{ortalama}} = \underbrace{\frac{1}{n}}_{\substack{\text{toplamı}\\\text{n'ye böl}}} \; \underbrace{\sum_{i=1}^{n}}_{\substack{\text{i = 1'den n'ye kadar}\\\text{hepsini topla}}} \overbrace{x_i}^{\text{i. değer}}
 ```
 
-**Nasıl okunur?** "x bar eşittir, bir bölü n çarpı, i eşittir 1'den n'ye kadar x alt i'lerin toplamı." Yani: Bütün değerleri topla, değer sayısına böl.
+**Ne anlatıyor?** Bütün değerler toplanır ve değer sayısına bölünür.
 
 * **Medyan (median):** Sıralanmış verinin ortasındaki değerdir. Aykırı değerlere dayanıklıdır; yukarıdaki örnekte medyan 30 bin TL'dir.
 * **Mod (mode):** En sık görülen değerdir. Nominal veride kullanılabilen tek merkezi eğilim ölçüsüdür.
@@ -232,7 +232,7 @@ Dağılım simetrikse bu üç ölçü birbirine yakındır. Gelir gibi **sağa �
 \underbrace{\sigma^2}_{\text{varyans}} = \underbrace{\frac{1}{n}\sum_{i=1}^{n}}_{\substack{\text{n değerin}\\\text{ortalamasını al}}} \underbrace{\big(\overbrace{x_i - \bar{x}}^{\text{ortalamadan sapma}}\big)^2}_{\text{sapmanın karesi}} \qquad \underbrace{\sigma}_{\text{standart sapma}} = \sqrt{\sigma^2}
 ```
 
-**Nasıl okunur?** "Sigma kare eşittir, bir bölü n çarpı, i eşittir 1'den n'ye kadar x alt i eksi x bar'ın karelerinin toplamı. Sigma eşittir karekök sigma kare." Yani: Her değerin ortalamadan ne kadar saptığını bul, karesini al (ortalamanın altındaki ve üstündeki sapmalar birbirini götürmesin diye), bu karelerin ortalamasını al. Karekök almak, birimi verinin birimine geri döndürür (TL² → TL).
+**Ne anlatıyor?** Her değerin ortalamadan ne kadar saptığı bulunur ve karesi alınır (ortalamanın altındaki ve üstündeki sapmalar birbirini götürmesin diye); bu karelerin ortalaması varyanstır. Karekök almak, birimi verinin birimine geri döndürür (TL² → TL).
 
 **Beş sayı özeti ve kutu grafiği.** *Minimum, Q1, Medyan, Q3, Maksimum* değerlerine **beş sayı özeti** denir ve **kutu grafiği (box plot)** ile görselleştirilir. Kutu Q1'den Q3'e uzanır, içindeki çizgi medyandır. Bıyıklar (whiskers), aykırı sayılmayan en uç değerlere kadar uzanır. **Q1 − 1.5·IQR**'nin altında veya **Q3 + 1.5·IQR**'nin üstünde kalan noktalar aykırı değer adayı olarak tek tek işaretlenir.
 
@@ -268,7 +268,7 @@ $$d(x, y) = \left( \sum_{i=1}^{p} |x_i - y_i|^h \right)^{1/h}$$
 \underbrace{d(x, y)}_{\substack{\text{x ile y arasındaki}\\\text{uzaklık}}} = \Bigg( \underbrace{\sum_{i=1}^{p}}_{\substack{\text{p boyutun}\\\text{hepsinde topla}}} \overbrace{|x_i - y_i|}^{\substack{\text{i. boyuttaki fark}\\\text{(işaretsiz)}}}{}^{\,h} \Bigg)^{1/h}
 ```
 
-**Nasıl okunur?** "x ile y'nin uzaklığı eşittir, i eşittir 1'den p'ye kadar x alt i eksi y alt i'nin mutlak değerinin h'inci kuvvetlerinin toplamının h'inci dereceden kökü." $h = 2$ için: Her boyuttaki farkın karesini al, topla, karekök al. Bu, Pisagor teoreminin p boyuta genişletilmiş hâlidir.
+**Ne anlatıyor?** İki nokta arasındaki farklar her boyutta ayrı ayrı alınır, mutlak değerlerinin h. kuvvetleri toplanır ve toplamın h. dereceden kökü alınır. $h = 2$ için her boyuttaki farkın karesi alınır, toplanır ve karekökü alınır; bu, Pisagor teoreminin p boyuta genişletilmiş hâlidir.
 
 * $h = 2$ → **Öklid uzaklığı (Euclidean):** Kuş uçuşu uzaklık.
 * $h = 1$ → **Manhattan uzaklığı (City-block):** Izgara biçimli sokaklarda taksinin gideceği yol.
@@ -284,7 +284,7 @@ $$d(x, y) = \left( \sum_{i=1}^{p} |x_i - y_i|^h \right)^{1/h}$$
 \underbrace{\cos(x, y)}_{\substack{\text{x ile y'nin}\\\text{benzerliği}}} = \frac{\overbrace{x \cdot y}^{\substack{\text{iç çarpım: aynı boyuttaki}\\\text{değerleri çarp, topla}}}}{\underbrace{\|x\|}_{\text{x'in uzunluğu}} \, \underbrace{\|y\|}_{\text{y'nin uzunluğu}}}
 ```
 
-**Nasıl okunur?** "x ile y'nin kosinüsü eşittir, x nokta y, bölü x'in normu çarpı y'nin normu." Vektörün uzunluğu $\lVert x \rVert = \sqrt{x_1^2 + \dots + x_p^2}$'dir. Paydaki iç çarpımı uzunluklara bölmek, vektörlerin büyüklüğünün etkisini siler; geriye yalnızca **yön** kalır.
+**Ne anlatıyor?** İki vektörün iç çarpımı, uzunluklarının çarpımına bölünür; sonuç, vektörler arasındaki açının kosinüsüdür. Vektörün uzunluğu $\lVert x \rVert = \sqrt{x_1^2 + \dots + x_p^2}$'dir. Paydaki iç çarpımı uzunluklara bölmek, vektörlerin büyüklüğünün etkisini siler; geriye yalnızca **yön** kalır.
 
 Kosinüs benzerliği vektörlerin *büyüklüğüne değil yönüne* bakar. Bu yüzden metin madenciliğinde vazgeçilmezdir. Bir makale ile aynı makalenin iki kez arka arkaya yazılmış hâlinin kelime sayıları farklıdır, ama "konuları" aynıdır ve kosinüs benzerlikleri 1 çıkar.
 
@@ -298,7 +298,7 @@ $$J(A, B) = \frac{|A \cap B|}{|A \cup B|}$$
 \underbrace{J(A, B)}_{\substack{\text{A ile B'nin}\\\text{benzerliği}}} = \frac{\overbrace{|A \cap B|}^{\substack{\text{ikisinde de olan}\\\text{öğe sayısı}}}}{\underbrace{|A \cup B|}_{\substack{\text{en az birinde olan}\\\text{öğe sayısı}}}}
 ```
 
-**Nasıl okunur?** "A ile B'nin Jaccard katsayısı eşittir, A kesişim B'nin eleman sayısı bölü A birleşim B'nin eleman sayısı." Buradaki dikey çizgiler mutlak değer değil, **kümenin eleman sayısıdır**. Örnek: A = {ekmek, süt, peynir}, B = {süt, peynir, zeytin} ise ortak 2 öğe, toplam 4 farklı öğe vardır: J = 2/4 = 0.5.
+**Ne anlatıyor?** İki kümenin ortak öğe sayısı, iki kümedeki toplam farklı öğe sayısına bölünür. Buradaki dikey çizgiler mutlak değer değil, **kümenin eleman sayısıdır**. Örnek: A = {ekmek, süt, peynir}, B = {süt, peynir, zeytin} ise ortak 2 öğe, toplam 4 farklı öğe vardır: J = 2/4 = 0.5.
 
 > **Ölçeklendirme uyarısı:** Uzaklık tabanlı yöntemlerde nitelikler farklı ölçeklerdeyse (yaş: 18–80, gelir: 10.000–1.000.000) büyük ölçekli nitelik uzaklığı tek başına belirler. Bu yüzden uzaklık hesaplamadan önce veri mutlaka **normalize** edilmelidir (bkz. Bölüm 4.5).
 
@@ -415,7 +415,7 @@ Bu yönler, verinin kovaryans matrisinin **özvektörleridir (eigenvectors)**. H
 \underbrace{v'}_{\text{yeni değer}} = \frac{\overbrace{v - \min_A}^{\substack{\text{değerin en küçük}\\\text{değerden uzaklığı}}}}{\underbrace{\max_A - \min_A}_{\substack{\text{A niteliğinin}\\\text{değişim aralığı}}}}
 ```
 
-**Nasıl okunur?** "v üssü eşittir, v eksi A'nın minimumu, bölü A'nın maksimumu eksi A'nın minimumu." Yani: Değer, en küçükten en büyüğe giden yolun yüzde kaçında? Yaş 18–80 aralığındaysa 49 yaş, (49 − 18) / (80 − 18) = 0.5 olur.
+**Ne anlatıyor?** Değerin, en küçükten en büyüğe giden aralığın yüzde kaçında olduğu bulunur. Yaş 18–80 aralığındaysa 49 yaş, (49 − 18) / (80 − 18) = 0.5 olur.
 
 * **Z-skor standardizasyonu:** $v' = \dfrac{v - \bar{A}}{\sigma_A}$ → ortalama 0, standart sapma 1 olur. Aykırı değer varsa min-maksa göre daha güvenlidir.
 
@@ -423,7 +423,7 @@ Bu yönler, verinin kovaryans matrisinin **özvektörleridir (eigenvectors)**. H
 \underbrace{v'}_{\text{z-skoru}} = \frac{\overbrace{v - \bar{A}}^{\text{ortalamadan sapma}}}{\underbrace{\sigma_A}_{\substack{\text{A'nın standart}\\\text{sapması}}}}
 ```
 
-**Nasıl okunur?** "v üssü eşittir, v eksi A bar, bölü sigma alt A." Yani: Değer, ortalamadan kaç standart sapma uzakta? Sınav ortalaması 60, standart sapma 10 ise 80 alan öğrencinin z-skoru (80 − 60) / 10 = **2**'dir.
+**Ne anlatıyor?** Değerin ortalamadan kaç standart sapma uzakta olduğu bulunur. Sınav ortalaması 60, standart sapma 10 ise 80 alan öğrencinin z-skoru (80 − 60) / 10 = **2**'dir.
 
 * **Ondalık ölçekleme:** $v' = v / 10^j$ (en büyük mutlak değer 1'in altına inecek şekilde).
 
@@ -607,7 +607,7 @@ $$\text{destek}(X \Rightarrow Y) = P(X \cup Y) = \frac{\text{X ve Y'yi birlikte 
 \underbrace{\text{destek}(X \Rightarrow Y)}_{\text{kuralın desteği}} = \underbrace{P(X \cup Y)}_{\substack{\text{bir fişte X'in ve Y'nin}\\\text{birlikte bulunma olasılığı}}}
 ```
 
-**Nasıl okunur?** "X ise Y kuralının desteği eşittir, P X birleşim Y." **Dikkat:** Buradaki $\cup$ "X veya Y" anlamına gelmez. $X \cup Y$, X'teki ve Y'deki öğelerin hepsinden oluşan öğe kümesidir. Fişin bu kümenin **tamamını**, yani X'i ve Y'yi **birlikte** içermesi gerekir.
+**Ne anlatıyor?** Kuralın desteği, X'i ve Y'yi birlikte içeren fişlerin bütün fişlere oranıdır. **Dikkat:** Buradaki $\cup$ "X veya Y" anlamına gelmez. $X \cup Y$, X'teki ve Y'deki öğelerin hepsinden oluşan öğe kümesidir. Fişin bu kümenin **tamamını**, yani X'i ve Y'yi **birlikte** içermesi gerekir.
 
 **Güven (Confidence):** X'i içeren işlemlerin ne kadarının Y'yi de içerdiğini gösterir. Kuralın *ne kadar güvenilir* olduğunun ölçüsüdür.
 
@@ -617,7 +617,7 @@ $$\text{güven}(X \Rightarrow Y) = P(Y \mid X) = \frac{\text{destek}(X \cup Y)}{
 \underbrace{\text{güven}(X \Rightarrow Y)}_{\text{kuralın güveni}} = \underbrace{P(Y \mid X)}_{\substack{\text{X alındığı bilinirken}\\\text{Y'nin de alınma olasılığı}}} = \frac{\overbrace{\text{destek}(X \cup Y)}^{\text{X ve Y birlikte}}}{\underbrace{\text{destek}(X)}_{\substack{\text{yalnızca X'i içeren}\\\text{fişlere bakılır}}}}
 ```
 
-**Nasıl okunur?** "X ise Y kuralının güveni eşittir, X verildiğinde Y'nin olasılığı; yani X birleşim Y'nin desteği bölü X'in desteği." Dikey çizgi ($\mid$) **"verildiğinde"** diye okunur: Bütün fişleri bırakıp yalnızca X'i içeren fişlere bakarız. Bu yüzden $P(Y \mid X)$ ile $P(X \mid Y)$ genellikle farklıdır.
+**Ne anlatıyor?** Güven, X'i içeren fişlerin ne kadarında Y'nin de bulunduğunu gösterir: X ile Y'nin birlikte desteği, X'in desteğine bölünür. Dikey çizgi ($\mid$) **"verildiğinde"** diye okunur: Bütün fişleri bırakıp yalnızca X'i içeren fişlere bakarız. Bu yüzden $P(Y \mid X)$ ile $P(X \mid Y)$ genellikle farklıdır.
 
 **Lift:** Güvenin, Y'nin zaten ne kadar yaygın olduğuna göre düzeltilmiş hâlidir.
 
@@ -629,7 +629,7 @@ $$\text{güven}(X \Rightarrow Y) = P(Y \mid X) = \frac{\text{destek}(X \cup Y)}{
 \text{lift}(X \Rightarrow Y) = \frac{\overbrace{\text{güven}(X \Rightarrow Y)}^{\substack{\text{X alanlarda}\\\text{Y oranı}}}}{\underbrace{\text{destek}(Y)}_{\substack{\text{tüm fişlerde}\\\text{Y oranı}}}} = \frac{\overbrace{P(X \cup Y)}^{\substack{\text{gerçekte birlikte}\\\text{görülme}}}}{\underbrace{P(X)\,P(Y)}_{\substack{\text{bağımsız olsalardı beklenen}\\\text{birlikte görülme}}}}
 ```
 
-**Nasıl okunur?** "X ise Y kuralının lift'i eşittir, güven bölü Y'nin desteği; ya da P X birleşim Y, bölü P X çarpı P Y." Yani: X alanlar Y'yi, genel müşteri kitlesine göre **kaç kat** daha sık alıyor?
+**Ne anlatıyor?** Lift, X'i alanların Y'yi genel müşteri kitlesine göre **kaç kat** daha sık aldığını gösterir: Güven, Y'nin desteğine bölünür.
 
 * Lift > 1 → X ve Y **pozitif ilişkili**: Birlikte görülme beklenenden sık.
 * Lift = 1 → X ve Y **bağımsız**.
@@ -874,7 +874,7 @@ $$\text{Entropi}(S) = -\sum_{i=1}^{m} p_i \log_2 p_i$$
 \underbrace{\text{Entropi}(S)}_{\substack{\text{S kümesindeki}\\\text{belirsizlik (bit)}}} = \overbrace{-}^{\substack{\text{sonucu pozitif}\\\text{yapar}}} \underbrace{\sum_{i=1}^{m}}_{\substack{\text{m sınıfın}\\\text{hepsi için topla}}} \overbrace{p_i}^{\substack{\text{i. sınıfın oranı}\\\text{(ağırlık)}}} \; \underbrace{\log_2 p_i}_{\substack{\text{i. sınıfın}\\\text{"sürpriz" değeri}}}
 ```
 
-**Nasıl okunur?** "S'nin entropisi eşittir eksi, i eşittir 1'den m'ye kadar p alt i çarpı log iki tabanında p alt i'lerin toplamı."
+**Ne anlatıyor?** Entropi, bir kümedeki sınıf karışıklığını ölçer: Her sınıfın oranı, o oranın 2 tabanında logaritmasıyla çarpılır, sonuçlar toplanır ve işareti çevrilir. Bütün örnekler aynı sınıftaysa entropi 0, iki sınıf yarı yarıyaysa 1 bittir.
 
 * $p_i$: S'deki örneklerin kaçta kaçının i. sınıfta olduğu. Tenis verisinde $p_{\text{Evet}} = 9/14$.
 * $\log_2 p_i$: $p_i$ 1'den küçük olduğu için bu değer **negatiftir**. Sınıf ne kadar nadirse mutlak değeri o kadar büyüktür: Nadir bir sonuç gerçekleştiğinde daha çok "şaşırırız". Taban 2 olduğu için birim **bit**'tir.
@@ -894,7 +894,7 @@ Küme tamamen saf ise (tek sınıf) entropi **0**'dır. İki sınıf eşit dağ�
 \underbrace{\text{Kazanç}(S, A)}_{\substack{\text{A'ya göre bölmenin}\\\text{kazancı}}} = \underbrace{\text{Entropi}(S)}_{\text{bölmeden önce}} - \underbrace{\sum_{v \in \text{Değerler}(A)} \overbrace{\frac{|S_v|}{|S|}}^{\substack{\text{v dalına düşen}\\\text{örnek oranı}}}\,\overbrace{\text{Entropi}(S_v)}^{\text{v dalının entropisi}}}_{\text{bölmeden sonra: dalların ağırlıklı ortalama entropisi}}
 ```
 
-**Nasıl okunur?** "S'nin A'ya göre kazancı eşittir, S'nin entropisi eksi, A'nın değerlerindeki her v için S alt v'nin eleman sayısı bölü S'nin eleman sayısı çarpı S alt v'nin entropisinin toplamı."
+**Ne anlatıyor?** Bilgi kazancı, bölmeden önceki entropiden, A niteliğine göre bölme sonrasında oluşan alt kümelerin büyüklükleriyle ağırlıklandırılmış entropilerinin toplamı çıkarılarak bulunur. Kazanç ne kadar büyükse bölme, sınıf belirsizliğini o kadar çok azaltır.
 
 * $v \in \text{Değerler}(A)$: "v, A'nın değerlerinden biri". A = Hava Durumu ise v sırasıyla Güneşli, Bulutlu ve Yağmurlu olur.
 * $S_v$: S'nin, A niteliği v değerini alan örnekleri; yani v dalına düşen örnekler. $\lvert S_v \rvert$ bunların sayısıdır.
@@ -988,7 +988,7 @@ P(C \mid X) = \frac{P(X \mid C)\, P(C)}{P(X)}
 \underbrace{P(C \mid X)}_{\substack{\text{sonsal: X'i gördükten}\\\text{sonra C'nin olasılığı}}} = \frac{\overbrace{P(X \mid C)}^{\text{olabilirlik}}\;\overbrace{P(C)}^{\text{önsel}}}{\underbrace{P(X)}_{\substack{\text{X'i görme olasılığı}\\\text{(tüm sınıflar için aynı)}}}}
 ```
 
-**Nasıl okunur?** "X verildiğinde C'nin olasılığı eşittir, C verildiğinde X'in olasılığı çarpı C'nin olasılığı, bölü X'in olasılığı." Tenis örneğinde C = "Evet", X = (Güneşli, Serin, Yüksek, Güçlü) olur. Soru şudur: "Bu hava koşullarını gördükten sonra tenis oynanma olasılığı nedir?"
+**Ne anlatıyor?** Bayes teoremi, gözlem görüldükten sonraki (sonsal) olasılığı, sınıfın baştaki olasılığı ile bu sınıfta o gözlemin görülme olasılığının çarpımından elde eder; payda bütün sınıflar için aynıdır. Tenis örneğinde C = "Evet", X = (Güneşli, Serin, Yüksek, Güçlü) olur. Soru şudur: "Bu hava koşullarını gördükten sonra tenis oynanma olasılığı nedir?"
 
 * $P(C)$: **Önsel (prior)** olasılık. Veriyi görmeden önce sınıfın olasılığı.
 * $P(X \mid C)$: **Olabilirlik (likelihood)**. Sınıf $C$ iken $X$'i görme olasılığı.
@@ -1004,7 +1004,7 @@ $$P(X \mid C) = P(x_1 \mid C) \cdot P(x_2 \mid C) \cdots P(x_n \mid C)$$
 \underbrace{P(X \mid C)}_{\substack{\text{tüm niteliklerin birlikte}\\\text{görülme olasılığı}}} = \underbrace{P(x_1 \mid C)}_{\text{1. nitelik}} \cdot \underbrace{P(x_2 \mid C)}_{\text{2. nitelik}} \cdots \underbrace{P(x_n \mid C)}_{\text{n. nitelik}}
 ```
 
-**Nasıl okunur?** "C verildiğinde X'in olasılığı eşittir, C verildiğinde x alt 1'in olasılığı çarpı C verildiğinde x alt 2'nin olasılığı, ..., çarpı C verildiğinde x alt n'nin olasılığı." Her çarpan tek bir nitelikten kolayca sayılır. Örneğin $P(\text{Güneşli} \mid \text{Evet}) = 2/9$ şu demektir: "Tenis oynanan 9 günün 2'si güneşli."
+**Ne anlatıyor?** Naive Bayes, nitelikleri sınıf verildiğinde birbirinden bağımsız kabul eder; böylece bütün niteliklerin birlikte görülme olasılığı, tek tek olasılıkların çarpımına dönüşür. Her çarpan tek bir nitelikten kolayca sayılır. Örneğin $P(\text{Güneşli} \mid \text{Evet}) = 2/9$ şu demektir: "Tenis oynanan 9 günün 2'si güneşli."
 
 Bu varsayım gerçekte nadiren doğrudur. Yine de Naive Bayes pratikte şaşırtıcı derecede iyi çalışır, çok hızlıdır ve özellikle **metin sınıflandırmada** (spam filtreleme) standart bir başlangıç modelidir.
 
@@ -1024,7 +1024,7 @@ Laplace düzeltmesinde payın yanında paydanın da büyütülmesi gerekir. Aksi
 \underbrace{P(x_j = v \mid C)}_{\substack{\text{düzeltilmiş}\\\text{olasılık}}} = \frac{\overbrace{n_{v,C}}^{\substack{\text{C sınıfında v değerini}\\\text{alan örnek sayısı}}} + 1}{\underbrace{n_C}_{\substack{\text{C sınıfındaki}\\\text{örnek sayısı}}} + \underbrace{\lvert V_j \rvert}_{\substack{\text{niteliğin farklı}\\\text{değer sayısı}}}}
 ```
 
-**Nasıl okunur?** "C verildiğinde x alt j'nin v olma olasılığı eşittir, n alt v C artı 1, bölü n alt C artı V alt j'nin eleman sayısı."
+**Ne anlatıyor?** Her değerin sayımına 1 eklenir; böylece eğitimde hiç görülmemiş bir değer de sıfır olmayan küçük bir olasılık alır. Paydaya değer sayısının eklenmesi, olasılıkların toplamının yine 1 olmasını sağlar.
 
 **Ne anlatıyor?** Her değere, veride hiç görülmemiş olsa bile "bir kez görülmüş" muamelesi yapılır. Niteliğin $\lvert V_j \rvert$ farklı değeri olduğu için paya toplam $\lvert V_j \rvert$ tane 1 eklenmiş olur; paydaya da aynı sayı eklenince olasılıkların toplamı yine 1 kalır.
 
@@ -1155,7 +1155,7 @@ $$\text{Beklenen hata} = \text{Yanlılık}^2 + \text{Varyans} + \text{İndirgene
 \underbrace{\text{Beklenen hata}}_{\substack{\text{yeni veride}\\\text{ortalama hata}}} = \underbrace{\text{Yanlılık}^2}_{\substack{\text{model ortalamada}\\\text{ne kadar ıskalıyor?}}} + \underbrace{\text{Varyans}}_{\substack{\text{eğitim verisi değişince}\\\text{model ne kadar oynuyor?}}} + \underbrace{\text{İndirgenemez gürültü}}_{\substack{\text{verinin kendi rastgeleliği;}\\\text{hiçbir model gideremez}}}
 ```
 
-**Nasıl okunur?** "Beklenen hata eşittir yanlılığın karesi artı varyans artı indirgenemez gürültü."
+**Ne anlatıyor?** Bir modelin yeni verideki beklenen hatası üç parçaya ayrılır: modelin sistematik sapması (yanlılığın karesi), farklı eğitim verilerine göre oynaması (varyans) ve hiçbir modelin gideremeyeceği gürültü. İlk ikisi arasında bir denge kurulur; üçüncüsü azaltılamaz.
 
 * **Yanlılık (bias):** Modelin aşırı basit varsayımlar yüzünden gerçek ilişkiyi yakalayamamasından kaynaklanan hata. Yüksek yanlılık **eksik öğrenmeye (underfitting)** yol açar. Eğri bir ilişkiye düz bir çizgi uydurmak buna örnektir.
 * **Varyans (variance):** Modelin eğitim verisindeki küçük değişikliklere aşırı duyarlı olmasından kaynaklanan hata. Yüksek varyans **aşırı öğrenmeye (overfitting)** yol açar; model gürültüyü de ezberler.
@@ -1241,7 +1241,7 @@ k-Means aslında **küme içi kareler toplamını (Within-Cluster Sum of Squares
 \text{WCSS} = \underbrace{\sum_{j=1}^{k}}_{\substack{\text{k kümenin}\\\text{hepsi için}}} \; \underbrace{\sum_{x \in C_j}}_{\substack{\text{j. kümedeki}\\\text{her x noktası için}}} \overbrace{\|x - \mu_j\|^2}^{\substack{\text{noktanın kendi merkezine}\\\text{uzaklığının karesi}}}
 ```
 
-**Nasıl okunur?** "WCSS eşittir, j eşittir 1'den k'ya kadar, C alt j'deki her x için, x eksi mü alt j'nin normunun karesinin toplamı." $\mu_j$ ("mü alt j") j. kümenin merkezidir. İç içe iki toplam vardır: İçteki toplam bir kümenin içini, dıştaki toplam ise bütün kümeleri toplar.
+**Ne anlatıyor?** Her noktanın kendi küme merkezine uzaklığının karesi alınır ve bütün kümeler için toplanır; küçük değer, kümelerin sıkı olduğunu gösterir. $\mu_j$ ("mü alt j") j. kümenin merkezidir. İç içe iki toplam vardır: İçteki toplam bir kümenin içini, dıştaki toplam ise bütün kümeleri toplar.
 
 **Güçlü yönleri:** Basittir, anlaşılırdır ve hızlıdır. Her iterasyonun maliyeti $O(n \cdot k \cdot p)$'dir ve büyük veriye iyi ölçeklenir. Spark MLlib'de dağıtık bir sürümü vardır.
 
@@ -1322,7 +1322,7 @@ s(i) = \frac{b(i) - a(i)}{\max\{a(i),\, b(i)\}}
 \underbrace{s(i)}_{\substack{\text{i. noktanın}\\\text{siluet değeri}}} = \frac{\overbrace{b(i)}^{\substack{\text{en yakın diğer}\\\text{kümeye uzaklık}}} - \overbrace{a(i)}^{\substack{\text{kendi kümesine}\\\text{uzaklık}}}}{\underbrace{\max\{a(i),\, b(i)\}}_{\substack{\text{ikisinden büyüğü: sonucu}\\\text{-1 ile +1 arasına sıkıştırır}}}}
 ```
 
-**Nasıl okunur?** "s i eşittir, b i eksi a i, bölü a i ile b i'nin büyüğü." Örnek: a(i) = 2 ve b(i) = 8 ise s = (8 − 2) / 8 = **0.75**; nokta doğru kümededir. Tersine a(i) = 8 ve b(i) = 2 ise s = (2 − 8) / 8 = **−0.75**; nokta komşu kümeye daha yakındır.
+**Ne anlatıyor?** Bir noktanın kendi kümesine ortalama uzaklığı (a) ile en yakın diğer kümeye ortalama uzaklığı (b) karşılaştırılır; sonuç −1 ile 1 arasındadır. Örnek: a(i) = 2 ve b(i) = 8 ise s = (8 − 2) / 8 = **0.75**; nokta doğru kümededir. Tersine a(i) = 8 ve b(i) = 2 ise s = (2 − 8) / 8 = **−0.75**; nokta komşu kümeye daha yakındır.
 
 * $a(i)$: Noktanın **kendi kümesindeki** diğer noktalara ortalama uzaklığı (ne kadar sıkı?).
 * $b(i)$: Noktanın **en yakın diğer kümedeki** noktalara ortalama uzaklığı (ne kadar ayrık?).
@@ -1555,7 +1555,7 @@ $$\text{tf-idf}(t, d) = \text{tf}(t, d) \times \log \frac{N}{\text{df}(t)}$$
 \underbrace{\text{tf-idf}(t, d)}_{\substack{\text{t kelimesinin}\\\text{d belgesindeki ağırlığı}}} = \underbrace{\text{tf}(t, d)}_{\substack{\text{t, d'de kaç kez}\\\text{geçiyor?}}} \times \underbrace{\log \frac{\overbrace{N}^{\text{toplam belge sayısı}}}{\text{df}(t)}}_{\substack{\text{idf: t ne kadar nadir?}\\\text{df(t): t'yi içeren belge sayısı}}}
 ```
 
-**Nasıl okunur?** "t'nin d'deki tf-idf değeri eşittir, t'nin d'deki terim frekansı çarpı log N bölü t'nin belge frekansı." 1000 belgelik bir koleksiyonda (10 tabanında logaritma ile) her belgede geçen "ve" için idf = log(1000/1000) = **0**, yalnızca 10 belgede geçen "Hadoop" için idf = log(1000/10) = **2** olur.
+**Ne anlatıyor?** Bir terimin belgede ne kadar sık geçtiği, terimin bütün koleksiyonda ne kadar nadir olduğuyla çarpılır; her belgede geçen sıradan kelimelerin ağırlığı sıfıra iner. 1000 belgelik bir koleksiyonda (10 tabanında logaritma ile) her belgede geçen "ve" için idf = log(1000/1000) = **0**, yalnızca 10 belgede geçen "Hadoop" için idf = log(1000/10) = **2** olur.
 
 4. **Madencilik:** Belge sınıflandırma (spam, duygu analizi), belge kümeleme, konu modelleme (LDA), varlık ismi tanıma. Belgeler arası benzerlikte **kosinüs benzerliği** kullanılır (Bölüm 3.4).
 
@@ -2509,14 +2509,14 @@ Basit bir kelime sayma işi için bile uzun komutlar yazmak ve sonucu ayrıca ok
 
 Bu bölümdeki araçlar Hadoop'tan ayrı olarak indirilip kurulur. Her biri belirli Hadoop ve Java sürümleriyle uyumludur.
 
-> **Sürüm uyumluluğu:** Bir aracı indirmeden önce, projenin sürüm notlarında hangi Hadoop ve Java sürümlerini desteklediği kontrol edilmelidir. Aşağıdaki komutlarda sürüm numarası `HIVE_SURUM` ve `PIG_SURUM` değişkenleriyle verilmiştir; bu değişkenlere, kurulu Hadoop 3.5 ve Java 17 ile uyumlu olduğu belirtilen sürüm yazılmalıdır. Uyumlu bir sürüm bulunamazsa uygulamalar, aynı işi yapan Spark SQL ve PySpark ile yapılabilir (Bölüm 21).
+> **Sürüm uyumluluğu:** Bir aracı indirmeden önce, projenin sürüm notlarında hangi Hadoop ve Java sürümlerini desteklediği kontrol edilmelidir. Aşağıdaki komutlarda sürüm numarası `HIVE_SURUM` ve `PIG_SURUM` değişkenleriyle verilmiştir ve bu notun yazıldığı tarihteki en son sürümler (Hive 4.2.1, Pig 0.18.0) kullanılmıştır. Bu sürümlerin kurulu Hadoop 3.5 ve Java 17 ile birlikte sınanmadığı unutulmamalıdır; bir uyumsuzluk görülürse değişkene projenin sürüm notlarında uyumlu olduğu belirtilen sürüm yazılmalıdır. Uyumlu bir sürüm bulunamazsa uygulamalar, aynı işi yapan Spark SQL ve PySpark ile yapılabilir (Bölüm 21).
 
 ### 20.1 Apache Hive ile Sınav Analizi
 
 **Kurulum.** Hive indirilir, kısa yolu ve ortam değişkenleri tanımlanır, HDFS'te Hive'ın kullanacağı klasörler açılır ve gömülü (Derby) metastore'un şeması `schematool` ile oluşturulur:
 
 ```bash
-HIVE_SURUM=...        # uyumlu sürüm numarası (sürüm notlarından)
+HIVE_SURUM=4.2.1      # yazım tarihindeki en son sürüm
 cd ~/bigdata
 wget https://archive.apache.org/dist/hive/hive-$HIVE_SURUM/apache-hive-$HIVE_SURUM-bin.tar.gz
 tar xzf apache-hive-$HIVE_SURUM-bin.tar.gz
@@ -2583,7 +2583,7 @@ Fizik'te iki not vardır: (45 + 70) / 2 = 57.5. Matematik'te üç not vardır: (
 **Kurulum.** Pig de aynı yolla kurulur:
 
 ```bash
-PIG_SURUM=...         # uyumlu sürüm numarası (sürüm notlarından)
+PIG_SURUM=0.18.0      # yazım tarihindeki en son sürüm
 cd ~/bigdata
 wget https://archive.apache.org/dist/pig/pig-$PIG_SURUM/pig-$PIG_SURUM.tar.gz
 tar xzf pig-$PIG_SURUM.tar.gz
