@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="506.239118pt" height="555.948219pt" viewBox="0 0 506.239118 555.948219" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="506.239118pt" height="555.942359pt" viewBox="0 0 506.239118 555.942359" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
@@ -20,8 +20,8 @@
  </defs>
  <g id="figure_1">
   <g id="patch_1">
-   <path d="M 0 555.948219 
-L 506.239118 555.948219 
+   <path d="M 0 555.942359 
+L 506.239118 555.942359 
 L 506.239118 0 
 L 0 0 
 z
@@ -38,29 +38,29 @@ z
    </g>
    <g id="FillBetweenPolyCollection_1">
     <defs>
-     <path id="mdfe0953880" d="M 45.575 -41.004219 
-L 45.575 -41.004219 
-L 55.974529 -165.798572 
-L 88.658765 -292.078572 
-L 122.828647 -388.645631 
-L 152.541588 -422.815513 
-L 173.340647 -430.243748 
-L 488.297824 -485.212689 
-L 491.269118 -486.698336 
-L 491.269118 -41.004219 
-L 491.269118 -41.004219 
-L 488.297824 -41.004219 
-L 173.340647 -41.004219 
-L 152.541588 -41.004219 
-L 122.828647 -41.004219 
-L 88.658765 -41.004219 
-L 55.974529 -41.004219 
-L 45.575 -41.004219 
+     <path id="mc43b2edd96" d="M 45.575 -40.998359 
+L 45.575 -40.998359 
+L 55.974529 -165.792712 
+L 88.658765 -292.072712 
+L 122.828647 -388.639771 
+L 152.541588 -422.809653 
+L 173.340647 -430.237889 
+L 488.297824 -485.20683 
+L 491.269118 -486.692477 
+L 491.269118 -40.998359 
+L 491.269118 -40.998359 
+L 488.297824 -40.998359 
+L 173.340647 -40.998359 
+L 152.541588 -40.998359 
+L 122.828647 -40.998359 
+L 88.658765 -40.998359 
+L 55.974529 -40.998359 
+L 45.575 -40.998359 
 z
 "/>
     </defs>
     <g clip-path="url(#p9e10c5c1d3)">
-     <use xlink:href="#mdfe0953880" x="0" y="555.948219" style="fill: #10b981; fill-opacity: 0.12"/>
+     <use xlink:href="#mc43b2edd96" x="0" y="555.942359" style="fill: #10b981; fill-opacity: 0.12"/>
     </g>
    </g>
    <g id="matplotlib.axis_1">
@@ -160,7 +160,7 @@ L 491.269118 60.336
      </g>
     </g>
     <g id="text_7">
-     <text style="font-size: 12px; font-family: 'Segoe UI', 'DejaVu Sans', 'Arial', 'Helvetica', sans-serif; text-anchor: middle; fill: #1f2937" x="268.422059" y="546.216969" transform="rotate(-0 268.422059 546.216969)">Yanlış Pozitif Oranı (FPR)</text>
+     <text style="font-size: 12px; font-family: 'Segoe UI', 'DejaVu Sans', 'Arial', 'Helvetica', sans-serif; text-anchor: middle; fill: #1f2937" x="268.422059" y="546.216969" transform="rotate(-0 268.422059 546.216969)">Sahte Pozitif Oranı (FPR)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -260,7 +260,7 @@ L 491.269118 69.249882
      </g>
     </g>
     <g id="text_14">
-     <text style="font-size: 12px; font-family: 'Segoe UI', 'DejaVu Sans', 'Arial', 'Helvetica', sans-serif; text-anchor: middle; fill: #1f2937" x="16.21125" y="287.64" transform="rotate(-90 16.21125 287.64)">Doğru Pozitif Oranı (TPR = Duyarlılık)</text>
+     <text style="font-size: 12px; font-family: 'Segoe UI', 'DejaVu Sans', 'Arial', 'Helvetica', sans-serif; text-anchor: middle; fill: #1f2937" x="16.21125" y="287.64" transform="rotate(-90 16.21125 287.64)">Gerçek Pozitif Oranı (TPR = Duyarlılık)</text>
     </g>
    </g>
    <g id="line2d_25">

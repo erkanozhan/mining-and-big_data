@@ -2,8 +2,8 @@
 
 Kullanım:  spark-submit python/00_kume_testi.py
 
-Kümedeki her executor'a küçük görevler gönderir ve görevlerin hangi makinede
-çalıştığını raporlar. Üç makinenin adını da görüyorsanız küme hazırdır.
+Kümedeki executor'lara 60 küçük görev gönderir ve görevlerin (ve işledikleri
+elemanların) hangi makinede çalıştığını raporlar. Üç makinenin adını da görüyorsanız küme hazırdır.
 """
 
 from collections import Counter
@@ -25,10 +25,11 @@ print("Spark sürümü     :", spark.version)
 print("Uygulama kimliği :", sc.applicationId)
 print("Spark arayüzü    :", sc.uiWebUrl)
 
-# 600 küçük görev, 60 bölüme (partition) dağıtılır
-sayac = Counter(sc.parallelize(range(600), 60).map(gorev_bilgisi).collect())
-print("\nGörevlerin çalıştığı makineler:")
+# 600 eleman 60 bölüme (partition) ayrılır; her bölüm bir görevdir (task) ve 10 eleman işler
+ELEMAN, BOLUM = 600, 60
+sayac = Counter(sc.parallelize(range(ELEMAN), BOLUM).map(gorev_bilgisi).collect())
+print(f"\nElemanların işlendiği makineler (her görev {ELEMAN // BOLUM} eleman işler):")
 for (makine, py), adet in sorted(sayac.items()):
-    print(f"  {makine:12s} Python {py}  → {adet} görev")
+    print(f"  {makine:12s} Python {py}  → {adet} eleman ({adet // (ELEMAN // BOLUM)} görev)")
 
 spark.stop()

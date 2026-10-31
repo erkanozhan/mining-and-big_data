@@ -191,7 +191,7 @@
                 </rect>
                 <text x="140" y="44" font-size="10" text-anchor="middle" fill="white">RAM: %55</text>
                 <rect x="190" y="30" width="80" height="20" rx="3" fill="#10b981"/>
-                <text x="230" y="44" font-size="10" text-anchor="middle" fill="white">Uygun ✓</text>
+                <text x="230" y="44" font-size="10" text-anchor="middle" fill="white">Uygun</text>
             </g>
         </g>
         
@@ -230,7 +230,7 @@
             <!-- Sonuç -->
             <rect x="270" y="10" width="150" height="40" rx="4" fill="#dcfce7" stroke="#10b981"/>
             <text x="345" y="35" font-size="12" text-anchor="middle" fill="#15803d">
-                ✓ İş tamamlandı
+                İş tamamlandı
             </text>
         </g>
     </g>

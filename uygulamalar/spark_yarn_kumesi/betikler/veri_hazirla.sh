@@ -10,7 +10,7 @@ trap 'rm -rf "$GECICI"' EXIT
 hdfs dfs -mkdir -p /veri /cikti
 
 # --- 1) Kelime sayma için Project Gutenberg kitapları (Uygulama 3) ---------------------------
-# 20 klasik eser (~20 MB) indirilir ve 25 kopya hâlinde HDFS'e konur (~500 MB). Kopyalar,
+# 20 klasik eser (~16 MB) indirilir ve 25 kopya hâlinde HDFS'e konur (~400 MB). Kopyalar,
 # "büyük" bir metin derlemi elde etmenin ucuz yoludur; kelime sıklıkları değişmez, yalnızca ölçeklenir.
 if ! hdfs dfs -test -d /veri/kitaplar; then
     echo "== Kitaplar indiriliyor"

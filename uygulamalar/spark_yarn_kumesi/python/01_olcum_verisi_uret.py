@@ -1,7 +1,7 @@
 """Uygulama 1 — 1BRC tarzı sıcaklık ölçümü verisini küme üzerinde üretip HDFS'e yazar.
 
 Kullanım:  spark-submit python/01_olcum_verisi_uret.py [satır_sayısı]
-           (varsayılan 100 milyon satır, yaklaşık 1,4 GB düz metin)
+           (varsayılan 100 milyon satır, yaklaşık 1.28 GB düz metin)
 
 Ders notundaki 12.7 vakasında 10 milyon satırlık dosyayı tek bilgisayarda
 Python ile üretmiştik. Burada üretimin kendisi de dağıtıktır: Her executor
@@ -42,7 +42,7 @@ ISTASYONLAR = [
 ]
 
 N = int(sys.argv[1]) if len(sys.argv) > 1 else 100_000_000
-BOLUM = max(8, N // 2_500_000)  # her bölüm ~2,5 milyon satır (~35 MB)
+BOLUM = max(8, N // 2_500_000)  # her bölüm ~2.5 milyon satır (~32 MB)
 
 spark = SparkSession.builder.appName("01-olcum-verisi-uret").getOrCreate()
 print("Spark arayüzü:", spark.sparkContext.uiWebUrl)

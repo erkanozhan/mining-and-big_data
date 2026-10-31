@@ -6,7 +6,7 @@ ve aynı eşikler (min_sup = 0.10, min_conf = 0.60) kullanıldığında Weka ile
 aynı sık öğe kümeleri ve aynı 27 kural bulunur.
 
 Çalıştırma (uygulamalar/birliktelik_kurallari klasöründen):
-    pip install "mlxtend>=0.23" pandas
+    pip install "mlxtend>=0.23.2" pandas    # association_rules(..., num_itemsets=...) için
     python python/birliktelik_kurallari.py
 """
 

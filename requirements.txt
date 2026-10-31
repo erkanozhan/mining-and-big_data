@@ -1,0 +1,16 @@
+# Ders notundaki Python örnekleri ve uygulamalar için gereken paketler
+# Kurulum: pip install -r requirements.txt   (Python 3.10 veya üstü)
+
+numpy
+pandas
+scipy
+scikit-learn
+imbalanced-learn        # Bölüm 11.2: SMOTE
+matplotlib              # scripts/sekil_uret.py, uygulama grafikleri
+mlxtend>=0.23.2         # uygulamalar/birliktelik_kurallari: association_rules(..., num_itemsets=...)
+
+# İsteğe bağlı
+duckdb                  # Bölüm 12.7: 1BRC'nin SQL ile çözümü
+
+# Not: Spark uygulamaları (uygulamalar/spark_yarn_kumesi) kümede kurulu Spark ile
+# spark-submit üzerinden çalıştırılır; PySpark ayrıca pip ile kurulmaz.

@@ -2,7 +2,7 @@
 
 *Veri Madenciliğinde İleri Konular ve Büyük Veri — ek ders notu*
 
-Ana ders notunun ([ders_notu.md](ders_notu.md)) Kısım I'inde veri madenciliği algoritmalarını tek bir bilgisayarda çalıştırdık. 12. bölümde de bu algoritmaların veri büyüdükçe neden tıkandığını gördük. Kısım II'de Hadoop'un iki temel bileşeni olan HDFS'i ve YARN'ı tanıdık. Ardından MapReduce ile ilk işimizi çalıştırdık ve Spark'ın adını andık. Bu ek not, iki kısmı birleştiren köprüdür. Laboratuvardaki üç bilgisayarı gerçek bir **Hadoop + Spark kümesine** dönüştürüyor, 12.7'deki "1 Milyar Satır" problemini ve bir makine öğrenmesi modelinin hiperparametre aramasını bu küme üzerinde çalıştırıyoruz.
+Ana ders notunun ([ders_notu.md](ders_notu.md)) Kısım I'inde veri madenciliği algoritmalarını tek bir bilgisayarda çalıştırdık. 12. bölümde de bu algoritmaların veri büyüdükçe neden tıkandığını gördük. Kısım II'de Hadoop'un depolama (HDFS) ve kaynak yönetimi (YARN) katmanlarını ve MapReduce programlama modelini tanıdık (Bölüm 15). Ardından tek makinede MapReduce ile ilk işimizi ve PySpark ile ilk denemelerimizi çalıştırdık (Bölüm 19 ve 21). Bu ek not, iki kısmı birleştiren köprüdür. Laboratuvardaki üç bilgisayarı gerçek bir **Hadoop + Spark kümesine** dönüştürüyor, 12.7'deki "1 Milyar Satır" problemini ve bir makine öğrenmesi modelinin hiperparametre aramasını bu küme üzerinde çalıştırıyoruz.
 
 Notun amacı yalnızca komutları sıralamak değildir. Her adımda üç soruya cevap arayacağız: **Ne yapıyoruz? Neden böyle yapıyoruz? Sonuç bize ne öğretiyor?** Bu yüzden notta verilen bütün süreler ve sayılar, laboratuvardaki kümede gerçekten ölçülmüş değerlerdir. Uygulama dosyaları [uygulamalar/spark_yarn_kumesi](uygulamalar/spark_yarn_kumesi/) klasöründedir.
 
@@ -54,7 +54,7 @@ Sıkça yapılan bir yanlış, "Spark çıktı, Hadoop öldü" demektir. Doğrus
 | Kaynak yönetimi | Hangi işin hangi makinede ne kadar bellek ve çekirdek kullanacağına karar vermek | **YARN** |
 | Hesaplama | Veriyi işlemek: SQL, makine öğrenmesi, akış işleme | **Spark** (ve karşılaştırma için MapReduce) |
 
-Ana notta Apache Mahout'u "yapay zekânın dedesi" olarak anmıştık. Mahout'un MapReduce üzerindeki algoritmaları, yinelemeli makine öğrenmesinin diske yazma maliyeti yüzünden zamanla terk edildi. Bugün aynı işi Spark'ın kendi makine öğrenmesi kütüphanesi **MLlib** yapar. 10. bölümde MLlib ile bir sınıflandırma modelini küme üzerinde eğiteceğiz.
+Ana notta Apache Mahout'u Hadoop üzerinde makine öğrenmesinin öncü kütüphanelerinden biri olarak tanımıştık (Bölüm 16.4). Mahout'un MapReduce üzerindeki algoritmaları, yinelemeli makine öğrenmesinin diske yazma maliyeti yüzünden zamanla terk edildi. Bugün aynı işi Spark'ın kendi makine öğrenmesi kütüphanesi **MLlib** yapar. 10. bölümde MLlib ile bir sınıflandırma modelini küme üzerinde eğiteceğiz.
 
 ---
 
@@ -170,7 +170,14 @@ Bu bölüm, kümemizi nasıl kurduğumuzu tekrarlanabilir biçimde anlatır. Ken
 
 * **Aynı kullanıcı adı ve aynı dizin yapısı:** Bütün makinelerde `hduser` kullanıcısı ve `~/bigdata` klasörü. Hadoop'un başlatma betikleri diğer makinelerde aynı yolları arar.
 * **Java 17:** Hadoop 3.5, sunucu tarafında Java 17 ister. Spark 4.x de Java 17 veya 21 ile çalışır. Linux Mint 22'de `openjdk-17` paketi hazır geliyordu.
-* **Parolasız SSH:** Yönetici makine, diğer makinelerdeki servisleri SSH ile başlatır. Bunun için yöneticinin açık anahtarı, kendisi dahil bütün makinelerin `~/.ssh/authorized_keys` dosyasında olmalıdır.
+* **Parolasız SSH:** Yönetici makine, diğer makinelerdeki servisleri SSH ile başlatır. Bunun için yöneticinin açık anahtarı, kendisi dahil bütün makinelerin `~/.ssh/authorized_keys` dosyasında olmalıdır. Kümede bu iş için ayrı bir `id_lab` anahtarı kullanıldı (5.4'teki `HADOOP_SSH_OPTS` bu anahtarı gösterir):
+
+  ```bash
+  ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_lab          # yönetici makinede, parolasız anahtar
+  for h in 192.168.1.10 192.168.1.11 192.168.1.12; do
+      ssh-copy-id -i ~/.ssh/id_lab.pub hduser@$h        # kendisi dahil her makineye
+  done
+  ```
 * **Aynı Python sürümü:** PySpark, driver'daki Python ile executor'lardaki Python'un küçük sürümünün (3.12 gibi) aynı olmasını şart koşar. Üç makinede de Python 3.12.3 vardı.
 
 Kurulumun hiçbir adımı yönetici (`sudo`) yetkisi gerektirmez. Bütün yazılımlar kullanıcının ev dizinine kurulur ve 1024'ün üzerindeki portları kullanır. Tek istisna güvenlik duvarıdır (5.7).
@@ -181,10 +188,11 @@ Yazılımlar yönetici makineye bir kez indirilir:
 
 ```bash
 mkdir -p ~/bigdata/indirilen && cd ~/bigdata/indirilen
-wget https://dlcdn.apache.org/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar.gz
-wget https://dlcdn.apache.org/spark/spark-4.1.3/spark-4.1.3-bin-hadoop3.tgz
+# archive.apache.org eski sürümleri de kalıcı olarak saklar; dlcdn.apache.org yalnızca güncel sürümleri tutar
+wget https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar.gz
+wget https://archive.apache.org/dist/spark/spark-4.1.3/spark-4.1.3-bin-hadoop3.tgz
 # İndirilen dosyanın bozulmadığını SHA-512 özetiyle doğrulamak iyi bir alışkanlıktır
-wget https://dlcdn.apache.org/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar.gz.sha512
+wget https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar.gz.sha512
 sha512sum -c hadoop-3.5.0.tar.gz.sha512
 
 cd ~/bigdata
@@ -300,7 +308,15 @@ for h in 192.168.1.11 192.168.1.12; do
 done
 ```
 
-Her makinede aynı yolda bir Python sanal ortamı kurulur (`~/bigdata/venv`, NumPy ve pandas). Executor'lar Python kodunu bu ortamla çalıştırır. Vento'nun işlemcisi SSE4.2 komut setini desteklemediği için NumPy'ın 2.3 ve sonraki sürümleri orada çalışmaz. **Kümedeki bütün makinelerde aynı sürümleri kullanmak gerektiğinden en zayıf makine sürüm sınırını belirler:** `numpy<2.3`, `pandas<2.3`.
+Her makinede aynı yolda bir Python sanal ortamı kurulur (`~/bigdata/venv`, NumPy ve pandas). Executor'lar Python kodunu bu ortamla çalıştırır. `python3-venv` paketi kurulu olmayan ve `sudo` yetkisi bulunmayan makinelerde ortam, kullanıcının ev dizinine kurulan `uv` aracıyla oluşturulabilir (5.9):
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh                            # uv'yi ~/.local/bin altına kurar
+uv venv --python 3.12 ~/bigdata/venv
+uv pip install --python ~/bigdata/venv/bin/python "numpy<2.3" "pandas<2.3"
+```
+
+Sürüm sınırlarının sebebi şudur: Vento'nun işlemcisi SSE4.2 komut setini desteklemediği için NumPy'ın 2.3 ve sonraki sürümleri orada çalışmaz. **Kümedeki bütün makinelerde aynı sürümleri kullanmak gerektiğinden en zayıf makine sürüm sınırını belirler:** `numpy<2.3`, `pandas<2.3`.
 
 ### 5.7 Güvenlik Duvarı
 
@@ -362,7 +378,7 @@ Gerçek bir kurulum nadiren ilk denemede sorunsuz biter. Bizim kurulumumuzda kar
 
 ## 6. Uygulama 0: Küme Ayakta mı?
 
-İlk uygulama yalnızca bir sağlık kontrolüdür. 600 küçük görevi 60 bölüme dağıtır ve her görevin hangi makinede çalıştığını sayar:
+İlk uygulama yalnızca bir sağlık kontrolüdür. 600 elemanlık bir listeyi 60 bölüme ayırır; her bölüm (10 eleman) bir **görev** olarak bir executor'da işlenir. Her eleman için işlendiği makine kaydedilir ve makine başına eleman sayısı toplanır:
 
 ```python
 def gorev_bilgisi(_):
@@ -370,18 +386,18 @@ def gorev_bilgisi(_):
     import platform, socket
     return (socket.gethostname(), platform.python_version())
 
-sayac = Counter(sc.parallelize(range(600), 60).map(gorev_bilgisi).collect())
+sayac = Counter(sc.parallelize(range(600), 60).map(gorev_bilgisi).collect())   # 60 bölüm = 60 görev
 ```
 
 ```text
 $ spark-submit python/00_kume_testi.py
-Görevlerin çalıştığı makineler:
-  FX-Gigabyte  Python 3.12.3  → 390 görev
-  FX-Mini      Python 3.12.3  → 170 görev
-  FX-Vento     Python 3.12.3  → 40 görev
+Elemanların işlendiği makineler (her görev 10 eleman işler):
+  FX-Gigabyte  Python 3.12.3  → 390 eleman (39 görev)
+  FX-Mini      Python 3.12.3  → 170 eleman (17 görev)
+  FX-Vento     Python 3.12.3  → 40 eleman (4 görev)
 ```
 
-Bu küçük çıktı üç şey söyler. Birincisi, `gorev_bilgisi` fonksiyonu driver'da değil **üç farklı makinede** çalıştı. Spark fonksiyonu serileştirip (pickle) executor'lara gönderdi. İkincisi, üç makinedeki Python sürümleri aynı. Üçüncüsü, görevler eşit dağılmadı: 4 executor'lık Gigabyte en çok, tek executor'lık Vento en az görevi aldı. Spark görevleri önceden paylaştırmaz. **Boşalan çekirdeğe sıradaki görevi verir.** Hızlı makine daha çok görev bitirir. Bu basit kural, 11. bölümde göreceğimiz yavaş düğüm sorununu büyük ölçüde kendiliğinden hafifletir.
+Bu küçük çıktı üç şey söyler. Birincisi, `gorev_bilgisi` fonksiyonu driver'da değil **üç farklı makinede** çalıştı. Spark fonksiyonu serileştirip (pickle) executor'lara gönderdi. İkincisi, üç makinedeki Python sürümleri aynı. Üçüncüsü, 60 görev eşit dağılmadı: 4 executor'lık Gigabyte 39, tek executor'lık Vento yalnızca 4 görev aldı. Spark görevleri önceden paylaştırmaz. **Boşalan çekirdeğe sıradaki görevi verir.** Hızlı makine daha çok görev bitirir. Bu basit kural, 11. bölümde göreceğimiz yavaş düğüm sorununu büyük ölçüde kendiliğinden hafifletir.
 
 ---
 
@@ -420,7 +436,7 @@ hdfs dfs -du -h /veri                          # birinci sütun: veri; ikinci s�
 hdfs fsck /veri/olcumler_csv -files -blocks -locations | grep -c Datanode
 ```
 
-`du` çıktısındaki iki sütun, replikasyonu sayıyla gösterir: 1,2 GB veri, HDFS'te 2,4 GB yer kaplar. `fsck` komutu her bloğun hangi iki makinede saklandığını listeler. Kümeyi test ederken 300 MB'lık bir dosyanın 3 bloğunun 6 kopyasının makinelere 3 (Gigabyte), 2 (Mini), 1 (Vento) olarak dağıldığını gördük. NameNode blokları yerleştirirken makinelerin boş disk alanını ve yazan istemcinin konumunu dikkate alır.
+`du` çıktısındaki iki sütun, replikasyonu sayıyla gösterir: 1.2 GB veri, HDFS'te 2.4 GB yer kaplar. `fsck` komutu her bloğun hangi iki makinede saklandığını listeler. Kümeyi test ederken 300 MB'lık bir dosyanın 3 bloğunun 6 kopyasının makinelere 3 (Gigabyte), 2 (Mini), 1 (Vento) olarak dağıldığını gördük. NameNode blokları yerleştirirken makinelerin boş disk alanını ve yazan istemcinin konumunu dikkate alır.
 
 > **Neden 40 dosya?** Spark her bölümü ayrı bir dosyaya yazar. Bu, paralel yazmanın doğal sonucudur: 40 görev aynı dosyaya sırayla yazmak yerine aynı anda 40 ayrı dosyaya yazar. Okurken klasörün tamamı tek bir tablo gibi okunur. Yine de çok sayıda küçük dosya NameNode'u yorar ("küçük dosya sorunu"). Bu yüzden bölüm boyutunu 30-130 MB aralığında tutmak iyi bir alışkanlıktır.
 
@@ -469,7 +485,7 @@ Planda 2.3 bölümünde anlattığımız her şey görünür. `FileScan` ve ilk 
 
 Aynı sorguyu üç farklı biçimde çalıştırdık:
 
-1. **Düz metin (CSV):** Her sorguda 1,28 GB metin okunur ve her satır ayrıştırılır (metinden sayıya çevrilir).
+1. **Düz metin (CSV):** Her sorguda 1.28 GB metin okunur ve her satır ayrıştırılır (metinden sayıya çevrilir).
 2. **Bellekte (cache):** Veri bir kez okunup executor'ların belleğine alınır. Sonraki sorgular bellekten çalışır.
 3. **Parquet:** Veri bir kez sütunlu ve sıkıştırılmış Parquet biçimine dönüştürülür. Sorgular bu dosyadan çalışır.
 
@@ -486,18 +502,18 @@ istasyon_ozeti(spark.read.parquet("hdfs:///veri/olcumler_parquet")).collect()
 
 | Yöntem | Süre | Not |
 |---|---|---|
-| Düz metin (CSV) | **33,2 sn** | 20 bölüm, 14 çekirdek; her satır ayrıştırılıyor |
-| Belleğe alma (bir kerelik) | 20,8 sn | `cache()` + `count()` |
-| Bellekteki veriden sorgu | **3,8 sn** | ~9 kat hızlı |
-| CSV → Parquet dönüşümü (bir kerelik) | 37,2 sn | |
-| Parquet'ten sorgu | **6,5 sn** | ~5 kat hızlı |
-| Dosya boyutu | CSV 1,28 GB → Parquet 0,21 GB | **6 kat küçük** |
+| Düz metin (CSV) | **33.2 sn** | 20 bölüm, 14 çekirdek; her satır ayrıştırılıyor |
+| Belleğe alma (bir kerelik) | 20.8 sn | `cache()` + `count()` |
+| Bellekteki veriden sorgu | **3.8 sn** | ~9 kat hızlı |
+| CSV → Parquet dönüşümü (bir kerelik) | 37.2 sn | |
+| Parquet'ten sorgu | **6.5 sn** | ~5 kat hızlı |
+| Dosya boyutu | CSV 1.28 GB → Parquet 0.21 GB | **6 kat küçük** |
 
 ### 8.4 Sonuçlar Ne Öğretiyor?
 
-**Bellek gerçekten hızlıdır, ama bedava değildir.** Bellekteki veriyle sorgu 3,8 saniyeye indi. Ancak veriyi belleğe almak 20,8 saniye sürdü ve bu bellek başka işlerden alındı. `cache()`, aynı veri üzerinde **birden çok kez** çalışılacaksa kârlıdır. Yinelemeli makine öğrenmesi algoritmaları tam olarak böyledir. Bir kez kullanılacak veri için `cache()` zararlıdır.
+**Bellek gerçekten hızlıdır, ama bedava değildir.** Bellekteki veriyle sorgu 3.8 saniyeye indi. Ancak veriyi belleğe almak 20.8 saniye sürdü ve bu bellek başka işlerden alındı. `cache()`, aynı veri üzerinde **birden çok kez** çalışılacaksa kârlıdır. Yinelemeli makine öğrenmesi algoritmaları tam olarak böyledir. Bir kez kullanılacak veri için `cache()` zararlıdır.
 
-**Dosya biçimi, donanım kadar önemlidir.** Parquet iki sebeple hızlıdır. Birincisi, **sütunlu** olduğu için yalnızca sorgunun istediği sütunlar okunur. İkincisi, aynı sütundaki benzer değerler (81 farklı il adı gibi) **sözlük kodlaması ve sıkıştırma** ile çok az yer kaplar. 1,28 GB'lık metin 0,21 GB'a indi. Ana notta 1BRC dersleri arasında saydığımız "dosya formatı önemlidir" maddesini burada kendi ölçümümüzle doğruladık. Kümemize hiçbir donanım eklemeden, yalnızca biçimi değiştirerek 5 kat hız kazandık.
+**Dosya biçimi, donanım kadar önemlidir.** Parquet iki sebeple hızlıdır. Birincisi, **sütunlu** olduğu için yalnızca sorgunun istediği sütunlar okunur. İkincisi, aynı sütundaki benzer değerler (81 farklı il adı gibi) **sözlük kodlaması ve sıkıştırma** ile çok az yer kaplar. 1.28 GB'lık metin 0.21 GB'a indi. Ana notta 1BRC dersleri arasında saydığımız "dosya formatı önemlidir" maddesini burada kendi ölçümümüzle doğruladık. Kümemize hiçbir donanım eklemeden, yalnızca biçimi değiştirerek 5 kat hız kazandık.
 
 **İlk sorgu her zaman daha yavaştır.** İlk sorgu, Java'nın kodu derleyip hızlandırması (JIT ısınması) ve executor'ların veriyle ilk kez karşılaşması nedeniyle daha uzun sürer. Bu yüzden 11. bölümdeki deneyde her ölçümü iki kez yapıp kısa olanı aldık.
 
@@ -549,9 +565,9 @@ en_sik = (
 
 | Yöntem | Süre |
 |---|---|
-| Hadoop MapReduce (Java) | **48,2 sn** |
-| Spark RDD (Python) | **18,7 sn** |
-| Spark DataFrame | **15,2 sn** |
+| Hadoop MapReduce (Java) | **48.2 sn** |
+| Spark RDD (Python) | **18.7 sn** |
+| Spark DataFrame | **15.2 sn** |
 
 ```text
 En sık 15 kelime (RDD ↔ DataFrame):
@@ -563,7 +579,7 @@ En sık 15 kelime (RDD ↔ DataFrame):
 
 ### 9.3 Yorum
 
-**Spark, MapReduce'tan 2,5-3 kat hızlı.** Tek adımlık bir işte bile fark büyüktür. Bunun sebepleri 1. bölümde anlattıklarımızdır: MapReduce her görev için ayrı bir JVM başlatır ve Map ile Reduce aşamaları arasındaki ara sonuçları diske yazar. Spark'ın executor'ları ise iş boyunca ayaktadır. Yinelemeli bir işte (örneğin 10 iterasyonlu k-Means) fark çok daha büyük olurdu.
+**Spark, MapReduce'tan 2.5-3 kat hızlı.** Tek adımlık bir işte bile fark büyüktür. Bunun sebepleri 1. bölümde anlattıklarımızdır: MapReduce her görev için ayrı bir JVM başlatır ve Map ile Reduce aşamaları arasındaki ara sonuçları diske yazar. Spark'ın executor'ları ise iş boyunca ayaktadır. Yinelemeli bir işte (örneğin 10 iterasyonlu k-Means) fark çok daha büyük olurdu.
 
 **Python RDD, Java MapReduce'u geçti, ama DataFrame'in gerisinde kaldı.** RDD sürümünde her satır JVM'den Python sürecine aktarılır, Python fonksiyonlarıyla işlenir ve sonuç tekrar JVM'e döner. Bu gidiş-dönüşün bir bedeli vardır. DataFrame sürümünde ise Python yalnızca planı tarif eder. Bütün hesaplama JVM içinde, Spark'ın ürettiği hızlı kodla yapılır. **Kural: Python ile Spark kullanırken mümkün olan her yerde DataFrame fonksiyonlarını kullanın. Kendi Python fonksiyonlarınızı (`map`, `udf`) yalnızca başka yol yoksa yazın.**
 
@@ -614,12 +630,12 @@ Eğitim verisini `repartition(12).cache()` ile 12 bölüme ayırıp belleğe ald
 
 | Ağaç sayısı | Derinlik | Ortalama doğruluk (3 kat) |
 |---|---|---|
-| 20 | 10 | 0,7401 |
-| 20 | 15 | 0,7915 |
-| 40 | 10 | 0,7375 |
-| 40 | 15 | **0,7916** |
+| 20 | 10 | 0.7401 |
+| 20 | 15 | 0.7915 |
+| 40 | 10 | 0.7375 |
+| 40 | 15 | **0.7916** |
 
-En iyi model (40 ağaç, derinlik 15) **test verisinde %79,2 doğruluk** verdi. En önemli nitelik açık farkla **rakım** oldu (önem payı 0,37). Onu 4 numaralı koruma alanı, yollara uzaklık ve yangın noktalarına uzaklık izledi. Orman türlerinin büyük ölçüde yüksekliğe göre değiştiğini bilen bir ormancı için şaşırtıcı olmayan bir sonuç. Model, alan bilgisiyle tutarlı bir şey öğrenmiş.
+En iyi model (40 ağaç, derinlik 15) **test verisinde %79.2 doğruluk** verdi. En önemli nitelik açık farkla **rakım** oldu (önem payı 0.37). Onu 4 numaralı koruma alanı, yollara uzaklık ve yangın noktalarına uzaklık izledi. Orman türlerinin büyük ölçüde yüksekliğe göre değiştiğini bilen bir ormancı için şaşırtıcı olmayan bir sonuç. Model, alan bilgisiyle tutarlı bir şey öğrenmiş.
 
 Tablo, hiperparametre seçimi hakkında da bir şey söylüyor: **Derinlik, ağaç sayısından çok daha önemlidir.** Derinliği 10'dan 15'e çıkarmak doğruluğu 5 puan artırırken, ağaç sayısını iki katına çıkarmak neredeyse hiç fark yaratmadı. Hesaplama bütçesi kısıtlıysa onu derinliğe harcamak daha akıllıcadır.
 
@@ -627,17 +643,17 @@ Tablo, hiperparametre seçimi hakkında da bir şey söylüyor: **Derinlik, ağa
 
 | Yöntem | Süre |
 |---|---|
-| Spark MLlib, küme, `parallelism=1` | **374,7 sn** |
-| Spark MLlib, küme, `parallelism=4` | **272,0 sn** |
-| scikit-learn, tek makine (Gigabyte, 8 iş parçacığı) | **75,6 sn** (test doğruluğu %83,0) |
+| Spark MLlib, küme, `parallelism=1` | **374.7 sn** |
+| Spark MLlib, küme, `parallelism=4` | **272.0 sn** |
+| scikit-learn, tek makine (Gigabyte, 8 iş parçacığı) | **75.6 sn** (test doğruluğu %83.0) |
 
 ![Hiperparametre araması süreleri](uygulamalar/spark_yarn_kumesi/ciktilar/g3_hiperparametre.svg)
 
 ### 10.5 Yorum: Spark Ne Zaman Kazanır?
 
-**Modeller arası paralellik işe yaradı, ama 4 kat değil.** `parallelism=4` aramayı 375 saniyeden 272 saniyeye, yani yaklaşık 1,4 kat hızlandırdı. Sebebi, tek bir model eğitilirken kümenin zaten büyük ölçüde meşgul olmasıdır. Dört model aynı anda eğitilince aynı 14 çekirdeği paylaşırlar. Kazanç, tek modelin kümeyi tam dolduramadığı anlardan (driver'ın bölünme kararı verdiği sıradaki boşluklar, son ağaç seviyelerindeki az sayıda görev) gelir.
+**Modeller arası paralellik işe yaradı, ama 4 kat değil.** `parallelism=4` aramayı 375 saniyeden 272 saniyeye, yani yaklaşık 1.4 kat hızlandırdı. Sebebi, tek bir model eğitilirken kümenin zaten büyük ölçüde meşgul olmasıdır. Dört model aynı anda eğitilince aynı 14 çekirdeği paylaşırlar. Kazanç, tek modelin kümeyi tam dolduramadığı anlardan (driver'ın bölünme kararı verdiği sıradaki boşluklar, son ağaç seviyelerindeki az sayıda görev) gelir.
 
-**Tek makine, kümeyi yendi: Dürüst bir sonuç.** Aynı arama, kümenin en güçlü makinesinde scikit-learn ile **75,6 saniyede** bitti. Bu, Spark'ın en iyi süresinden 3,6 kat kısa. Üstelik scikit-learn'ün test doğruluğu daha yüksek (%83,0'a karşı %79,2). Bu sonuç Spark'ın kötü olduğunu göstermez. **Bir aracın hangi ölçekte anlamlı olduğunu** gösterir:
+**Tek makine, kümeyi yendi: Dürüst bir sonuç.** Aynı arama, kümenin en güçlü makinesinde scikit-learn ile **75.6 saniyede** bitti. Bu, Spark'ın en iyi süresinden 3.6 kat kısa. Üstelik scikit-learn'ün test doğruluğu daha yüksek (%83.0'a karşı %79.2). Bu sonuç Spark'ın kötü olduğunu göstermez. **Bir aracın hangi ölçekte anlamlı olduğunu** gösterir:
 
 * **Dağıtık hesaplamanın sabit bir maliyeti vardır.** Spark her ağaç seviyesi için görevleri planlar, executor'lara gönderir, bölünme istatistiklerini ağ üzerinden toplar ve driver'da birleştirir. 72 MB'lık bir veri setinde bu koordinasyon maliyeti, hesaplamanın kendisinden büyüktür. Covertype, Gigabyte'ın 16 GB belleğine rahatça sığar. scikit-learn ise veriyi tek bir bellek alanında, ağ trafiği olmadan işler.
 * **Doğruluk farkı algoritmik bir tercihten gelir.** Spark MLlib, sürekli nitelikleri önce en fazla `maxBins` (bizde 64) aralığa böler ve bölünme noktalarını yalnızca bu aralık sınırlarında arar. Bu yaklaşık yöntem, verinin tamamını tek bir makinede sıralamayı gerektirmediği için dağıtık ortamda zorunludur. scikit-learn ise her olası eşik değerini dener. Rakım gibi çok değerli ve çok önemli bir nitelikte bu fark doğruluğa yansır. `maxBins` artırılarak fark kapatılabilir, ama süre de artar.
@@ -645,7 +661,7 @@ Tablo, hiperparametre seçimi hakkında da bir şey söylüyor: **Derinlik, ağa
 
 > **Mühendislik dersi:** "Büyük veri aracı kullanmak" bir amaç değildir. Önce verinizin boyutunu ve işin türünü ölçün. Veri belleğe sığıyorsa tek makinede pandas, scikit-learn veya DuckDB ile başlayın. Sınıra yaklaştığınızda Spark'a geçin.
 
-**Tekrarlanabilirlik: Neden iki çalıştırmanın doğrulukları biraz farklı?** `parallelism=1` ve `parallelism=4` çalıştırmalarında ortalama doğruluklar binde birkaç farklı çıktı (örneğin 0,7401 ve 0,7321). Bunun sebebi paralellik değil, `repartition(12)` adımıdır. Bu adım satırları bölümlere rastgele dağıtır. Rastgele Orman da her ağacın örneklemini bölüm bölüm çektiği için, aynı `seed` değeriyle bile bölümlerin içeriği değişince sonuç biraz değişir. **Dağıtık sistemlerde tam tekrarlanabilirlik için yalnızca rastgele tohumu sabitlemek yetmez, verinin bölümlenmesi de sabit olmalıdır.** Bilimsel bir çalışmada bu ayrıntı raporlanmalıdır.
+**Tekrarlanabilirlik: Neden iki çalıştırmanın doğrulukları biraz farklı?** `parallelism=1` ve `parallelism=4` çalıştırmalarında ortalama doğruluklar binde birkaç farklı çıktı (örneğin 0.7401 ve 0.7321). Bunun sebebi paralellik değil, `repartition(12)` adımıdır. Bu adım satırları bölümlere rastgele dağıtır. Rastgele Orman da her ağacın örneklemini bölüm bölüm çektiği için, aynı `seed` değeriyle bile bölümlerin içeriği değişince sonuç biraz değişir. **Dağıtık sistemlerde tam tekrarlanabilirlik için yalnızca rastgele tohumu sabitlemek yetmez, verinin bölümlenmesi de sabit olmalıdır.** Bilimsel bir çalışmada bu ayrıntı raporlanmalıdır.
 
 ---
 
@@ -671,19 +687,19 @@ for e in rest(spark, "executors"):          # http://<driver>:4040/api/v1/applic
 
 | Executor | Çekirdek | Süre | Hızlanma | İdeal | Executor'ların yeri |
 |---|---|---|---|---|---|
-| 1 | 2 | 74,4 sn | 1,00 | 1 | Mini |
-| 2 | 4 | 45,6 sn | 1,63 | 2 | Gigabyte, Vento |
-| 3 | 6 | 32,4 sn | 2,30 | 3 | Gigabyte, Mini, Vento |
-| 4 | 8 | 28,6 sn | 2,60 | 4 | Gigabyte, Mini ×2, Vento |
-| 6 | 12 | 24,5 sn | 3,04 | 6 | Gigabyte ×3, Mini ×2, Vento |
+| 1 | 2 | 74.4 sn | 1.00 | 1 | Mini |
+| 2 | 4 | 45.6 sn | 1.63 | 2 | Gigabyte, Vento |
+| 3 | 6 | 32.4 sn | 2.30 | 3 | Gigabyte, Mini, Vento |
+| 4 | 8 | 28.6 sn | 2.60 | 4 | Gigabyte, Mini ×2, Vento |
+| 6 | 12 | 24.5 sn | 3.04 | 6 | Gigabyte ×3, Mini ×2, Vento |
 
 Aynı ölçümlerde **çekirdek başına işleme hızı** (bir çekirdeğin saniyede işlediği veri):
 
 | Makine | Makinede tek executor varken | Makinede 2-3 executor varken |
 |---|---|---|
-| Gigabyte (i7-4790K) | 9,4-10,1 MB/sn | 5,4 MB/sn (3 executor) |
-| Mini (i5-6500T) | 9,3-9,4 MB/sn | 6,2-6,7 MB/sn (2 executor) |
-| Vento (Core 2 Duo) | 4,5-5,4 MB/sn | (tek executor) |
+| Gigabyte (i7-4790K) | 9.4-10.1 MB/sn | 5.4 MB/sn (3 executor) |
+| Mini (i5-6500T) | 9.3-9.4 MB/sn | 6.2-6.7 MB/sn (2 executor) |
+| Vento (Core 2 Duo) | 4.5-5.4 MB/sn | (tek executor) |
 
 ![Ölçekleme deneyi](uygulamalar/spark_yarn_kumesi/ciktilar/g4_olcekleme.svg)
 
@@ -693,13 +709,13 @@ Aynı ölçümlerde **çekirdek başına işleme hızı** (bir çekirdeğin sani
 
 **Hızlanma gerçek, ama doğrusal değil.** Çekirdek sayısını 6 katına çıkarmak işi 3 kat hızlandırdı. 2 executor'dan 3'e geçiş hâlâ verimliyken, 4'ten 6'ya geçiş yalnızca 4 saniye kazandırdı. Bu eğri, ana notta tartıştığımız Amdahl Yasasının ölçülmüş hâlidir. Sabit kalan kısımlar şunlardır: Driver'ın planlama ve görev dağıtma süresi, shuffle sonrasındaki nihai toplama aşaması ve son görevlerin bitmesinin beklenmesi.
 
-**Görev dalgaları (waves).** CSV dosyası 20 bölüm olarak okunuyor, yani aşama 0'da 20 görev var. 12 çekirdekle bu görevler iki dalgada (12 + 8) biter. İkinci dalgada 4 çekirdek boş bekler. 8 çekirdekle üç dalga (8 + 8 + 4) gerekir. Çekirdek sayısını artırmak, dalga sayısını azaltmadıkça kazanç getirmez. **Bölüm sayısının çekirdek sayısının birkaç katı olması** (örneğin 2-4 katı), dalgaların son kısmındaki boşluğu küçültür. Alıştırma 2 bu konuyu inceler.
+**Görev dalgaları (waves).** Okuma aşamasındaki görev sayısı sabit değildir, çekirdek sayısına bağlıdır. Spark bir dosya bölümünün boyutunu yaklaşık olarak *min(128 MB, toplam veri / çekirdek sayısı)* olarak seçer ve küçük dosyaları bu boyuta kadar aynı bölümde birleştirir (her dosya için 4 MB'lık bir "açma maliyeti" de hesaba katılır). 8. bölümdeki 14 çekirdekli çalıştırmada her bölüme yaklaşık 32 MB'lık parça dosyalarından ikisi sığdı ve 40 dosya **20 bölüm** olarak okundu. Bu deneydeki 2–12 çekirdekli çalıştırmalarda ise hedef bölüm boyutu büyüdüğü için her bölüme üç dosya sığar ve okuma **14 görevle** yapılır. `sonuclar.json` dosyasındaki görev sayıları bunu doğrular: Her ayarda makinelerin toplam görev sayısı 30'dur; bu sayı iki tekrarın toplamıdır, yani tekrar başına 14 okuma ve 1 son toplama görevi. 12 çekirdekle 14 okuma görevi iki dalgada (12 + 2) biter ve ikinci dalgada 10 çekirdek boş bekler. 8 çekirdekle de iki dalga (8 + 6) gerekir. Bu yüzden 8'den 12 çekirdeğe geçiş dalga sayısını azaltmamış, yalnızca birinci dalgayı hızlandırmıştır. Çekirdek sayısını artırmak, dalga sayısını azaltmadıkça sınırlı kazanç getirir. **Bölüm sayısının çekirdek sayısının birkaç katı olması** (örneğin 2-4 katı), dalgaların son kısmındaki boşluğu küçültür. Alıştırma 2 bu konuyu inceler.
 
-**Aynı makineye executor eklemek, yeni makine eklemekle aynı şey değildir.** İkinci tablo deneyin belki de en öğretici sonucudur. Gigabyte'ta tek executor varken bir çekirdek saniyede ~9,5 MB işliyordu. Aynı makinede 3 executor (6 çekirdek) çalışınca bu değer 5,4 MB'a düştü. Executor'lar aynı diski, aynı bellek yolunu ve aynı ağ kartını paylaşır. Gigabyte'ın 8 "çekirdeğinin" 4'ü ise aslında fiziksel çekirdeklerin hiper iş parçacığı (hyper-threading) kardeşleridir. **Yatay ölçeklemenin gücü, darboğaz olan kaynakları (disk, bellek bant genişliği) da çoğaltmasından gelir.** Aynı makineye işçi eklemek bunu yapmaz.
+**Aynı makineye executor eklemek, yeni makine eklemekle aynı şey değildir.** İkinci tablo deneyin belki de en öğretici sonucudur. Gigabyte'ta tek executor varken bir çekirdek saniyede ~9.5 MB işliyordu. Aynı makinede 3 executor (6 çekirdek) çalışınca bu değer 5.4 MB'a düştü. Executor'lar aynı diski, aynı bellek yolunu ve aynı ağ kartını paylaşır. Gigabyte'ın 8 "çekirdeğinin" 4'ü ise aslında fiziksel çekirdeklerin hiper iş parçacığı (hyper-threading) kardeşleridir. **Yatay ölçeklemenin gücü, darboğaz olan kaynakları (disk, bellek bant genişliği) da çoğaltmasından gelir.** Aynı makineye işçi eklemek bunu yapmaz.
 
-**Yavaş düğüm (straggler) ve kendiliğinden dengelenme.** Vento'nun bir çekirdeği, diğer makinelerin bir çekirdeğinin yaklaşık yarısı kadar iş yapıyor. Bu farkın iş süresine etkisi beklenenden küçük kaldı. Sebebi 6. bölümde gördüğümüz kuraldır: Spark görevleri önceden paylaştırmaz, boşalan çekirdeğe verir. 2 executor'lu çalıştırmada Gigabyte 17, Vento 13 görev yaptı. 6 executor'lu çalıştırmada Vento yalnızca 4 görev aldı. Yavaş düğüm daha az görev alarak kendiliğinden dengelendi. Asıl tehlike **son dalgadadır**: Bir aşamanın son görevi Vento'ya düşerse, diğer bütün çekirdekler o görevin bitmesini bekler. Spark'ın **spekülatif yürütme** özelliği (`spark.speculation=true`) bu durumda yavaş görevin bir kopyasını hızlı bir makinede başlatır ve önce biteni kullanır (Alıştırma 7).
+**Yavaş düğüm (straggler) ve kendiliğinden dengelenme.** Vento'nun bir çekirdeği, diğer makinelerin bir çekirdeğinin yaklaşık yarısı kadar iş yapıyor. Bu farkın iş süresine etkisi beklenenden küçük kaldı. Sebebi 6. bölümde gördüğümüz kuraldır: Spark görevleri önceden paylaştırmaz, boşalan çekirdeğe verir. 2 executor'lu çalıştırmada (iki tekrarın toplamı olarak) Gigabyte 17, Vento 13 görev yaptı. 6 executor'lu çalıştırmada aynı 30 görevden Vento yalnızca 4'ünü aldı. Yavaş düğüm daha az görev alarak kendiliğinden dengelendi. Asıl tehlike **son dalgadadır**: Bir aşamanın son görevi Vento'ya düşerse, diğer bütün çekirdekler o görevin bitmesini bekler. Spark'ın **spekülatif yürütme** özelliği (`spark.speculation=true`) bu durumda yavaş görevin bir kopyasını hızlı bir makinede başlatır ve önce biteni kullanır (Alıştırma 7).
 
-**Bir deney tasarımı tuzağı: Atlanan aşamalar.** Bu deneyin ilk sürümünde aynı DataFrame nesnesini iki kez `collect()` ettik ve kısa olan süreyi aldık. Sonuçlar 0,2-0,4 saniye çıktı: 1,28 GB'lık bir dosyayı okumak için imkânsız bir süre. Sebep, Spark'ın aynı sorgu planını ikinci kez çalıştırırken ilk çalıştırmadan kalan **shuffle dosyalarını yeniden kullanmasıydı**. Okuma ve kısmi toplama aşaması hiç çalışmadı (Spark arayüzünde "skipped stage" olarak görünür). Düzeltilmiş betik her tekrarda sorguyu sıfırdan kurar. Hatalı çıktı da ders malzemesi olarak [ciktilar/05_olcekleme_HATALI_atlanan_asama.txt](uygulamalar/spark_yarn_kumesi/ciktilar/05_olcekleme_HATALI_atlanan_asama.txt) dosyasında saklandı. **Ders: Ölçüm yaparken ne ölçtüğünüzü doğrulayın. Beklenmedik derecede iyi bir sonuç, çoğu zaman bir ölçüm hatasıdır.**
+**Bir deney tasarımı tuzağı: Atlanan aşamalar.** Bu deneyin ilk sürümünde aynı DataFrame nesnesini iki kez `collect()` ettik ve kısa olan süreyi aldık. Sonuçlar 0.2-0.4 saniye çıktı: 1.28 GB'lık bir dosyayı okumak için imkânsız bir süre. Sebep, Spark'ın aynı sorgu planını ikinci kez çalıştırırken ilk çalıştırmadan kalan **shuffle dosyalarını yeniden kullanmasıydı**. Okuma ve kısmi toplama aşaması hiç çalışmadı (Spark arayüzünde "skipped stage" olarak görünür). Düzeltilmiş betik her tekrarda sorguyu sıfırdan kurar. Hatalı çıktı da ders malzemesi olarak [ciktilar/05_olcekleme_HATALI_atlanan_asama.txt](uygulamalar/spark_yarn_kumesi/ciktilar/05_olcekleme_HATALI_atlanan_asama.txt) dosyasında saklandı. **Ders: Ölçüm yaparken ne ölçtüğünüzü doğrulayın. Beklenmedik derecede iyi bir sonuç, çoğu zaman bir ölçüm hatasıdır.**
 
 ---
 
@@ -727,12 +743,12 @@ Spark arayüzünde özellikle şu sekmelere bakmayı öneririz:
 
 ## 13. Özet: Ne Öğrendik?
 
-1. **Spark, MapReduce'un iki sınırını aşar.** Ara sonuçları bellekte tutar ve executor'ları iş boyunca ayakta tutar. Kendi kümemizde aynı kelime sayma işinde 2,5-3 kat fark ölçtük.
+1. **Spark, MapReduce'un iki sınırını aşar.** Ara sonuçları bellekte tutar ve executor'ları iş boyunca ayakta tutar. Kendi kümemizde aynı kelime sayma işinde 2.5-3 kat fark ölçtük.
 2. **Spark, Hadoop'un rakibi değil, parçasıdır.** Veriyi HDFS saklar, kaynakları YARN dağıtır, hesabı Spark yapar.
 3. **Spark bir sorguyu iş, aşama ve görevlere böler.** Aşama sınırları shuffle noktalarıdır. Kısmi toplama, ağdan taşınan veriyi milyonlarca satırdan birkaç bin satıra indirir.
 4. **Dosya biçimi ve önbellek, donanım kadar önemlidir.** Parquet sorguyu 5 kat, bellekteki veri 9 kat hızlandırdı. Parquet dosyası CSV'den 6 kat küçüktü.
 5. **DataFrame, RDD'den hızlıdır.** Python'da yazılan DataFrame kodu JVM içinde çalışır. Kendi Python fonksiyonlarımız ise her satırda dil sınırını geçmek zorundadır.
-6. **Dağıtık hesaplamanın sabit bir maliyeti vardır.** 72 MB'lık Covertype verisinde aynı hiperparametre aramasını tek makinede scikit-learn, kümedeki Spark'tan 3,6 kat hızlı bitirdi. Küme, veri tek makinenin belleğine ya da süresine sığmadığında kazanır.
+6. **Dağıtık hesaplamanın sabit bir maliyeti vardır.** 72 MB'lık Covertype verisinde aynı hiperparametre aramasını tek makinede scikit-learn, kümedeki Spark'tan 3.6 kat hızlı bitirdi. Küme, veri tek makinenin belleğine ya da süresine sığmadığında kazanır.
 7. **Ölçekleme doğrusal değildir.** Seri kısımlar (Amdahl), başlangıç maliyetleri ve yavaş düğümler, makine eklemenin getirisini sınırlar.
 8. **Gerçek kurulum, belgelerde yazmayan sorunlarla doludur.** Ad çözümleme, güvenlik duvarı, Python sürümleri ve kaynak muhasebesi. Bir kümeyi kurabilmek, onu kullanabilmek kadar değerli bir beceridir.
 

@@ -254,7 +254,7 @@
                 <text x="100" y="25" font-size="14" font-weight="600" text-anchor="middle" fill="#dc2626">
                     DataNode 2 ARIZALI!
                 </text>
-                <text x="100" y="50" font-size="20" text-anchor="middle" fill="#dc2626">❌</text>
+                <text x="100" y="50" font-size="20" text-anchor="middle" fill="#dc2626">ERİŞİLEMİYOR</text>
                 <text x="100" y="80" font-size="12" text-anchor="middle" fill="#7f1d1d">
                     Blok 1, Blok 2 kaybı riski
                 </text>
@@ -274,7 +274,7 @@
                 <text x="110" y="25" font-size="14" font-weight="600" text-anchor="middle" fill="#15803d">
                     Replikasyon Devrede
                 </text>
-                <text x="110" y="50" font-size="20" text-anchor="middle" fill="#10b981">✓</text>
+                <text x="110" y="50" font-size="20" text-anchor="middle" fill="#10b981">VERİ GÜVENDE</text>
                 <text x="110" y="75" font-size="12" text-anchor="middle" fill="#166534">
                     Blok 1 → Node 1, 4'te var
                 </text>

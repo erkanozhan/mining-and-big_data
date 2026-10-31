@@ -1,2 +1,0 @@
-First node.
-Hello world.

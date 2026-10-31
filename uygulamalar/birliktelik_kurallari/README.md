@@ -39,7 +39,7 @@ uygulamalar/birliktelik_kurallari/
 **Python** (3.9 veya üstü):
 
 ```bash
-pip install pandas "mlxtend>=0.23"
+pip install pandas "mlxtend>=0.23.2"   # num_itemsets parametresi 0.23.2 ile geldi
 cd uygulamalar/birliktelik_kurallari
 python python/birliktelik_kurallari.py
 ```

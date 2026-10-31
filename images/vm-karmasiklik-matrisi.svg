@@ -56,32 +56,32 @@
   <text x="111" y="452" font-size="14" font-weight="600" text-anchor="middle" fill="#374151">Negatif</text>
 
   <!-- Hücreler -->
-  <!-- DP / TP -->
+  <!-- GP / TP -->
   <rect x="160" y="186" width="210" height="170" rx="10" fill="url(#greenCell)" stroke="#10b981" stroke-width="2" filter="url(#shadow)"/>
-  <text x="265" y="246" font-size="30" font-weight="bold" text-anchor="middle" fill="#065f46">DP</text>
-  <text x="265" y="276" font-size="16" font-weight="600" text-anchor="middle" fill="#065f46">Doğru Pozitif</text>
+  <text x="265" y="246" font-size="30" font-weight="bold" text-anchor="middle" fill="#065f46">GP</text>
+  <text x="265" y="276" font-size="16" font-weight="600" text-anchor="middle" fill="#065f46">Gerçek Pozitif</text>
   <text x="265" y="298" font-size="15" text-anchor="middle" fill="#047857">(TP)</text>
 
-  <!-- YN / FN -->
+  <!-- SN / FN -->
   <rect x="376" y="186" width="210" height="170" rx="10" fill="url(#redCell)" stroke="#ef4444" stroke-width="2" filter="url(#shadow)"/>
-  <text x="481" y="236" font-size="30" font-weight="bold" text-anchor="middle" fill="#991b1b">YN</text>
-  <text x="481" y="266" font-size="16" font-weight="600" text-anchor="middle" fill="#991b1b">Yanlış Negatif</text>
+  <text x="481" y="236" font-size="30" font-weight="bold" text-anchor="middle" fill="#991b1b">SN</text>
+  <text x="481" y="266" font-size="16" font-weight="600" text-anchor="middle" fill="#991b1b">Sahte Negatif</text>
   <text x="481" y="288" font-size="15" text-anchor="middle" fill="#b91c1c">(FN)</text>
   <rect x="431" y="302" width="100" height="26" rx="13" fill="#ef4444"/>
   <text x="481" y="320" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">Tip II hata</text>
 
-  <!-- YP / FP -->
+  <!-- SP / FP -->
   <rect x="160" y="362" width="210" height="170" rx="10" fill="url(#amberCell)" stroke="#f59e0b" stroke-width="2" filter="url(#shadow)"/>
-  <text x="265" y="412" font-size="30" font-weight="bold" text-anchor="middle" fill="#92400e">YP</text>
-  <text x="265" y="442" font-size="16" font-weight="600" text-anchor="middle" fill="#92400e">Yanlış Pozitif</text>
+  <text x="265" y="412" font-size="30" font-weight="bold" text-anchor="middle" fill="#92400e">SP</text>
+  <text x="265" y="442" font-size="16" font-weight="600" text-anchor="middle" fill="#92400e">Sahte Pozitif</text>
   <text x="265" y="464" font-size="15" text-anchor="middle" fill="#b45309">(FP)</text>
   <rect x="220" y="478" width="90" height="26" rx="13" fill="#f59e0b"/>
   <text x="265" y="496" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">Tip I hata</text>
 
-  <!-- DN / TN -->
+  <!-- GN / TN -->
   <rect x="376" y="362" width="210" height="170" rx="10" fill="url(#greenCell)" stroke="#10b981" stroke-width="2" filter="url(#shadow)"/>
-  <text x="481" y="422" font-size="30" font-weight="bold" text-anchor="middle" fill="#065f46">DN</text>
-  <text x="481" y="452" font-size="16" font-weight="600" text-anchor="middle" fill="#065f46">Doğru Negatif</text>
+  <text x="481" y="422" font-size="30" font-weight="bold" text-anchor="middle" fill="#065f46">GN</text>
+  <text x="481" y="452" font-size="16" font-weight="600" text-anchor="middle" fill="#065f46">Gerçek Negatif</text>
   <text x="481" y="474" font-size="15" text-anchor="middle" fill="#047857">(TN)</text>
 
   <!-- Matris notu -->
