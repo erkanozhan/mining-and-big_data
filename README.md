@@ -2,17 +2,22 @@
 
 Bu depo, veri madenciliği ve büyük veri teknolojileri dersinin Türkçe ders notlarını, şekillerini ve uygulamalarını içerir. Ders iki soruya cevap arar: **Veriden nasıl bilgi çıkarılır?** ve **Veri tek bir bilgisayara sığmayacak kadar büyüdüğünde bu nasıl yapılır?**
 
+- **Web sürümü:** [erkanozhan.github.io/mining-and-big_data](https://erkanozhan.github.io/mining-and-big_data/). Aynı not; bölüm listesi, tüm notta arama ve formüllerle birlikte.
+- **PDF / yazdırma:** [Notun tamamı tek sayfada](https://erkanozhan.github.io/mining-and-big_data/yazdir.html) açılıp Ctrl+P ile "PDF olarak kaydet" seçilebilir. Aynı PDF `python araclar/pdf_olustur.py` komutuyla da üretilir (Chrome veya Edge gerekir).
+
 ## Ders haritası
 
 | Dosya / klasör | İçerik |
 |---|---|
-| [ders_notu.md](ders_notu.md) | Ana ders notu. **Kısım I (Bölüm 0–13):** süreç modelleri, veriyi tanıma, ön işleme, veri ambarı ve OLAP, birliktelik kuralları, sınıflandırma, model değerlendirme, kümeleme, aykırı değer tespiti, ileri konular, büyük veriye köprü, etik. **Kısım II (Bölüm 14–21):** büyük veri ve 5V, Hadoop (HDFS, YARN, MapReduce), Hadoop ekosistemi (Hive, Pig, Spark, Mahout, HBase), kurulum, WordCount, Hive/Pig/Mahout ve Spark uygulamaları. |
+| [ders_notu.md](ders_notu.md) | Ana ders notunun giriş sayfası ve içindekiler; bölümler [`bolumler/`](bolumler) klasöründe ayrı dosyalardır. **Kısım I (Bölüm 0–13):** süreç modelleri, veriyi tanıma, ön işleme, veri ambarı ve OLAP, birliktelik kuralları, sınıflandırma, model değerlendirme, kümeleme, aykırı değer tespiti, ileri konular, büyük veriye köprü, etik. **Kısım II (Bölüm 14–21):** büyük veri ve 5V, Hadoop (HDFS, YARN, MapReduce), Hadoop ekosistemi (Hive, Pig, Spark, Mahout, HBase), kurulum, WordCount, Hive/Pig/Mahout ve Spark uygulamaları. |
 | [spark_ders_notu.md](spark_ders_notu.md) | Ek not: Laboratuvardaki üç makineyle kurulan Hadoop + Spark kümesi; 1BRC, kelime sayma (MapReduce ve Spark), MLlib ile hiperparametre araması, ölçekleme deneyi. |
 | [uygulamalar/veri_on_isleme](uygulamalar/veri_on_isleme/README.md) | Kirli bir müşteri veri setinin Python (pandas) ve R (tidyverse) ile uçtan uca temizlenmesi (Bölüm 4.6). |
 | [uygulamalar/birliktelik_kurallari](uygulamalar/birliktelik_kurallari/README.md) | Pazar sepeti analizi: Weka (Apriori, FPGrowth) ve Python (`mlxtend`) (Bölüm 6.4). |
 | [uygulamalar/spark_yarn_kumesi](uygulamalar/spark_yarn_kumesi/README.md) | Ek notun betikleri, küme yapılandırma dosyaları ve laboratuvarda alınan ölçüm çıktıları. |
 | [scripts/sekil_uret.py](scripts/sekil_uret.py) | Ders notundaki veriye dayalı şekilleri `images/` klasörüne yeniden üretir. |
 | `images/` | Ders notlarındaki bütün şekiller (SVG). |
+| [`index.html`](index.html), [`_sidebar.md`](_sidebar.md), [`docsify-ayar.js`](docsify-ayar.js), [`docsify-stil.css`](docsify-stil.css) | Web sürümünü oluşturan docsify sayfası, bölüm listesi, ayarları ve stilleri |
+| [`yazdir.html`](yazdir.html), [`araclar/pdf_olustur.py`](araclar/pdf_olustur.py) | Notun tamamını tek sayfada gösteren yazdırma sayfası ve PDF üreten betik |
 
 Önerilen okuma sırası: `ders_notu.md` Kısım I → Kısım II → `spark_ders_notu.md`. Her uygulama klasörü, ilgili bölüm okunduktan sonra incelenmek üzere hazırlanmıştır.
 

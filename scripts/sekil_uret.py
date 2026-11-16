@@ -1,6 +1,6 @@
 """Ders notu için veri tabanlı şekilleri üretir.
 
-"Veri Madenciliğinde İleri Konular ve Büyük Veri" ders notundaki (ders_notu.md)
+"Veri Madenciliğinde İleri Konular ve Büyük Veri" ders notundaki (bolumler/ klasörü)
 matplotlib şekillerini SVG olarak `images/` klasörüne yazar: kutu grafiği,
 uzaklık ölçüleri, PCA, k-NN, ROC eğrisi, aşırı öğrenme, k-Means iterasyonları,
 dendrogram, DBSCAN, aykırı değer türleri ve kavram kayması.
